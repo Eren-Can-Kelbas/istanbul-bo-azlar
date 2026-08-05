@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#061322"/><stop offset=".48" stop-color="#083b5a"/><stop offset="1" stop-color="#163f2a"/></linearGradient>
+    <linearGradient id="line" x1="0" x2="1"><stop offset="0" stop-color="#5ad3ff"/><stop offset="1" stop-color="#7ddc7a"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="940" cy="110" r="180" fill="#ffffff" opacity=".05"/>
+  <path d="M70 435 C250 255, 395 540, 570 365 S930 260, 1130 410" fill="none" stroke="url(#line)" stroke-width="18" stroke-linecap="round" opacity=".9"/>
+  <path d="M120 498 H1080" stroke="#e8d8a8" stroke-width="8" opacity=".75"/>
+  <path d="M240 210 l50 80 h-100z M350 185 l60 105 h-120z M910 205 l70 115 h-140z" fill="#8edb93" opacity=".85"/>
+  <text x="90" y="140" fill="#f7f3e8" font-size="56" font-family="Arial, sans-serif" font-weight="700">Megakent’in İçinde</text>
+  <text x="90" y="210" fill="#f7f3e8" font-size="56" font-family="Arial, sans-serif" font-weight="700">Zamanın Durduğu Yerler</text>
+  <text x="94" y="278" fill="#d5e8ef" font-size="28" font-family="Arial, sans-serif">İstanbul’un Mavi ve Yeşil Hafızası</text>
+</svg>
