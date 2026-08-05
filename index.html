@@ -21,10 +21,12 @@
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menü</button>
     <nav id="main-nav" class="main-nav" aria-label="Ana menü">
       <a href="#amaç">Amaç</a>
+      <a href="#video">Video</a>
       <a href="#bogaz">Boğaz</a>
       <a href="#katmanlar">Katmanlar</a>
+      <a href="#renk-sec">Mavi mi Yeşil mi?</a>
       <a href="#rota">Rota</a>
-      <a href="#ses">Sesler</a>
+      <a href="#galeri">Galeri</a>
       <a href="#quiz">Quiz</a>
       <a href="#ekip">Ekip</a>
     </nav>
@@ -39,6 +41,7 @@
         <p class="hero-subtitle">İstanbul’u Boğaz’ın mavisiyle başlayan, insan hafızasıyla derinleşen ve Arboretum’un yeşil sessizliğine uzanan canlı bir şehir arşivi olarak okuyoruz.</p>
         <div class="hero-actions">
           <a class="btn primary" href="#bogaz">Boğaz’dan Başla</a>
+          <button class="btn ghost" id="open-presentation" type="button">Sunum Modu</button>
           <a class="btn ghost" href="kaynaklar/megakent_mavi_yesil_hafiza_15_slayt_revize.pptx">Sunumu İndir</a>
         </div>
         <div class="hero-stats" aria-label="Proje anahtar kelimeleri">
@@ -81,6 +84,33 @@
         <span>Sunum cümlesi</span>
         <blockquote>“Boğaz kentin dış dünyaya açılan kapısıysa; Arboretum kentin kendi içine çekildiği, nefes aldığı genetik hafızasıdır.”</blockquote>
       </aside>
+    </section>
+
+    <section id="video" class="section-pad teaser-section">
+      <div class="section-head">
+        <p class="eyebrow">Kısa Tanıtım Videosu</p>
+        <h2>Boğaz’dan yeşil hafızaya kısa bir görsel giriş</h2>
+        <p>Şimdilik stok görsellerden hazırlanmış kısa bir tanıtım videosu eklendi. Daha sonra yapay zekâ ile üretilmiş gerçek bir drone tur videosu veya kendi çektiğiniz görüntülerle kolayca değiştirebilirsiniz.</p>
+      </div>
+      <div class="teaser-wrap">
+        <div class="teaser-player">
+          <video controls preload="metadata" poster="assets/images/bogaz-havadan.webp">
+            <source src="assets/video/istanbul-tanitim.mp4" type="video/mp4">
+            Tarayıcınız video etiketini desteklemiyor.
+          </video>
+        </div>
+        <div class="teaser-copy">
+          <div class="note-card">
+            <span class="pill">Nasıl Kullanılır?</span>
+            <h3>Sunumda önerilen kullanım</h3>
+            <ul>
+              <li>Sunumun ilk 15–20 saniyesinde açabilirsiniz.</li>
+              <li>Konuşma girişi: “İstanbul’u önce görelim, sonra okuyalım.”</li>
+              <li>Daha sonra bu videoyu bir AI drone turu ile değiştirebilirsiniz.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="bogaz" class="section-pad bosphorus-feature">
@@ -133,6 +163,22 @@
             <button class="read-more" data-modal="yesil">Detaylı oku</button>
           </div>
         </article>
+      </div>
+    </section>
+
+    <section id="renk-sec" class="section-pad choice-section">
+      <div class="section-head">
+        <p class="eyebrow">Mavi mi Yeşil mi?</p>
+        <h2>Senin İstanbul’un hangi tona daha yakın?</h2>
+        <p>Bu küçük etkileşim, projeyi gezen kişilere İstanbul’u hangi gözle düşündüklerini sorar.</p>
+      </div>
+      <div class="choice-wrap">
+        <div class="choice-buttons">
+          <button class="choice-btn active" data-choice="maviSec">Mavi İstanbul</button>
+          <button class="choice-btn" data-choice="yesilSec">Yeşil İstanbul</button>
+          <button class="choice-btn" data-choice="hepsiSec">İkisi de</button>
+        </div>
+        <div class="choice-result" id="choice-result" aria-live="polite"></div>
       </div>
     </section>
 
@@ -229,6 +275,43 @@
       </div>
     </section>
 
+    <section id="album" class="section-pad album-section">
+      <div class="section-head">
+        <p class="eyebrow">Ekip Albümü</p>
+        <h2>Şimdilik stok görseller, sonra kendi fotoğraflarınızla değiştirin</h2>
+        <p>Bu bölüm özellikle ekip fotoğraflarıyla güçlensin diye hazırlandı. Şimdilik yer tutucu / stok görseller kullanıldı.</p>
+      </div>
+      <div class="album-grid">
+        <article class="album-card featured">
+          <img src="assets/images/bogaz-havadan.webp" alt="Boğaz genel görünüm">
+          <div class="album-caption"><strong>Yer Tutucu 01</strong><span>Boğaz genel drone görünümü</span></div>
+        </article>
+        <article class="album-card">
+          <img src="assets/images/anadolu-hisari.webp" alt="Anadolu Hisarı">
+          <div class="album-caption"><strong>Yer Tutucu 02</strong><span>Anadolu Hisarı / kıyı fotoğrafı</span></div>
+        </article>
+        <article class="album-card">
+          <img src="assets/images/rumeli-hisari.webp" alt="Rumeli Hisarı">
+          <div class="album-caption"><strong>Yer Tutucu 03</strong><span>Rumeli Hisarı / sahil görünümü</span></div>
+        </article>
+        <article class="album-card">
+          <img src="assets/images/kopru.webp" alt="Köprü görünümü">
+          <div class="album-caption"><strong>Yer Tutucu 04</strong><span>Köprü / vapur / kıyı detayı</span></div>
+        </article>
+        <article class="album-card">
+          <img src="assets/images/belgrad-ormani.webp" alt="Belgrad Ormanı">
+          <div class="album-caption"><strong>Yer Tutucu 05</strong><span>Belgrad Ormanı yürüyüş alanı</span></div>
+        </article>
+        <article class="album-card">
+          <img src="assets/images/ataturk-arboretumu.webp" alt="Atatürk Arboretumu">
+          <div class="album-caption"><strong>Yer Tutucu 06</strong><span>Arboretum gölet veya patika</span></div>
+        </article>
+      </div>
+      <div class="replace-tip">
+        <strong>İpucu:</strong> Kendi fotoğraflarınızı aynı oranlarda hazırlayıp bu bölümdeki dosyaları değiştirmeniz yeterli.
+      </div>
+    </section>
+
     <section id="quiz" class="section-pad quiz-section">
       <div class="section-head">
         <p class="eyebrow">Mini Quiz</p>
@@ -272,6 +355,23 @@
   <dialog id="detail-modal" class="detail-modal">
     <button class="modal-close" type="button" aria-label="Pencereyi kapat">×</button>
     <div id="modal-content"></div>
+  </dialog>
+
+  <dialog id="presentation-modal" class="presentation-modal">
+    <div class="presentation-shell">
+      <button class="presentation-close" type="button" aria-label="Sunum modunu kapat">×</button>
+      <div class="presentation-stage">
+        <div id="presentation-content"></div>
+      </div>
+      <div class="presentation-bar">
+        <button class="btn ghost" id="presentation-prev" type="button">← Önceki</button>
+        <div class="presentation-meta">
+          <strong id="presentation-counter"></strong>
+          <div id="presentation-dots" class="presentation-dots"></div>
+        </div>
+        <button class="btn primary" id="presentation-next" type="button">Sonraki →</button>
+      </div>
+    </div>
   </dialog>
 
   <script src="js/script.js"></script>

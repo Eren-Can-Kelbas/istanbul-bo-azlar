@@ -33,7 +33,7 @@ $$('[data-scroll]').forEach((btn) => {
 const pollResult = $('#poll-result');
 const pollMessages = {
   Gri: 'Gri cevabı güzel bir başlangıç: İstanbul’un görünen yüzü çoğu zaman trafik, beton ve kalabalık. Biz bu perdenin altındaki mavi ve yeşili anlatıyoruz.',
-  Mavi: 'Mavi cevap, Boğaz’ın İstanbul kimliğindeki gücünü gösterir. Boğaz bu sayfada şehrin ana omurgası.',
+  Mavi: 'Mavi cevap, Boğaz’ın İstanbul kimliğindeki gücünü gösterir. Bu sitede mavi hafıza özellikle ön plana çıkarılıyor.',
   Yeşil: 'Yeşil cevap, Belgrad Ormanı ve Atatürk Arboretumu gibi alanların şehir hafızasında ne kadar değerli olduğunu gösterir.',
   Hepsi: 'En güçlü cevap bu: İstanbul tek renk değil. Sunumun ana fikri de İstanbul’un çok katmanlı bir şehir olduğu.'
 };
@@ -73,6 +73,34 @@ modalClose?.addEventListener('click', () => modal.close());
 modal?.addEventListener('click', (event) => {
   if (event.target === modal) modal.close();
 });
+
+const choiceResult = $('#choice-result');
+const choiceData = {
+  maviSec: {
+    title: 'Senin İstanbul’un: Mavi İstanbul',
+    text: 'Boğaz, vapur, martı, köprü ve kıyı yaşamı senin için İstanbul’un ana kimliğini taşıyor. Bu bakış, projenin Boğaz merkezli omurgasıyla örtüşüyor.',
+    className: 'mavi'
+  },
+  yesilSec: {
+    title: 'Senin İstanbul’un: Yeşil İstanbul',
+    text: 'İstanbul’u sadece kalabalık değil; aynı zamanda Belgrad Ormanı ve Atatürk Arboretumu gibi nefes alınan alanlarla düşünüyorsun. Yeşil hafıza senin için daha güçlü.',
+    className: 'yesil'
+  },
+  hepsiSec: {
+    title: 'Senin İstanbul’un: Mavi + Yeşil + İnsan',
+    text: 'Senin bakışın bu projenin tam merkezine denk geliyor: İstanbul yalnızca tek bir renk değil; mavi, insan ve yeşil hafızanın üst üste geldiği çok katmanlı bir şehir.',
+    className: 'karma'
+  }
+};
+function renderChoice(key = 'maviSec') {
+  const item = choiceData[key];
+  if (!item || !choiceResult) return;
+  choiceResult.className = `choice-result ${item.className}`;
+  choiceResult.innerHTML = `<span class="pill">Sonuç</span><h3>${item.title}</h3><p>${item.text}</p>`;
+  $$('.choice-btn').forEach((btn) => btn.classList.toggle('active', btn.dataset.choice === key));
+}
+$$('.choice-btn').forEach((button) => button.addEventListener('click', () => renderChoice(button.dataset.choice)));
+renderChoice();
 
 const places = {
   bogaz: {
@@ -212,4 +240,107 @@ $$('audio').forEach((audio) => {
     $$('.audio-card').forEach((card) => card.classList.remove('active-audio'));
     audio.closest('.audio-card')?.classList.add('active-audio');
   });
+});
+
+// Sunum modu
+const presentationModal = $('#presentation-modal');
+const presentationContent = $('#presentation-content');
+const presentationCounter = $('#presentation-counter');
+const presentationDots = $('#presentation-dots');
+const presentationPrev = $('#presentation-prev');
+const presentationNext = $('#presentation-next');
+const presentationClose = $('.presentation-close');
+const openPresentation = $('#open-presentation');
+const presentationSlides = [
+  {
+    title: 'Megakent’in İçinde Zamanın Durduğu Yerler',
+    subtitle: 'İstanbul’un Mavi ve Yeşil Hafızası',
+    text: 'Bu sunum modu, web sayfasını sınıf içinde daha rahat anlatmanız için hazırlandı. Ana akış: Boğaz → İnsan Hafızası → Yeşil Hafıza → Nefes Rotası.',
+    image: 'assets/images/bogaz-havadan.webp'
+  },
+  {
+    title: 'Mavi Hafıza',
+    subtitle: 'Boğaz: İstanbul’un mavi omurgası',
+    text: 'Boğaz yalnızca doğal bir su yolu değil; İstanbul’un kültürel ritmini kuran ana sahnedir. Vapur, köprü, kıyı yaşamı ve sahil hafızası burada toplanır.',
+    image: 'assets/images/kopru.webp'
+  },
+  {
+    title: 'İnsan Hafızası',
+    subtitle: 'Göçler, semtler, diller ve günlük hayat',
+    text: 'İstanbul’un hafızası yalnızca mekânlarda değil, insanlarda birikir. Şehir farklı toplulukları, yaşam ritimlerini ve hikâyeleri bir arada taşır.',
+    image: 'assets/images/anadolu-hisari.webp'
+  },
+  {
+    title: 'Yeşil Hafıza',
+    subtitle: 'Belgrad Ormanı ve Atatürk Arboretumu',
+    text: 'Bu alanlar megakentin içinde zamanı yavaşlatan, nefes aldıran ve doğanın hafızasını koruyan yeşil arşivlerdir.',
+    image: 'assets/images/ataturk-arboretumu.webp'
+  },
+  {
+    title: 'Nefes Rotası',
+    subtitle: 'Boğaz’dan Arboretum’a yolculuk',
+    text: 'Proje bir gezi listesi değil; İstanbul’un mavi hafızasından yeşil hafızasına uzanan düşünsel bir rota sunar.',
+    image: 'assets/images/belgrad-ormani.webp'
+  },
+  {
+    title: 'Kapanış',
+    subtitle: 'İstanbul’un iki ana rengi',
+    text: 'Boğaz’ın mavisi şehri dünyaya açar; Arboretum’un yeşili şehre nefes aldırır. İstanbul’u özel yapan şey bu çok katmanlı birlikteliktir.',
+    image: 'assets/images/bogaz-havadan.webp'
+  }
+];
+let presentationIndex = 0;
+function renderPresentation(index = 0) {
+  const slide = presentationSlides[index];
+  if (!slide || !presentationContent || !presentationCounter || !presentationDots) return;
+  presentationContent.innerHTML = `
+    <div class="presentation-slide">
+      <div class="presentation-text">
+        <p class="eyebrow">Sunum Modu</p>
+        <h2>${slide.title}</h2>
+        <h3>${slide.subtitle}</h3>
+        <p>${slide.text}</p>
+      </div>
+      <div class="presentation-image"><img src="${slide.image}" alt="${slide.title}"></div>
+    </div>
+  `;
+  presentationCounter.textContent = `Slayt ${index + 1}/${presentationSlides.length}`;
+  presentationDots.innerHTML = presentationSlides.map((_, i) => `<button class="presentation-dot ${i === index ? 'active' : ''}" data-slide="${i}" aria-label="Slayt ${i + 1}"></button>`).join('');
+  $$('.presentation-dot', presentationDots).forEach((dot) => {
+    dot.addEventListener('click', () => {
+      presentationIndex = Number(dot.dataset.slide);
+      renderPresentation(presentationIndex);
+    });
+  });
+}
+openPresentation?.addEventListener('click', () => {
+  presentationIndex = 0;
+  renderPresentation(presentationIndex);
+  if (typeof presentationModal.showModal === 'function') presentationModal.showModal();
+});
+presentationPrev?.addEventListener('click', () => {
+  presentationIndex = (presentationIndex - 1 + presentationSlides.length) % presentationSlides.length;
+  renderPresentation(presentationIndex);
+});
+presentationNext?.addEventListener('click', () => {
+  presentationIndex = (presentationIndex + 1) % presentationSlides.length;
+  renderPresentation(presentationIndex);
+});
+presentationClose?.addEventListener('click', () => presentationModal.close());
+presentationModal?.addEventListener('click', (event) => {
+  if (event.target === presentationModal) presentationModal.close();
+});
+document.addEventListener('keydown', (event) => {
+  if (!presentationModal?.open) return;
+  if (event.key === 'ArrowRight') {
+    presentationIndex = (presentationIndex + 1) % presentationSlides.length;
+    renderPresentation(presentationIndex);
+  }
+  if (event.key === 'ArrowLeft') {
+    presentationIndex = (presentationIndex - 1 + presentationSlides.length) % presentationSlides.length;
+    renderPresentation(presentationIndex);
+  }
+  if (event.key === 'Escape') {
+    presentationModal.close();
+  }
 });
