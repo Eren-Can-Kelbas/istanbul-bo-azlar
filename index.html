@@ -5,7 +5,695 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>İstanbul Rota | İnteraktif Harita</title>
   <meta name="description" content="Tam ekran, popup pencereli interaktif İstanbul rota haritası.">
-  <link rel="stylesheet" href="css/styles.css">
+  <style>
+:root{
+  --bg:#f4e5c4;
+  --green:#1f6b3a;
+  --green-dark:#174f2d;
+  --ink:#132034;
+  --muted:#5d665d;
+  --card:rgba(255,255,255,.985);
+  --card-soft:#fffaf0;
+  --shadow:0 28px 80px rgba(35,23,10,.24);
+  --accent:#d15f28;
+  --line:rgba(19,32,52,.10);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--ink);
+}
+button{font:inherit}
+
+.app,.stage{
+  position:fixed;
+  inset:0;
+}
+.stage{
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+
+.mapWrap{
+  position:relative;
+  aspect-ratio:2048 / 1117;
+  width:min(100vw, calc(100vh * 2048 / 1117));
+  max-height:100vh;
+  overflow:hidden;
+  background:var(--bg);
+}
+.mapImage{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.hotspots{
+  position:absolute;
+  inset:0;
+}
+.map-hotspot{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  transform:translate(-50%,-50%);
+  width:clamp(38px, var(--size), 84px);
+  height:clamp(38px, var(--size), 84px);
+  border-radius:50%;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  z-index:4;
+}
+.map-hotspot:hover,
+.map-hotspot.active{
+  background:transparent;
+  outline:0;
+  box-shadow:none;
+}
+
+.soundToggle{
+  position:absolute;
+  right:max(16px,2vw);
+  bottom:max(16px,2vw);
+  z-index:6;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:2px solid rgba(31,107,58,.7);
+  background:rgba(255,248,223,.95);
+  color:var(--green-dark);
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(35,23,10,.18);
+}
+.soundToggle.playing{
+  background:var(--green);
+  color:#fff;
+}
+
+/* POPUP: artık ekrana sığacak şekilde sabit yüksekliğe oturuyor. */
+.infoModal{
+  position:fixed;
+  inset:0;
+  z-index:20;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.infoModal.open{
+  display:flex;
+}
+.modalBackdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(25,19,12,.34);
+  backdrop-filter:blur(7px);
+}
+.modalPanel{
+  position:relative;
+  width:min(1180px, calc(100vw - 32px));
+  height:min(88vh, 760px);
+  border-radius:30px;
+  overflow:hidden;
+  background:var(--card);
+  color:var(--ink);
+  box-shadow:var(--shadow);
+}
+.closeBtn{
+  position:absolute;
+  right:16px;
+  top:16px;
+  z-index:8;
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  background:rgba(19,32,52,.90);
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.travelCard{
+  display:grid;
+  grid-template-columns:minmax(0,1.02fr) minmax(390px,.98fr);
+  height:100%;
+  min-height:0;
+}
+
+/* Fotoğraflar artık kırpılmıyor; tam görünür. */
+.travelHero{
+  position:relative;
+  min-height:0;
+  height:100%;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.25), transparent 34%),
+    #e3d7bd;
+  overflow:hidden;
+}
+.travelHero img,
+.travelHero video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  background:#e8dcc1;
+}
+.travelHero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, transparent 65%, rgba(0,0,0,.10));
+  pointer-events:none;
+}
+.photoEmpty{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding:32px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.56), transparent 35%),
+    linear-gradient(135deg, #efe0bd, #d8c39b);
+}
+.photoEmptyBox{
+  max-width:360px;
+  padding:24px;
+  border-radius:24px;
+  background:rgba(255,255,255,.58);
+  color:#5c513d;
+  font-weight:750;
+  line-height:1.55;
+}
+.heroOverlay{
+  position:absolute;
+  inset:auto 16px 16px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  pointer-events:none;
+}
+.chipRow{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.chip{
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.90);
+  color:var(--ink);
+  font-weight:850;
+  backdrop-filter:blur(8px);
+  box-shadow:0 10px 20px rgba(35,23,10,.10);
+}
+.galleryNav{
+  display:flex;
+  gap:10px;
+  pointer-events:auto;
+}
+.arrowBtn{
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  background:rgba(19,32,52,.88);
+  color:#fff;
+  font-size:25px;
+  cursor:pointer;
+}
+.arrowBtn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.travelInfo{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:24px 26px 18px;
+  overflow-y:auto;
+  min-height:0;
+  background:
+    linear-gradient(180deg, rgba(255,250,240,1) 0%, rgba(255,255,255,1) 100%);
+  scrollbar-width:thin;
+}
+.travelInfo::-webkit-scrollbar{ width:8px; }
+.travelInfo::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.28);
+  border-radius:999px;
+}
+.travelTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+}
+.kicker{
+  display:inline-flex;
+  margin-bottom:7px;
+  color:var(--green);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:.72rem;
+}
+.travelInfo h1{
+  margin:0;
+  font-size:clamp(1.9rem,3.2vw,2.75rem);
+  line-height:.98;
+  letter-spacing:-.04em;
+}
+.subtitle{
+  margin:8px 0 0;
+  color:var(--accent);
+  font-size:1rem;
+  font-weight:850;
+}
+.badge{
+  padding:9px 12px;
+  border-radius:16px;
+  background:rgba(31,107,58,.10);
+  color:var(--green-dark);
+  font-weight:850;
+  white-space:nowrap;
+}
+.routeOrder{
+  display:inline-flex;
+  align-self:flex-start;
+  padding:9px 12px;
+  border-radius:999px;
+  background:#f4efe3;
+  color:#554734;
+  font-weight:850;
+  font-size:.95rem;
+}
+.smallMeta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.smallMeta .meta{
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(19,32,52,.06);
+  color:var(--ink);
+  font-size:.88rem;
+  font-weight:750;
+}
+
+.contentGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.contentBox{
+  padding:13px 14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.72);
+  border:1px solid var(--line);
+}
+.contentBox.full{
+  grid-column:1 / -1;
+}
+.contentBox h3{
+  margin:0 0 6px;
+  font-size:.93rem;
+  color:var(--green-dark);
+}
+.contentBox p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.55;
+  font-size:.95rem;
+}
+.noteBlock{
+  padding:14px;
+  border-left:4px solid var(--green);
+  border-radius:16px;
+  background:rgba(31,107,58,.08);
+}
+.noteBlock strong{
+  display:block;
+  margin-bottom:6px;
+}
+.noteBlock div{
+  line-height:1.55;
+  font-size:.95rem;
+}
+
+.photoCaption{
+  padding:12px 14px;
+  border-radius:16px;
+  background:rgba(209,95,40,.08);
+  border:1px solid rgba(209,95,40,.12);
+  color:#5a402d;
+  font-weight:720;
+  line-height:1.45;
+  font-size:.92rem;
+}
+
+.thumbHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:8px;
+}
+.thumbHint{
+  color:var(--muted);
+  font-size:.85rem;
+}
+.thumbStrip{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.thumbStrip button{
+  width:68px;
+  height:52px;
+  border:0;
+  border-radius:12px;
+  overflow:hidden;
+  padding:0;
+  background:rgba(19,32,52,.06);
+  cursor:pointer;
+  outline:2px solid transparent;
+  position:relative;
+}
+.thumbStrip button.active{
+  outline-color:var(--green);
+}
+.thumbStrip img,
+.thumbStrip video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.thumbStrip .videoThumb::after{
+  content:"▶";
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:rgba(19,32,52,.25);
+  font-weight:900;
+}
+.routeButtons{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:2px;
+}
+.routeBtn{
+  border:0;
+  border-radius:999px;
+  padding:10px 14px;
+  background:rgba(19,32,52,.08);
+  color:var(--ink);
+  font-weight:850;
+  cursor:pointer;
+}
+.routeBtn.primary{
+  background:var(--green);
+  color:#fff;
+}
+
+@media (max-width:940px){
+  .modalPanel{
+    height:92vh;
+  }
+  .travelCard{
+    grid-template-columns:1fr;
+    overflow-y:auto;
+  }
+  .travelHero{
+    height:42vh;
+    min-height:280px;
+  }
+  .travelInfo{
+    overflow:visible;
+  }
+  .contentGrid{ grid-template-columns:1fr; }
+}
+@media (max-width:620px){
+  .infoModal{ padding:10px; }
+  .modalPanel{ width:calc(100vw - 20px); border-radius:24px; }
+  .travelInfo{ padding:20px; }
+  .travelTop{ flex-direction:column; }
+  .badge{ white-space:normal; }
+  .map-hotspot{
+    width:clamp(34px, 8vw, 56px);
+    height:clamp(34px, 8vw, 56px);
+  }
+}
+
+
+/* Profesyonel yerel rota müziği playerı */
+.hiddenMedia{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+.localMusicPlayer{
+  position:absolute;
+  right:max(16px,2vw);
+  bottom:max(16px,2vw);
+  z-index:12;
+}
+.playerMiniButton{
+  min-width:214px;
+  height:58px;
+  border:1px solid rgba(31,107,58,.24);
+  border-radius:999px;
+  background:rgba(255,250,240,.94);
+  color:var(--ink);
+  box-shadow:0 16px 36px rgba(35,23,10,.20);
+  backdrop-filter:blur(12px);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:7px 16px 7px 8px;
+  cursor:pointer;
+}
+.miniDisc{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  overflow:hidden;
+  background:linear-gradient(135deg, #d9c595, #fff3d4);
+  box-shadow:0 0 0 3px rgba(31,107,58,.10);
+  flex:0 0 auto;
+}
+.miniDisc img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.miniDisc.is-playing{
+  animation:spinDisc 8s linear infinite;
+}
+.miniText{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  line-height:1.15;
+}
+.miniText strong{ font-size:.98rem; color:var(--green-dark); }
+.miniText small{
+  color:var(--muted);
+  max-width:135px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.playerPanel{
+  position:absolute;
+  right:0;
+  bottom:72px;
+  width:min(430px, calc(100vw - 32px));
+  padding:16px;
+  border-radius:28px;
+  background:rgba(255,250,240,.96);
+  color:var(--ink);
+  box-shadow:0 24px 70px rgba(35,23,10,.26);
+  border:1px solid rgba(31,107,58,.16);
+  backdrop-filter:blur(14px);
+  display:none;
+}
+.playerPanel.open{ display:block; }
+.playerHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:14px;
+}
+.playerKicker{
+  display:block;
+  color:var(--green);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:.72rem;
+  margin-bottom:4px;
+}
+.playerHeader h2{ margin:0; font-size:1.45rem; line-height:1; }
+.playerClose{
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  background:rgba(19,32,52,.90);
+  color:#fff;
+  font-size:23px;
+  line-height:1;
+  cursor:pointer;
+}
+.nowPlaying{
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr);
+  gap:14px;
+  align-items:center;
+  padding:12px;
+  border-radius:22px;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(19,32,52,.08);
+}
+.coverBox{
+  width:88px;
+  height:88px;
+  border-radius:20px;
+  overflow:hidden;
+  background:linear-gradient(135deg, #d8c295, #fff2d0);
+}
+.coverBox img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.trackInfo{ min-width:0; display:flex; flex-direction:column; gap:5px; }
+.trackInfo strong{ font-size:1.18rem; line-height:1.1; }
+.trackInfo span{ color:var(--muted); font-weight:750; }
+.progressBlock{ margin-top:14px; }
+.progressRange,.volumeRange{ width:100%; accent-color:var(--green); }
+.timeRow{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:.86rem;
+  font-weight:750;
+  margin-top:4px;
+}
+.controlRow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin:14px 0;
+}
+.circleControl,.playControl{
+  border:0;
+  border-radius:50%;
+  background:rgba(19,32,52,.10);
+  color:var(--ink);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+}
+.circleControl{ width:44px; height:44px; font-size:28px; }
+.playControl{
+  width:62px;
+  height:62px;
+  background:var(--green);
+  color:#fff;
+  font-size:25px;
+  box-shadow:0 14px 28px rgba(31,107,58,.28);
+}
+.volumeRow{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:10px;
+  align-items:center;
+  color:var(--muted);
+  font-weight:800;
+}
+.loopToggle{
+  border:0;
+  border-radius:999px;
+  padding:8px 10px;
+  background:rgba(19,32,52,.08);
+  color:var(--ink);
+  font-weight:850;
+  cursor:pointer;
+}
+.loopToggle.active{ background:rgba(31,107,58,.14); color:var(--green-dark); }
+.trackList{ display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+.trackItem{
+  width:100%;
+  border:0;
+  border-radius:16px;
+  padding:10px;
+  display:grid;
+  grid-template-columns:44px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  background:rgba(19,32,52,.06);
+  cursor:pointer;
+  text-align:left;
+}
+.trackItem.active{ background:rgba(31,107,58,.13); }
+.trackItem img{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  object-fit:cover;
+  background:#e8dcc1;
+}
+.trackItem strong{
+  display:block;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.trackItem span{ color:var(--muted); font-size:.88rem; }
+.trackItem em{ font-style:normal; color:var(--green-dark); font-weight:900; }
+.playerNote{
+  margin:12px 2px 0;
+  color:var(--muted);
+  font-size:.86rem;
+  line-height:1.42;
+}
+@keyframes spinDisc{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+@media (max-width:620px){
+  .localMusicPlayer{ right:10px; bottom:10px; }
+  .playerMiniButton{ min-width:58px; width:58px; padding:7px; }
+  .miniText{ display:none; }
+  .playerPanel{ right:-2px; bottom:68px; width:calc(100vw - 20px); }
+}
+
+  </style>
 </head>
 <body>
   <main class="app">
@@ -102,6 +790,400 @@
   <script>
     window.LOCAL_MUSIC_TRACKS = [{"title": "Burası İstanbul", "artist": "Nil Karaibrahimgil", "src": "assets/music/nil-burasi-istanbul.mp4", "cover": "assets/music/covers/burasi-istanbul.png"}, {"title": "İstanbul Kafası", "artist": "Dolunay Obruk", "src": "assets/music/dolunay-istanbul-kafasi.mp4", "cover": "assets/music/covers/dolunay-obruk.png"}, {"title": "Istanbul", "artist": "The Four Lads", "src": "assets/music/four-lads-istanbul.mp4", "cover": "assets/music/covers/the-four-lads.png"}];
   </script>
-  <script src="js/script.js"></script>
+  <script>
+const stops = window.ROUTE_STOPS || [];
+const modal = document.querySelector('#infoModal');
+const content = document.querySelector('#dialogContent');
+const closeBtn = document.querySelector('.closeBtn');
+const hotspots = Array.from(document.querySelectorAll('.map-hotspot'));
+
+let currentStop = null;
+let currentImageIndex = 0;
+
+const popupDetails = {
+  fsm: {
+    importance: 'Boğaz geçişi üzerinden İstanbul’un iki yakasını ve modern ulaşım hafızasını temsil eder.',
+    presentation: 'Köprünün sadece ulaşım aracı değil, iki kıta arasında kurulan bağın simgesi olduğunu vurgulayabilirsin.',
+    photoNote: 'Fotoğraf önerisi: köprü, Boğaz manzarası veya rota geçişini gösteren kareler.'
+  },
+  belgrad: {
+    importance: 'Megakentin içinde korunmuş geniş yeşil dokuyu gösterir.',
+    presentation: 'İstanbul’un yalnızca kalabalık ve yapılaşmadan ibaret olmadığını; güçlü bir doğal hafızaya sahip olduğunu anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: orman yolu, ağaç dokusu, yürüyüş yolu veya su kemeri.'
+  },
+  arboretum: {
+    importance: 'Bitki çeşitliliği ve koruma fikriyle doğayı yaşayan bir arşiv gibi sunar.',
+    presentation: 'Doğanın sadece gezilecek alan değil, korunması ve öğrenilmesi gereken bir kültür parçası olduğunu vurgulayabilirsin.',
+    photoNote: 'Fotoğraf önerisi: gölet, ağaç koleksiyonları, giriş tabelası veya yürüyüş alanı.'
+  },
+  rumeli: {
+    importance: 'Boğaz’ın tarihî savunma hattını ve İstanbul’un fetih hafızasını temsil eder.',
+    presentation: 'Doğal manzaranın tarihî yapılarla nasıl birleştiğini anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: hisar duvarları, kuleler veya Boğaz manzaralı hisar kareleri.'
+  },
+  bebek: {
+    importance: 'Boğaz’ın gündelik hayatla birleştiği kıyı kültürünü gösterir.',
+    presentation: 'İstanbul’da suyun sadece manzara değil; yürüyüş, buluşma ve sosyalleşme alanı olduğunu anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: sahil yürüyüşü, tekneler, deniz kıyısı veya sosyal yaşam kareleri.'
+  },
+  anadolu: {
+    importance: 'Boğaz’ın daha sakin ve tarihî Anadolu yakası hafızasını tamamlar.',
+    presentation: 'Rumeli Hisarı ile karşılıklı konumu üzerinden iki yakanın tarihsel bağını anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: Anadolu Hisarı, sahil dokusu veya Boğaz’ın sakin kıyı görüntüleri.'
+  },
+  cekmekoy: {
+    importance: 'Rota anlatısının başladığı ve kapandığı gündelik yaşam noktasıdır.',
+    presentation: 'Şehir içinden başlayıp doğa, tarih ve Boğaz hattını dolaşarak tekrar başlangıca dönen döngüsel rota fikrini açıklayabilirsin.',
+    photoNote: 'Fotoğraf önerisi: başlangıç/kapanış duygusunu veren sokak, yol, ekip ya da rota başlangıcı kareleri.'
+  }
+};
+
+function getStop(id){
+  return stops.find(stop => stop.id === id);
+}
+function stopIndex(id){
+  return stops.findIndex(stop => stop.id === id);
+}
+function setActive(id){
+  hotspots.forEach(h => h.classList.toggle('active', h.dataset.stop === id));
+}
+function openModal(){
+  modal?.classList.add('open');
+  modal?.setAttribute('aria-hidden', 'false');
+}
+function closeModal(){
+  modal?.classList.remove('open');
+  modal?.setAttribute('aria-hidden', 'true');
+  setActive(null);
+}
+function tagHTML(tags){
+  return (tags || []).map(tag => `<span class="meta">${tag}</span>`).join('');
+}
+function normalizeMedia(stop){
+  if(Array.isArray(stop.media) && stop.media.length){
+    return stop.media.map(item => {
+      if(typeof item === 'string'){
+        return { type: guessType(item), src: item, caption: '' };
+      }
+      return { type: item.type || guessType(item.src || ''), src: item.src, caption: item.caption || '' };
+    }).filter(item => item.src);
+  }
+
+  const photos = stop.photos && stop.photos.length ? stop.photos : ['assets/images/rota-haritasi.png'];
+  return photos.map(src => ({ type: guessType(src), src, caption: '' }));
+}
+function guessType(src){
+  return /\.(mp4|webm|ogg)$/i.test(src) ? 'video' : 'image';
+}
+function renderMainMedia(item, stop){
+  if(!item || !item.src){
+    return `
+      <div class="photoEmpty">
+        <div class="photoEmptyBox">Bu durak için fotoğraf/video alanı hazır. Dosya eklediğinde burada tam haliyle görünecek.</div>
+      </div>
+    `;
+  }
+  if(item.type === 'video'){
+    return `<video src="${item.src}" controls playsinline preload="metadata"></video>`;
+  }
+  return `<img src="${item.src}" alt="${stop.title} görseli">`;
+}
+function renderThumb(item, stop, index, active){
+  const cls = `${active ? 'active' : ''} ${item.type === 'video' ? 'videoThumb' : ''}`.trim();
+  const thumbMedia = item.type === 'video'
+    ? `<video src="${item.src}" muted preload="metadata"></video>`
+    : `<img src="${item.src}" alt="${stop.title} küçük görsel ${index + 1}">`;
+  return `
+    <button type="button" class="${cls}" data-thumb="${index}" aria-label="${index + 1}. medya">
+      ${thumbMedia}
+    </button>
+  `;
+}
+function renderStop(stop, imageIndex = 0){
+  if(!stop || !content) return;
+  currentStop = stop;
+  const media = normalizeMedia(stop);
+  currentImageIndex = Math.max(0, Math.min(imageIndex, media.length - 1));
+  const detail = popupDetails[stop.id] || {};
+  const currentItem = media[currentImageIndex];
+  const currentCaption = currentItem.caption || detail.photoNote || 'Bu alana durakla ilgili fotoğraf veya video açıklaması eklenebilir.';
+
+  const thumbs = media.map((item, index) => renderThumb(item, stop, index, index === currentImageIndex)).join('');
+
+  content.innerHTML = `
+    <article class="travelCard">
+      <div class="travelHero">
+        ${renderMainMedia(currentItem, stop)}
+        <div class="heroOverlay">
+          <div class="chipRow">
+            <span class="chip">${currentImageIndex + 1}/${media.length} medya</span>
+            <span class="chip">${stop.category}</span>
+          </div>
+          <div class="galleryNav">
+            <button class="arrowBtn" type="button" data-gallery="prev" aria-label="Önceki medya" ${media.length < 2 ? 'disabled' : ''}>‹</button>
+            <button class="arrowBtn" type="button" data-gallery="next" aria-label="Sonraki medya" ${media.length < 2 ? 'disabled' : ''}>›</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="travelInfo">
+        <div class="travelTop">
+          <div>
+            <span class="kicker">Gezi Kartı</span>
+            <h1 id="modalTitle">${stop.title}</h1>
+            <p class="subtitle">${stop.subtitle}</p>
+          </div>
+          <div class="badge">${stop.category}</div>
+        </div>
+
+        <div class="routeOrder">${stop.routeOrder}</div>
+        <div class="smallMeta">${tagHTML(stop.tags)}</div>
+
+        <div class="contentGrid">
+          <div class="contentBox full">
+            <h3>Kısa Bilgi</h3>
+            <p>${stop.text}</p>
+          </div>
+          <div class="contentBox">
+            <h3>Neden Önemli?</h3>
+            <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
+          </div>
+          <div class="contentBox">
+            <h3>Sunumda Nasıl Anlatılır?</h3>
+            <p>${detail.presentation || 'Bu durak üzerinden İstanbul’un mavi, yeşil ve tarihî hafızasıyla bağlantı kurulabilir.'}</p>
+          </div>
+        </div>
+
+        <div class="noteBlock">
+          <strong>Sunum Cümlesi</strong>
+          <div>${stop.note}</div>
+        </div>
+
+        <div class="photoCaption">${currentCaption}</div>
+
+        <div>
+          <div class="thumbHeader">
+            <span class="kicker">Fotoğraf / Video Albümü</span>
+            <span class="thumbHint">Medya ekledikçe burada çoğalır</span>
+          </div>
+          <div class="thumbStrip">${thumbs}</div>
+        </div>
+
+        <div class="routeButtons">
+          <button class="routeBtn" type="button" data-route="prev">← Önceki Durak</button>
+          <button class="routeBtn primary" type="button" data-route="next">Sonraki Durak →</button>
+        </div>
+      </div>
+    </article>
+  `;
+
+  content.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(media.length < 2) return;
+      const nextIndex = btn.dataset.gallery === 'next'
+        ? (currentImageIndex + 1) % media.length
+        : (currentImageIndex - 1 + media.length) % media.length;
+      renderStop(stop, nextIndex);
+    });
+  });
+
+  content.querySelectorAll('[data-thumb]').forEach(btn => {
+    btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
+  });
+
+  content.querySelectorAll('[data-route]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = stopIndex(stop.id);
+      const nextIndex = btn.dataset.route === 'next'
+        ? (index + 1) % stops.length
+        : (index - 1 + stops.length) % stops.length;
+      openStop(stops[nextIndex].id);
+    });
+  });
+}
+function openStop(id){
+  const stop = getStop(id);
+  if(!stop) return;
+  setActive(id);
+  renderStop(stop, 0);
+  openModal();
+}
+hotspots.forEach(h => {
+  h.addEventListener('click', () => openStop(h.dataset.stop));
+});
+closeBtn?.addEventListener('click', closeModal);
+modal?.addEventListener('click', event => {
+  if(event.target?.dataset?.close === 'true') closeModal();
+});
+document.addEventListener('keydown', event => {
+  if(!modal?.classList.contains('open')) return;
+  if(event.key === 'Escape') closeModal();
+  if(!currentStop) return;
+  const media = normalizeMedia(currentStop);
+  if(event.key === 'ArrowRight') renderStop(currentStop, (currentImageIndex + 1) % media.length);
+  if(event.key === 'ArrowLeft') renderStop(currentStop, (currentImageIndex - 1 + media.length) % media.length);
+});
+
+
+/* Profesyonel yerel müzik playerı */
+const localTracks = window.LOCAL_MUSIC_TRACKS || [];
+const routeAudio = document.querySelector('#routeAudio');
+const playerMiniButton = document.querySelector('#playerMiniButton');
+const playerPanel = document.querySelector('#playerPanel');
+const playerClose = document.querySelector('#playerClose');
+const miniCover = document.querySelector('#miniCover');
+const miniTrackName = document.querySelector('#miniTrackName');
+const miniDisc = document.querySelector('.miniDisc');
+const playerCover = document.querySelector('#playerCover');
+const trackTitle = document.querySelector('#trackTitle');
+const trackArtist = document.querySelector('#trackArtist');
+const progressRange = document.querySelector('#progressRange');
+const currentTimeLabel = document.querySelector('#currentTime');
+const durationTimeLabel = document.querySelector('#durationTime');
+const prevTrackButton = document.querySelector('#prevTrack');
+const nextTrackButton = document.querySelector('#nextTrack');
+const playPauseButton = document.querySelector('#playPause');
+const volumeRange = document.querySelector('#volumeRange');
+const loopToggle = document.querySelector('#loopToggle');
+const trackList = document.querySelector('#trackList');
+
+let activeTrackIndex = 0;
+let playlistLoop = true;
+let firstInteractionStarted = false;
+
+function formatTime(seconds){
+  if(!Number.isFinite(seconds)) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+  return `${mins}:${secs}`;
+}
+function getTrack(index){
+  return localTracks[index] || localTracks[0];
+}
+function updateTrackList(){
+  if(!trackList) return;
+  trackList.innerHTML = localTracks.map((track, index) => `
+    <button class="trackItem ${index === activeTrackIndex ? 'active' : ''}" type="button" data-track="${index}">
+      <img src="${track.cover}" alt="">
+      <span>
+        <strong>${track.title}</strong>
+        <span>${track.artist}</span>
+      </span>
+      <em>${index === activeTrackIndex ? 'Çalıyor' : 'Seç'}</em>
+    </button>
+  `).join('');
+  trackList.querySelectorAll('[data-track]').forEach((button) => {
+    button.addEventListener('click', () => setTrack(Number(button.dataset.track), true));
+  });
+}
+function setTrack(index, shouldPlay = false){
+  const track = getTrack(index);
+  if(!track || !routeAudio) return;
+  activeTrackIndex = index;
+  routeAudio.src = track.src;
+  routeAudio.volume = Number(volumeRange?.value ?? 0.45);
+  if(playerCover) playerCover.src = track.cover;
+  if(miniCover) miniCover.src = track.cover;
+  if(trackTitle) trackTitle.textContent = track.title;
+  if(trackArtist) trackArtist.textContent = track.artist;
+  if(miniTrackName) miniTrackName.textContent = track.title;
+  if(progressRange) progressRange.value = 0;
+  if(currentTimeLabel) currentTimeLabel.textContent = '0:00';
+  if(durationTimeLabel) durationTimeLabel.textContent = '0:00';
+  updateTrackList();
+  if(shouldPlay) playRouteMusic();
+}
+async function playRouteMusic(){
+  if(!routeAudio) return;
+  try{
+    await routeAudio.play();
+    if(playPauseButton) playPauseButton.textContent = 'Ⅱ';
+    miniDisc?.classList.add('is-playing');
+  }catch(error){
+    if(playPauseButton) playPauseButton.textContent = '▶';
+    miniDisc?.classList.remove('is-playing');
+  }
+}
+function pauseRouteMusic(){
+  if(!routeAudio) return;
+  routeAudio.pause();
+  if(playPauseButton) playPauseButton.textContent = '▶';
+  miniDisc?.classList.remove('is-playing');
+}
+function toggleRouteMusic(){
+  if(!routeAudio) return;
+  if(routeAudio.paused) playRouteMusic();
+  else pauseRouteMusic();
+}
+function nextTrack(shouldPlay = true){
+  if(!localTracks.length) return;
+  setTrack((activeTrackIndex + 1) % localTracks.length, shouldPlay);
+}
+function prevTrack(shouldPlay = true){
+  if(!localTracks.length) return;
+  setTrack((activeTrackIndex - 1 + localTracks.length) % localTracks.length, shouldPlay);
+}
+function openPlayer(){
+  playerPanel?.classList.add('open');
+  playerPanel?.setAttribute('aria-hidden', 'false');
+}
+function closePlayer(){
+  playerPanel?.classList.remove('open');
+  playerPanel?.setAttribute('aria-hidden', 'true');
+}
+function togglePlayer(){
+  if(playerPanel?.classList.contains('open')) closePlayer();
+  else openPlayer();
+}
+function tryStartOnFirstInteraction(){
+  if(firstInteractionStarted) return;
+  firstInteractionStarted = true;
+  if(routeAudio && routeAudio.paused) playRouteMusic();
+}
+
+playerMiniButton?.addEventListener('click', () => {
+  togglePlayer();
+  tryStartOnFirstInteraction();
+});
+playerClose?.addEventListener('click', closePlayer);
+playPauseButton?.addEventListener('click', toggleRouteMusic);
+nextTrackButton?.addEventListener('click', () => nextTrack(true));
+prevTrackButton?.addEventListener('click', () => prevTrack(true));
+volumeRange?.addEventListener('input', () => {
+  if(routeAudio) routeAudio.volume = Number(volumeRange.value);
+});
+loopToggle?.addEventListener('click', () => {
+  playlistLoop = !playlistLoop;
+  loopToggle.classList.toggle('active', playlistLoop);
+  loopToggle.textContent = playlistLoop ? 'Loop açık' : 'Loop kapalı';
+});
+progressRange?.addEventListener('input', () => {
+  if(!routeAudio || !Number.isFinite(routeAudio.duration)) return;
+  routeAudio.currentTime = (Number(progressRange.value) / 100) * routeAudio.duration;
+});
+routeAudio?.addEventListener('timeupdate', () => {
+  if(!routeAudio || !Number.isFinite(routeAudio.duration)) return;
+  if(progressRange) progressRange.value = (routeAudio.currentTime / routeAudio.duration) * 100;
+  if(currentTimeLabel) currentTimeLabel.textContent = formatTime(routeAudio.currentTime);
+  if(durationTimeLabel) durationTimeLabel.textContent = formatTime(routeAudio.duration);
+});
+routeAudio?.addEventListener('loadedmetadata', () => {
+  if(durationTimeLabel) durationTimeLabel.textContent = formatTime(routeAudio.duration);
+});
+routeAudio?.addEventListener('pause', () => miniDisc?.classList.remove('is-playing'));
+routeAudio?.addEventListener('play', () => miniDisc?.classList.add('is-playing'));
+routeAudio?.addEventListener('ended', () => {
+  if(playlistLoop || activeTrackIndex < localTracks.length - 1){
+    nextTrack(true);
+  }else{
+    pauseRouteMusic();
+  }
+});
+document.addEventListener('pointerdown', tryStartOnFirstInteraction, { once:true });
+if(localTracks.length){
+  setTrack(0, false);
+}
+
+  </script>
 </body>
 </html>

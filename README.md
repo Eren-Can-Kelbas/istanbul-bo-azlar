@@ -1,19 +1,26 @@
-# İstanbul Rota - Profesyonel Müzik Player v13
+# İstanbul Rota - GitHub Safe v14
 
-Bu sürümde:
-- Spotify paneli kaldırıldı.
-- Sağ alta profesyonel “Rota Müziği” playerı eklendi.
-- 3 MP4 ses/video dosyası playera bağlandı.
-- Kapak görselleri playera bağlandı.
-- Play / pause, önceki şarkı, sonraki şarkı, ses seviyesi, progress bar ve loop modu eklendi.
-- Sayfaya ilk tıklamada müziği başlatma denemesi eklendi.
+Bu sürüm GitHub Pages için düzeltildi.
+
+## Ne düzeltildi?
+- CSS ve JavaScript `index.html` içine gömüldü.
+- Böylece GitHub'da `css/styles.css` veya `js/script.js` yolu yanlış yüklenirse player bozulmaz.
 - Harita hotspotları ve tıklama koordinatları değiştirilmedi.
+- Yerel müzik playerı, kapak görselleri ve MP4 dosyaları paketin içindedir.
 
-## Kullanım
-1. ZIP'i çıkar.
-2. `index.html` dosyasını aç.
-3. Sayfaya bir kere tıkla veya sağ alttaki playerdan play tuşuna bas.
-4. Şarkılar arasında playerdan geçiş yapabilirsin.
+## GitHub'a yüklerken
+Repository kök dizininde şunlar görünmeli:
 
-## Not
-Tarayıcı güvenliği nedeniyle müzik her zaman otomatik başlamayabilir. Bu durumda play tuşuna bir kere basmak yeterlidir.
+- index.html
+- assets/
+- css/
+- js/
+- README.md
+
+En kritik dosya `index.html`, en kritik klasör ise `assets/`.
+
+## Yayına alma
+Settings > Pages > Deploy from branch > main / root seç.
+
+## Sorun devam ederse
+Tarayıcıda Ctrl + F5 yap. GitHub Pages bazen eski dosyayı cache'te tutar.
