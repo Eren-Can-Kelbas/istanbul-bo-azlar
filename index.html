@@ -3,377 +3,105 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Megakent’in İçinde Zamanın Durduğu Yerler</title>
-  <meta name="description" content="İstanbul’un Boğaz merkezli mavi hafızasını, insan katmanını ve Belgrad Ormanı–Atatürk Arboretumu yeşil hafızasını anlatan interaktif proje sayfası.">
-  <link rel="icon" href="assets/svg/favicon.svg" type="image/svg+xml">
+  <title>İstanbul Rota | İnteraktif Harita</title>
+  <meta name="description" content="Tam ekran, popup pencereli interaktif İstanbul rota haritası.">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="cursor-glow" aria-hidden="true"></div>
-  <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Ana sayfaya dön">
-      <span class="brand-mark">İ</span>
-      <span>
-        <strong>İstanbul Hafızası</strong>
-        <small>Boğaz • İnsan • Yeşil</small>
-      </span>
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menü</button>
-    <nav id="main-nav" class="main-nav" aria-label="Ana menü">
-      <a href="#amaç">Amaç</a>
-      <a href="#video">Video</a>
-      <a href="#bogaz">Boğaz</a>
-      <a href="#katmanlar">Katmanlar</a>
-      <a href="#renk-sec">Mavi mi Yeşil mi?</a>
-      <a href="#rota">Rota</a>
-      <a href="#galeri">Galeri</a>
-      <a href="#quiz">Quiz</a>
-      <a href="#ekip">Ekip</a>
-    </nav>
-  </header>
+  <main class="app">
 
-  <main>
-    <section class="hero section-pad" aria-labelledby="hero-title">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-content">
-        <p class="eyebrow">Şehir Kültür İstanbul Projesi</p>
-        <h1 id="hero-title">Megakent’in İçinde<br>Zamanın Durduğu Yerler</h1>
-        <p class="hero-subtitle">İstanbul’u Boğaz’ın mavisiyle başlayan, insan hafızasıyla derinleşen ve Arboretum’un yeşil sessizliğine uzanan canlı bir şehir arşivi olarak okuyoruz.</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#bogaz">Boğaz’dan Başla</a>
-          <button class="btn ghost" id="open-presentation" type="button">Sunum Modu</button>
-          <a class="btn ghost" href="kaynaklar/megakent_mavi_yesil_hafiza_15_slayt_revize.pptx">Sunumu İndir</a>
-        </div>
-        <div class="hero-stats" aria-label="Proje anahtar kelimeleri">
-          <span><strong>Mavi</strong> Boğaz</span>
-          <span><strong>İnsan</strong> katmanı</span>
-          <span><strong>Yeşil</strong> Arboretum</span>
+    <section class="stage">
+      <div class="mapWrap">
+        <img src="assets/images/rota-haritasi.png" alt="İstanbul keşif rotası haritası" class="mapImage">
+        <div class="hotspots" aria-label="Tıklanabilir rota durakları">
+          <button class="map-hotspot" style="--x:73.05%;--y:29.02%;--size:5.2vw;" data-stop="fsm" aria-label="FSM Köprüsü"></button>
+          <button class="map-hotspot" style="--x:32.57%;--y:12.76%;--size:5.2vw;" data-stop="belgrad" aria-label="Belgrad Ormanı"></button>
+          <button class="map-hotspot" style="--x:25.31%;--y:42.14%;--size:5.2vw;" data-stop="arboretum" aria-label="Atatürk Arboretumu"></button>
+          <button class="map-hotspot" style="--x:45.79%;--y:38.47%;--size:5.2vw;" data-stop="rumeli" aria-label="Rumeli Hisarı"></button>
+          <button class="map-hotspot" style="--x:53.2%;--y:69.03%;--size:5.2vw;" data-stop="bebek" aria-label="Bebek Sahili"></button>
+          <button class="map-hotspot" style="--x:64.86%;--y:50.16%;--size:5.2vw;" data-stop="anadolu" aria-label="Anadolu Hisarı"></button>
+          <button class="map-hotspot" style="--x:89.1%;--y:66.7%;--size:7.6vw;" data-stop="cekmekoy" aria-label="Çekmeköy"></button>
         </div>
       </div>
-      <div class="hero-visual" aria-label="İstanbul Boğazı görseli üzerinde mavi ve yeşil hafıza kartları">
-        <img src="assets/images/bogaz-havadan.webp" alt="İstanbul Boğazı kuşbakışı görünümü">
-        <div class="wave-lines" aria-hidden="true"></div>
-        <div class="visual-card mavi">Mavi Hafıza<br><span>Boğaz</span></div>
-        <div class="visual-card yesil">Yeşil Hafıza<br><span>Arboretum</span></div>
-      </div>
-      <button class="scroll-cue" type="button" data-scroll="#amaç" aria-label="Aşağı kaydır">↓</button>
-    </section>
 
-    <section class="intro-strip" aria-label="Açılış sorusu">
-      <div>
-        <span class="pill">Mini Etkileşim</span>
-        <h2>İstanbul deyince aklınıza ilk hangi renk geliyor?</h2>
-      </div>
-      <div class="poll" aria-live="polite">
-        <button class="poll-btn" data-poll="Gri">Gri</button>
-        <button class="poll-btn" data-poll="Mavi">Mavi</button>
-        <button class="poll-btn" data-poll="Yeşil">Yeşil</button>
-        <button class="poll-btn" data-poll="Hepsi">Hepsi</button>
-      </div>
-      <p id="poll-result" class="poll-result">Sunumda bu soruyu sınıfa sorup ardından “Biz gri İstanbul’un içindeki mavi ve yeşil hafızayı göstermek istedik.” diyebilirsiniz.</p>
-    </section>
+      <section id="localMusicPlayer" class="localMusicPlayer" aria-label="Rota müziği oynatıcı">
+        <video id="routeAudio" class="hiddenMedia" preload="metadata" playsinline></video>
 
-    <section id="amaç" class="section-pad two-col">
-      <div>
-        <p class="eyebrow">Projenin Derdi</p>
-        <h2>İstanbul’u yeniden okumak</h2>
-        <p>Bu çalışma İstanbul’u tek bir kalabalık görüntüsü olarak değil; doğanın, tarihin ve insan hikâyelerinin üst üste biriktiği yaşayan bir arşiv olarak ele alır.</p>
-        <p>Sayfanın omurgası <strong>Boğaz</strong> üzerine kurulur. Boğaz, İstanbul’un hem doğal güzelliğini hem stratejik önemini hem de gündelik kültürünü görünür kılar. Belgrad Ormanı ve Atatürk Arboretumu ise bu mavi hafızanın yanında kentin korunan yeşil belleğini temsil eder.</p>
-      </div>
-      <aside class="quote-card">
-        <span>Sunum cümlesi</span>
-        <blockquote>“Boğaz kentin dış dünyaya açılan kapısıysa; Arboretum kentin kendi içine çekildiği, nefes aldığı genetik hafızasıdır.”</blockquote>
-      </aside>
-    </section>
+        <button id="playerMiniButton" class="playerMiniButton" type="button" aria-label="Rota müziği panelini aç veya kapat">
+          <span class="miniDisc">
+            <img id="miniCover" src="" alt="">
+          </span>
+          <span class="miniText">
+            <strong>Rota Müziği</strong>
+            <small id="miniTrackName">Şarkı seçili</small>
+          </span>
+        </button>
 
-    <section id="video" class="section-pad teaser-section">
-      <div class="section-head">
-        <p class="eyebrow">Kısa Tanıtım Videosu</p>
-        <h2>Boğaz’dan yeşil hafızaya kısa bir görsel giriş</h2>
-        <p>Şimdilik stok görsellerden hazırlanmış kısa bir tanıtım videosu eklendi. Daha sonra yapay zekâ ile üretilmiş gerçek bir drone tur videosu veya kendi çektiğiniz görüntülerle kolayca değiştirebilirsiniz.</p>
-      </div>
-      <div class="teaser-wrap">
-        <div class="teaser-player">
-          <video controls preload="metadata" poster="assets/images/bogaz-havadan.webp">
-            <source src="assets/video/istanbul-tanitim.mp4" type="video/mp4">
-            Tarayıcınız video etiketini desteklemiyor.
-          </video>
-        </div>
-        <div class="teaser-copy">
-          <div class="note-card">
-            <span class="pill">Nasıl Kullanılır?</span>
-            <h3>Sunumda önerilen kullanım</h3>
-            <ul>
-              <li>Sunumun ilk 15–20 saniyesinde açabilirsiniz.</li>
-              <li>Konuşma girişi: “İstanbul’u önce görelim, sonra okuyalım.”</li>
-              <li>Daha sonra bu videoyu bir AI drone turu ile değiştirebilirsiniz.</li>
-            </ul>
+        <aside id="playerPanel" class="playerPanel" aria-hidden="true">
+          <div class="playerHeader">
+            <div>
+              <span class="playerKicker">Sunum Müziği</span>
+              <h2>Rota Müziği</h2>
+            </div>
+            <button id="playerClose" class="playerClose" type="button" aria-label="Müzik panelini kapat">×</button>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section id="bogaz" class="section-pad bosphorus-feature">
-      <div class="feature-photo">
-        <img src="assets/images/kopru.webp" alt="Boğaz Köprüsü ve İstanbul Boğazı">
-      </div>
-      <div class="feature-copy">
-        <p class="eyebrow">Öncelikli Tema</p>
-        <h2>Boğaz: İstanbul’un mavi omurgası</h2>
-        <p>Bu sayfanın merkezinde Boğaz var. Çünkü Boğaz yalnızca iki kıta arasındaki su yolu değildir; şehrin hafızasını taşıyan bir sahne, gündelik hayatın ritmi ve İstanbul’u dünyaya bağlayan doğal bir kapıdır.</p>
-        <div class="mini-grid">
-          <article><strong>Coğrafya</strong><span>İki kıtayı ayırır ve bağlar.</span></article>
-          <article><strong>Kültür</strong><span>Vapur, martı, yalı, kahve ve sahil yaşamını üretir.</span></article>
-          <article><strong>Hafıza</strong><span>Hisarlar, köprüler ve kıyı semtleriyle tarih taşır.</span></article>
-        </div>
-      </div>
-    </section>
+          <div class="nowPlaying">
+            <div class="coverBox">
+              <img id="playerCover" src="" alt="Şarkı kapak görseli">
+            </div>
 
-    <section id="katmanlar" class="section-pad layers-section">
-      <div class="section-head">
-        <p class="eyebrow">Üç Katmanlı Anlatım</p>
-        <h2>Mavi, insan ve yeşil hafıza</h2>
-        <p>Sayfanın akışı, sunumdaki “canlı kütüphane / insan gen havuzu / bitkisel gen havuzu” fikrine sadık kalır.</p>
-      </div>
-      <div class="layer-grid">
-        <article class="layer-card blue">
-          <img src="assets/images/bogaz-havadan.webp" alt="İstanbul Boğazı kuşbakışı görünümü">
-          <div class="layer-card-content">
-            <span class="pill">Katman 1</span>
-            <h3>Mavi Hafıza</h3>
-            <p>Boğaz; iki kıtayı ayıran ama aynı anda birleştiren doğal omurgadır. Vapur, yalı, köprü, martı ve sahil yaşamı bu hafızanın parçalarıdır.</p>
-            <button class="read-more" data-modal="mavi">Detaylı oku</button>
+            <div class="trackInfo">
+              <strong id="trackTitle">Şarkı adı</strong>
+              <span id="trackArtist">Sanatçı</span>
+            </div>
           </div>
-        </article>
-        <article class="layer-card amber">
-          <img src="assets/images/anadolu-hisari.webp" alt="Anadolu Hisarı kıyı görünümü">
-          <div class="layer-card-content">
-            <span class="pill">Katman 2</span>
-            <h3>İnsan Hafızası</h3>
-            <p>İstanbul; göçlerin, semtlerin, dillerin, sınıfların ve günlük ritimlerin bir arada yaşadığı büyük bir insan havuzudur.</p>
-            <button class="read-more" data-modal="insan">Detaylı oku</button>
+
+          <div class="progressBlock">
+            <input id="progressRange" class="progressRange" type="range" min="0" max="100" value="0" step="0.1" aria-label="Şarkı ilerleme çubuğu">
+            <div class="timeRow">
+              <span id="currentTime">0:00</span>
+              <span id="durationTime">0:00</span>
+            </div>
           </div>
-        </article>
-        <article class="layer-card green">
-          <img src="assets/images/ataturk-arboretumu.webp" alt="Atatürk Arboretumu doğa görünümü">
-          <div class="layer-card-content">
-            <span class="pill">Katman 3</span>
-            <h3>Yeşil Hafıza</h3>
-            <p>Belgrad Ormanı ve Atatürk Arboretumu, megakentin içinde zamanı yavaşlatan canlı bir ağaç müzesi ve yeşil sığınaktır.</p>
-            <button class="read-more" data-modal="yesil">Detaylı oku</button>
+
+          <div class="controlRow">
+            <button id="prevTrack" class="circleControl" type="button" aria-label="Önceki şarkı">‹</button>
+            <button id="playPause" class="playControl" type="button" aria-label="Oynat veya duraklat">▶</button>
+            <button id="nextTrack" class="circleControl" type="button" aria-label="Sonraki şarkı">›</button>
           </div>
-        </article>
-      </div>
-    </section>
 
-    <section id="renk-sec" class="section-pad choice-section">
-      <div class="section-head">
-        <p class="eyebrow">Mavi mi Yeşil mi?</p>
-        <h2>Senin İstanbul’un hangi tona daha yakın?</h2>
-        <p>Bu küçük etkileşim, projeyi gezen kişilere İstanbul’u hangi gözle düşündüklerini sorar.</p>
-      </div>
-      <div class="choice-wrap">
-        <div class="choice-buttons">
-          <button class="choice-btn active" data-choice="maviSec">Mavi İstanbul</button>
-          <button class="choice-btn" data-choice="yesilSec">Yeşil İstanbul</button>
-          <button class="choice-btn" data-choice="hepsiSec">İkisi de</button>
-        </div>
-        <div class="choice-result" id="choice-result" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section id="rota" class="section-pad route-section">
-      <div class="section-head">
-        <p class="eyebrow">İnteraktif Rota</p>
-        <h2>Boğaz’dan Arboretum’a nefes rotası</h2>
-        <p>Noktalara veya rota kartlarına tıklayarak sunumda kullanabileceğiniz kısa geçiş cümlelerini görün.</p>
-      </div>
-      <div class="route-wrap">
-        <div class="route-map" aria-label="Boğaz’dan Arboretum’a uzanan şematik rota">
-          <img class="route-bg" src="assets/images/bogaz-havadan.webp" alt="İstanbul Boğazı arka planı">
-          <svg class="route-line" viewBox="0 0 1000 560" aria-hidden="true">
-            <defs>
-              <linearGradient id="routeGrad" x1="0" x2="1">
-                <stop offset="0" stop-color="#7dd3fc" />
-                <stop offset="0.55" stop-color="#38bdf8" />
-                <stop offset="1" stop-color="#86efac" />
-              </linearGradient>
-            </defs>
-            <path d="M390,105 C520,155 320,310 375,420 C450,535 700,420 745,205" />
-          </svg>
-          <button class="map-pin active" style="--x:39%;--y:19%" data-place="bogaz"><span>1</span><em>Boğaz</em></button>
-          <button class="map-pin" style="--x:34%;--y:69%" data-place="anadolu"><span>2</span><em>Anadolu</em></button>
-          <button class="map-pin" style="--x:49%;--y:79%" data-place="rumeli"><span>3</span><em>Rumeli</em></button>
-          <button class="map-pin" style="--x:68%;--y:53%" data-place="belgrad"><span>4</span><em>Belgrad</em></button>
-          <button class="map-pin" style="--x:74%;--y:36%" data-place="arboretum"><span>5</span><em>Arboretum</em></button>
-        </div>
-        <div class="route-panel">
-          <div class="route-info" id="route-info" aria-live="polite"></div>
-          <div class="route-controls" aria-label="Rota kontrol düğmeleri">
-            <button class="route-step active" data-place="bogaz">01 Boğaz</button>
-            <button class="route-step" data-place="anadolu">02 Anadolu Hisarı</button>
-            <button class="route-step" data-place="rumeli">03 Rumeli Hisarı</button>
-            <button class="route-step" data-place="belgrad">04 Belgrad</button>
-            <button class="route-step" data-place="arboretum">05 Arboretum</button>
+          <div class="volumeRow">
+            <span>Ses</span>
+            <input id="volumeRange" class="volumeRange" type="range" min="0" max="1" value="0.45" step="0.01" aria-label="Ses seviyesi">
+            <button id="loopToggle" class="loopToggle active" type="button" aria-label="Döngüyü aç veya kapat">Loop açık</button>
           </div>
-        </div>
-      </div>
+
+          <div class="trackList" id="trackList" aria-label="Şarkı listesi"></div>
+
+          <p class="playerNote">
+            Sayfaya ilk tıklamada müzik başlatılır. Tarayıcı engellerse play tuşuna basman yeterli.
+          </p>
+        </aside>
+      </section>
+
     </section>
 
-    <section id="ses" class="section-pad sound-section">
-      <div class="section-head">
-        <p class="eyebrow">Seslerle İstanbul</p>
-        <h2>Boğaz’ın sesi, şehrin uğultusu, yeşilin sessizliği</h2>
-        <p>Bozuk gelen deneysel mikser kaldırıldı. Yerine bilgisayarda dosya olmadan çalışan, site içinde yerel olarak bulunan daha yumuşak üç ses kartı eklendi.</p>
-      </div>
-      <div class="sound-lab">
-        <article class="audio-card active-audio">
-          <div>
-            <span class="pill">Mavi</span>
-            <h3>Boğaz / dalga / vapur</h3>
-            <p>Sunum açılışında 8–10 saniye kullanılabilir.</p>
-          </div>
-          <audio controls loop preload="metadata" src="assets/audio/bogaz-dalga-vapur.wav"></audio>
-        </article>
-        <article class="audio-card">
-          <div>
-            <span class="pill">Şehir</span>
-            <h3>Uzak İstanbul uğultusu</h3>
-            <p>“İstanbul’u duymak” bölümünde düşük seste deneyebilirsiniz.</p>
-          </div>
-          <audio controls loop preload="metadata" src="assets/audio/istanbul-sehir-ambiyans.wav"></audio>
-        </article>
-        <article class="audio-card">
-          <div>
-            <span class="pill">Yeşil</span>
-            <h3>Arboretum / kuş / rüzgâr</h3>
-            <p>Boğaz’dan yeşil hafızaya geçerken kullanılabilir.</p>
-          </div>
-          <audio controls loop preload="metadata" src="assets/audio/arboretum-orman-kus.wav"></audio>
-        </article>
-      </div>
-      <div class="external-sounds">
-        <h3>Beğendiğiniz dış bağlantılar</h3>
-        <p>İndirilemediği için gömülmedi; isterseniz sunum sırasında ayrıca açabilirsiniz.</p>
-        <a class="sound-link" href="https://www.soundsnap.com/istanbul_restaurant_ambience_turkish_and_international_voices_wav" target="_blank" rel="noopener">Soundsnap: İstanbul restoran ambiyansı</a>
-        <a class="sound-link" href="https://music.apple.com/kz/song/i-stanbul-bo%C4%9Faz%C4%B1/1790715692" target="_blank" rel="noopener">Apple Music: İstanbul Boğazı</a>
-      </div>
-    </section>
-
-    <section id="galeri" class="section-pad gallery-section">
-      <div class="section-head">
-        <p class="eyebrow">Görsel Hafıza</p>
-        <h2>Boğaz ağırlıklı maviden yeşile fotoğraf akışı</h2>
-        <p>Galeri Boğaz temasını öne çıkaracak şekilde yenilendi. Kendi çektiğiniz fotoğraflarla aynı dosya adlarını değiştirirseniz site otomatik güncellenir.</p>
-      </div>
-      <div class="gallery-grid">
-        <figure class="wide"><img src="assets/images/bogaz-havadan.webp" alt="Boğaz kuşbakışı"><figcaption>Boğaz: dışa açılan mavi kapı</figcaption></figure>
-        <figure><img src="assets/images/kopru.webp" alt="Boğaz Köprüsü"><figcaption>Köprüler: iki yaka arasında bağ</figcaption></figure>
-        <figure><img src="assets/images/rumeli-hisari.webp" alt="Rumeli Hisarı"><figcaption>Rumeli Hisarı: anıtsal güç</figcaption></figure>
-        <figure><img src="assets/images/belgrad-ormani.webp" alt="Belgrad Ormanı"><figcaption>Belgrad Ormanı: şehrin huzuru</figcaption></figure>
-        <figure><img src="assets/images/ataturk-arboretumu.webp" alt="Atatürk Arboretumu"><figcaption>Arboretum: canlı ağaç müzesi</figcaption></figure>
-      </div>
-    </section>
-
-    <section id="album" class="section-pad album-section">
-      <div class="section-head">
-        <p class="eyebrow">Ekip Albümü</p>
-        <h2>Şimdilik stok görseller, sonra kendi fotoğraflarınızla değiştirin</h2>
-        <p>Bu bölüm özellikle ekip fotoğraflarıyla güçlensin diye hazırlandı. Şimdilik yer tutucu / stok görseller kullanıldı.</p>
-      </div>
-      <div class="album-grid">
-        <article class="album-card featured">
-          <img src="assets/images/bogaz-havadan.webp" alt="Boğaz genel görünüm">
-          <div class="album-caption"><strong>Yer Tutucu 01</strong><span>Boğaz genel drone görünümü</span></div>
-        </article>
-        <article class="album-card">
-          <img src="assets/images/anadolu-hisari.webp" alt="Anadolu Hisarı">
-          <div class="album-caption"><strong>Yer Tutucu 02</strong><span>Anadolu Hisarı / kıyı fotoğrafı</span></div>
-        </article>
-        <article class="album-card">
-          <img src="assets/images/rumeli-hisari.webp" alt="Rumeli Hisarı">
-          <div class="album-caption"><strong>Yer Tutucu 03</strong><span>Rumeli Hisarı / sahil görünümü</span></div>
-        </article>
-        <article class="album-card">
-          <img src="assets/images/kopru.webp" alt="Köprü görünümü">
-          <div class="album-caption"><strong>Yer Tutucu 04</strong><span>Köprü / vapur / kıyı detayı</span></div>
-        </article>
-        <article class="album-card">
-          <img src="assets/images/belgrad-ormani.webp" alt="Belgrad Ormanı">
-          <div class="album-caption"><strong>Yer Tutucu 05</strong><span>Belgrad Ormanı yürüyüş alanı</span></div>
-        </article>
-        <article class="album-card">
-          <img src="assets/images/ataturk-arboretumu.webp" alt="Atatürk Arboretumu">
-          <div class="album-caption"><strong>Yer Tutucu 06</strong><span>Arboretum gölet veya patika</span></div>
-        </article>
-      </div>
-      <div class="replace-tip">
-        <strong>İpucu:</strong> Kendi fotoğraflarınızı aynı oranlarda hazırlayıp bu bölümdeki dosyaları değiştirmeniz yeterli.
-      </div>
-    </section>
-
-    <section id="quiz" class="section-pad quiz-section">
-      <div class="section-head">
-        <p class="eyebrow">Mini Quiz</p>
-        <h2>Sunum sonunda 5 soruluk etkileşim</h2>
-        <p>Arkadaşlarınız veya hoca sayfaya girerse hızlıca deneyebilir.</p>
-      </div>
-      <div class="quiz-card">
-        <p id="quiz-counter" class="quiz-counter"></p>
-        <h3 id="quiz-question"></h3>
-        <div id="quiz-options" class="quiz-options"></div>
-        <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
-        <button class="btn ghost" id="quiz-next" type="button">Sonraki Soru</button>
-      </div>
-    </section>
-
-    <section id="ekip" class="section-pad team-section">
-      <div class="section-head">
-        <p class="eyebrow">Ekip ve Kaynaklar</p>
-        <h2>Üç kişilik proje çalışma alanı</h2>
-        <p>İsimleri ve görevleri isterseniz index.html içinden kolayca değiştirebilirsiniz.</p>
-      </div>
-      <div class="team-grid">
-        <article><span>E</span><h3>Eren Can Kelbaş</h3><p>Web sayfası, interaktif rota ve teknik düzenleme.</p></article>
-        <article><span>B</span><h3>Beyzanur Güngör</h3><p>Sunum akışı, anlatım geçişleri ve sınıf içi sunum.</p></article>
-        <article><span>Ö</span><h3>Özlem Özdeniz</h3><p>İçerik metni, kavramsal çerçeve ve görsel kaynaklar.</p></article>
-      </div>
-      <div class="resource-card">
-        <h3>Dosyalar</h3>
-        <a href="kaynaklar/megakent_mavi_yesil_hafiza_15_slayt_revize.pptx">Revize 15 slaytlık sunum</a>
-        <a href="kaynaklar/orijinal_sunum.pptx">Orijinal sunum</a>
-        <a href="kaynaklar/istanbul_metni.docx">İstanbul metni</a>
-      </div>
-    </section>
+    <div id="infoModal" class="infoModal" aria-hidden="true">
+      <div class="modalBackdrop" data-close="true"></div>
+      <section class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="closeBtn" type="button" aria-label="Kapat">×</button>
+        <div id="dialogContent"></div>
+      </section>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <p>“İstanbul; Boğaz’ın mavisi, insanın hafızası ve Arboretum’un yeşiliyle yaşayan çok katmanlı bir şehirdir.”</p>
-    <a href="#top">Yukarı dön ↑</a>
-  </footer>
-
-  <dialog id="detail-modal" class="detail-modal">
-    <button class="modal-close" type="button" aria-label="Pencereyi kapat">×</button>
-    <div id="modal-content"></div>
-  </dialog>
-
-  <dialog id="presentation-modal" class="presentation-modal">
-    <div class="presentation-shell">
-      <button class="presentation-close" type="button" aria-label="Sunum modunu kapat">×</button>
-      <div class="presentation-stage">
-        <div id="presentation-content"></div>
-      </div>
-      <div class="presentation-bar">
-        <button class="btn ghost" id="presentation-prev" type="button">← Önceki</button>
-        <div class="presentation-meta">
-          <strong id="presentation-counter"></strong>
-          <div id="presentation-dots" class="presentation-dots"></div>
-        </div>
-        <button class="btn primary" id="presentation-next" type="button">Sonraki →</button>
-      </div>
-    </div>
-  </dialog>
-
+  <script>
+    window.ROUTE_STOPS = [{"id": "fsm", "title": "FSM Köprüsü", "subtitle": "Boğaz geçişinin modern simgesi", "routeOrder": "Rota sırası: 2. durak, dönüşte FSM hattı yeniden hatırlanır", "category": "Mavi Hafıza", "tags": ["Boğaz", "Geçiş", "Köprü", "Manzara"], "text": "FSM Köprüsü, Anadolu Yakası ile Avrupa Yakası arasındaki geçişi temsil eder. Bu durak, rotanın mavi hafızasını ve Boğaz’ın bağlayıcı gücünü görünür kılar.", "note": "FSM Köprüsü, iki kıtayı yalnızca fiziksel olarak değil, kültürel olarak da birbirine bağlayan modern bir eşiktir.", "x": 73.05, "y": 29.02, "size": 5.2, "photos": ["assets/images/fsm-gidis/1.webp", "assets/images/fsm-gidis/2.webp", "assets/images/fsm-donus/1.webp", "assets/images/fsm-donus/2.webp"]}, {"id": "belgrad", "title": "Belgrad Ormanı", "subtitle": "Kentin yeşil nefesi", "routeOrder": "Rota sırası: 3. durak", "category": "Yeşil Hafıza", "tags": ["Orman", "Doğa", "Sessizlik", "Yürüyüş"], "text": "Belgrad Ormanı, İstanbul’un yoğun şehir dokusu içinde doğanın korunduğu en önemli alanlardan biridir. Sessizlik, yürüyüş ve ağaç dokusu burada öne çıkar.", "note": "Boğaz maviyse, Belgrad Ormanı İstanbul’un derin yeşilidir.", "x": 32.57, "y": 12.76, "size": 5.2, "photos": ["assets/images/belgrad/1.webp", "assets/images/belgrad/2.webp"]}, {"id": "arboretum", "title": "Atatürk Arboretumu", "subtitle": "Yaşayan ağaç müzesi", "routeOrder": "Rota sırası: 4. durak", "category": "Yeşil Hafıza", "tags": ["Arboretum", "Bitki Çeşitliliği", "Doğa", "Gölet"], "text": "Atatürk Arboretumu, doğanın sadece bir manzara değil, korunması gereken canlı bir arşiv olduğunu gösterir. Bitki çeşitliliği ve düzenli peyzajıyla eşsiz bir çalışma ve gezi alanıdır.", "note": "Arboretum, İstanbul’un kendi içine çekildiği genetik hafızasıdır.", "x": 25.31, "y": 42.14, "size": 5.2, "photos": ["assets/images/arboretum/1.webp", "assets/images/arboretum/2.webp", "assets/images/arboretum/3.webp"]}, {"id": "rumeli", "title": "Rumeli Hisarı", "subtitle": "Boğaz’ın tarihî eşiği", "routeOrder": "Rota sırası: 5. durak", "category": "Tarih Hafızası", "tags": ["Tarih", "Hisar", "Boğaz", "Miras"], "text": "Rumeli Hisarı, Boğaz’ın tarihî savunma ve geçiş hafızasını yansıtır. Bu durak, İstanbul’un yalnızca doğal değil aynı zamanda güçlü bir tarih katmanına sahip olduğunu gösterir.", "note": "Rumeli Hisarı, Boğaz’ın tarih ve güç hafızasını görünür kılar.", "x": 45.79, "y": 38.47, "size": 5.2, "photos": ["assets/images/rumeli/1.webp"]}, {"id": "bebek", "title": "Bebek Sahili", "subtitle": "Boğaz kıyısında gündelik yaşam", "routeOrder": "Rota sırası: 6. durak", "category": "Mavi Hafıza", "tags": ["Sahil", "Boğaz", "Sosyal Yaşam", "Kıyı"], "text": "Bebek Sahili, Boğaz manzarasının İstanbul gündelik yaşamıyla buluştuğu canlı kıyı duraklarından biridir. Deniz, yürüyüş ve sosyal yaşam burada iç içedir.", "note": "Bebek’te Boğaz yalnızca izlenen bir manzara değil, yaşanan bir şehir ritmidir.", "x": 53.2, "y": 69.03, "size": 5.2, "photos": ["assets/images/bebek/1.webp", "assets/images/bebek/2.webp"]}, {"id": "anadolu", "title": "Anadolu Hisarı", "subtitle": "Boğaz’ın sakin yüzü", "routeOrder": "Rota sırası: 8. durak", "category": "Tarih + Mavi Hafıza", "tags": ["Hisar", "Sakinlik", "Boğaz", "Kültür"], "text": "Anadolu Hisarı, Boğaz’ın daha sakin, daha korunaklı ve daha içe dönük tarafını temsil eder. Rumeli Hisarı ile birlikte Boğaz’ın karşılıklı tarihî hafızasını tamamlar.", "note": "Anadolu Hisarı, Boğaz’ın korunaklı ve sakin cildi gibidir.", "x": 64.86, "y": 50.16, "size": 5.2, "photos": ["assets/images/anadolu/1.webp", "assets/images/anadolu/2.webp"]}, {"id": "cekmekoy", "title": "Çekmeköy", "subtitle": "Başlangıç ve kapanış noktası", "routeOrder": "Rota sırası: 1. durak ve kapanış noktası", "category": "Başlangıç Noktası", "tags": ["Başlangıç", "Kapanış", "Kent Yaşamı", "Rota"], "text": "Rota Çekmeköy’den başlar ve yine Çekmeköy’de sona erer. Böylece İstanbul’un gündelik yaşam alanından başlayıp doğa, tarih ve Boğaz üzerinden tamamlanan döngüsel bir anlatı kurulmuş olur.", "note": "Başladığımız yere dönerken İstanbul’u artık yalnızca bir megakent olarak değil, mavi ve yeşil hafızasıyla okuyoruz.", "x": 89.1, "y": 66.7, "size": 7.6, "photos": ["assets/images/cekmekoy/1.webp", "assets/images/cekmekoy/2.webp", "assets/images/cekmekoy/3.webp", "assets/images/cekmekoy/4.webp", "assets/images/cekmekoy-donus/1.webp", "assets/images/cekmekoy-donus/2.webp", "assets/images/cekmekoy-donus/3.webp"]}];
+  </script>
+  <script>
+    window.LOCAL_MUSIC_TRACKS = [{"title": "Burası İstanbul", "artist": "Nil Karaibrahimgil", "src": "assets/music/nil-burasi-istanbul.mp4", "cover": "assets/music/covers/burasi-istanbul.png"}, {"title": "İstanbul Kafası", "artist": "Dolunay Obruk", "src": "assets/music/dolunay-istanbul-kafasi.mp4", "cover": "assets/music/covers/dolunay-obruk.png"}, {"title": "Istanbul", "artist": "The Four Lads", "src": "assets/music/four-lads-istanbul.mp4", "cover": "assets/music/covers/the-four-lads.png"}];
+  </script>
   <script src="js/script.js"></script>
 </body>
 </html>

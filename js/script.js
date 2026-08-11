@@ -1,346 +1,392 @@
-const $ = (selector, scope = document) => scope.querySelector(selector);
-const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+const stops = window.ROUTE_STOPS || [];
+const modal = document.querySelector('#infoModal');
+const content = document.querySelector('#dialogContent');
+const closeBtn = document.querySelector('.closeBtn');
+const hotspots = Array.from(document.querySelectorAll('.map-hotspot'));
 
-const glow = $('.cursor-glow');
-window.addEventListener('pointermove', (event) => {
-  if (!glow) return;
-  glow.style.left = `${event.clientX}px`;
-  glow.style.top = `${event.clientY}px`;
-});
+let currentStop = null;
+let currentImageIndex = 0;
 
-const navToggle = $('.nav-toggle');
-const mainNav = $('#main-nav');
-if (navToggle && mainNav) {
-  navToggle.addEventListener('click', () => {
-    const isOpen = mainNav.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-  $$('#main-nav a').forEach((link) => {
-    link.addEventListener('click', () => {
-      mainNav.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    });
-  });
-}
-
-$$('[data-scroll]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const target = $(btn.dataset.scroll);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
-  });
-});
-
-const pollResult = $('#poll-result');
-const pollMessages = {
-  Gri: 'Gri cevabı güzel bir başlangıç: İstanbul’un görünen yüzü çoğu zaman trafik, beton ve kalabalık. Biz bu perdenin altındaki mavi ve yeşili anlatıyoruz.',
-  Mavi: 'Mavi cevap, Boğaz’ın İstanbul kimliğindeki gücünü gösterir. Bu sitede mavi hafıza özellikle ön plana çıkarılıyor.',
-  Yeşil: 'Yeşil cevap, Belgrad Ormanı ve Atatürk Arboretumu gibi alanların şehir hafızasında ne kadar değerli olduğunu gösterir.',
-  Hepsi: 'En güçlü cevap bu: İstanbul tek renk değil. Sunumun ana fikri de İstanbul’un çok katmanlı bir şehir olduğu.'
-};
-$$('.poll-btn').forEach((button) => {
-  button.addEventListener('click', () => {
-    $$('.poll-btn').forEach((b) => b.classList.remove('active'));
-    button.classList.add('active');
-    pollResult.textContent = pollMessages[button.dataset.poll];
-  });
-});
-
-const modal = $('#detail-modal');
-const modalContent = $('#modal-content');
-const modalClose = $('.modal-close');
-const modalData = {
-  mavi: {
-    title: 'Mavi Hafıza: Boğaz',
-    body: 'Boğaz, İstanbul’un yalnızca doğal güzelliği değil; stratejik konumu, ulaşımı, yalıları, köprüleri ve gündelik sahil yaşamıyla şehrin kimliğini kuran mavi omurgadır. Sunumda “dünyanın kolyesi” imgesiyle anlatılması bu yüzden güçlüdür.'
-  },
-  insan: {
-    title: 'İnsan Hafızası: Kentin Gen Havuzu',
-    body: 'İstanbul tarih boyunca farklı coğrafyalardan gelen toplulukları bir araya getirmiştir. Bu yüzden şehir sadece mekânların değil, insanların, dillerin, sınıfların ve hikâyelerin de üst üste biriktiği canlı bir arşivdir.'
-  },
-  yesil: {
-    title: 'Yeşil Hafıza: Belgrad Ormanı ve Atatürk Arboretumu',
-    body: 'Belgrad Ormanı ve Atatürk Arboretumu, megakentin içinde zamanı yavaşlatan alanlardır. Arboretum sıradan bir park değil; bitkilerin korunduğu, gözlemlendiği ve gelecek kuşaklara aktarıldığı canlı bir ağaç müzesi gibi ele alınabilir.'
-  }
-};
-$$('.read-more').forEach((button) => {
-  button.addEventListener('click', () => {
-    const item = modalData[button.dataset.modal];
-    modalContent.innerHTML = `<p class="eyebrow">Detay</p><h2>${item.title}</h2><p>${item.body}</p>`;
-    if (typeof modal.showModal === 'function') modal.showModal();
-  });
-});
-modalClose?.addEventListener('click', () => modal.close());
-modal?.addEventListener('click', (event) => {
-  if (event.target === modal) modal.close();
-});
-
-const choiceResult = $('#choice-result');
-const choiceData = {
-  maviSec: {
-    title: 'Senin İstanbul’un: Mavi İstanbul',
-    text: 'Boğaz, vapur, martı, köprü ve kıyı yaşamı senin için İstanbul’un ana kimliğini taşıyor. Bu bakış, projenin Boğaz merkezli omurgasıyla örtüşüyor.',
-    className: 'mavi'
-  },
-  yesilSec: {
-    title: 'Senin İstanbul’un: Yeşil İstanbul',
-    text: 'İstanbul’u sadece kalabalık değil; aynı zamanda Belgrad Ormanı ve Atatürk Arboretumu gibi nefes alınan alanlarla düşünüyorsun. Yeşil hafıza senin için daha güçlü.',
-    className: 'yesil'
-  },
-  hepsiSec: {
-    title: 'Senin İstanbul’un: Mavi + Yeşil + İnsan',
-    text: 'Senin bakışın bu projenin tam merkezine denk geliyor: İstanbul yalnızca tek bir renk değil; mavi, insan ve yeşil hafızanın üst üste geldiği çok katmanlı bir şehir.',
-    className: 'karma'
-  }
-};
-function renderChoice(key = 'maviSec') {
-  const item = choiceData[key];
-  if (!item || !choiceResult) return;
-  choiceResult.className = `choice-result ${item.className}`;
-  choiceResult.innerHTML = `<span class="pill">Sonuç</span><h3>${item.title}</h3><p>${item.text}</p>`;
-  $$('.choice-btn').forEach((btn) => btn.classList.toggle('active', btn.dataset.choice === key));
-}
-$$('.choice-btn').forEach((button) => button.addEventListener('click', () => renderChoice(button.dataset.choice)));
-renderChoice();
-
-const places = {
-  bogaz: {
-    no: '01',
-    title: 'İstanbul Boğazı',
-    tag: 'Mavi hafızanın başlangıcı',
-    img: 'assets/images/bogaz-havadan.webp',
-    text: 'İstanbul’u İstanbul yapan ana sahne. İki kıtayı ayırır ama vapurlar, köprüler ve kıyı yaşamıyla aynı zamanda birleştirir.',
-    line: 'Geçiş cümlesi: “Boğaz, İstanbul’un dış dünyaya açılan mavi kapısıdır.”'
-  },
-  anadolu: {
-    no: '02',
-    title: 'Anadolu Hisarı & Kanlıca',
-    tag: 'Sakin ve içe dönük kıyı hafızası',
-    img: 'assets/images/anadolu-hisari.webp',
-    text: 'Kanlıca yoğurdu, kıyı kahveleri, Anadolu Hisarı ve yavaş akan zamanla Boğaz’ın daha sakin yüzü burada görünür olur.',
-    line: 'Geçiş cümlesi: “Anadolu yakası Boğaz’ın daha sakin cildidir.”'
-  },
-  rumeli: {
-    no: '03',
-    title: 'Rumeli Hisarı & Sarayburnu Hattı',
-    tag: 'Anıtsal güç ve stratejik bakış',
-    img: 'assets/images/rumeli-hisari.webp',
-    text: 'Hisarlar, surlar ve imparatorluk hafızası burada daha belirginleşir. Boğaz’ın güzelliği, tarihsel güçle birleşir.',
-    line: 'Geçiş cümlesi: “Rumeli yakası Boğaz’ın dış dünyaya bakan vitrini gibidir.”'
+const popupDetails = {
+  fsm: {
+    importance: 'Boğaz geçişi üzerinden İstanbul’un iki yakasını ve modern ulaşım hafızasını temsil eder.',
+    presentation: 'Köprünün sadece ulaşım aracı değil, iki kıta arasında kurulan bağın simgesi olduğunu vurgulayabilirsin.',
+    photoNote: 'Fotoğraf önerisi: köprü, Boğaz manzarası veya rota geçişini gösteren kareler.'
   },
   belgrad: {
-    no: '04',
-    title: 'Belgrad Ormanı',
-    tag: 'Megakentin nefes alanı',
-    img: 'assets/images/belgrad-ormani.webp',
-    text: 'Kentin betonlaşmasına karşı yeşil bir eşik. Orman, şehre yalnızca oksijen değil, yavaşlama ve kaçış duygusu da verir.',
-    line: 'Geçiş cümlesi: “Boğaz maviyse, Belgrad Ormanı İstanbul’un derin yeşilidir.”'
+    importance: 'Megakentin içinde korunmuş geniş yeşil dokuyu gösterir.',
+    presentation: 'İstanbul’un yalnızca kalabalık ve yapılaşmadan ibaret olmadığını; güçlü bir doğal hafızaya sahip olduğunu anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: orman yolu, ağaç dokusu, yürüyüş yolu veya su kemeri.'
   },
   arboretum: {
-    no: '05',
-    title: 'Atatürk Arboretumu',
-    tag: 'Zamanın durduğu yeşil arşiv',
-    img: 'assets/images/ataturk-arboretumu.webp',
-    text: 'Belgrad Ormanı’nın yanında, bitkisel hafızayı görünür kılan canlı bir ağaç müzesi. Sunumun “zamanın durduğu yer” duygusunu en iyi taşıyan alanlardan biri.',
-    line: 'Geçiş cümlesi: “Arboretum, İstanbul’un kendi içine çekildiği genetik hafızasıdır.”'
+    importance: 'Bitki çeşitliliği ve koruma fikriyle doğayı yaşayan bir arşiv gibi sunar.',
+    presentation: 'Doğanın sadece gezilecek alan değil, korunması ve öğrenilmesi gereken bir kültür parçası olduğunu vurgulayabilirsin.',
+    photoNote: 'Fotoğraf önerisi: gölet, ağaç koleksiyonları, giriş tabelası veya yürüyüş alanı.'
+  },
+  rumeli: {
+    importance: 'Boğaz’ın tarihî savunma hattını ve İstanbul’un fetih hafızasını temsil eder.',
+    presentation: 'Doğal manzaranın tarihî yapılarla nasıl birleştiğini anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: hisar duvarları, kuleler veya Boğaz manzaralı hisar kareleri.'
+  },
+  bebek: {
+    importance: 'Boğaz’ın gündelik hayatla birleştiği kıyı kültürünü gösterir.',
+    presentation: 'İstanbul’da suyun sadece manzara değil; yürüyüş, buluşma ve sosyalleşme alanı olduğunu anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: sahil yürüyüşü, tekneler, deniz kıyısı veya sosyal yaşam kareleri.'
+  },
+  anadolu: {
+    importance: 'Boğaz’ın daha sakin ve tarihî Anadolu yakası hafızasını tamamlar.',
+    presentation: 'Rumeli Hisarı ile karşılıklı konumu üzerinden iki yakanın tarihsel bağını anlatabilirsin.',
+    photoNote: 'Fotoğraf önerisi: Anadolu Hisarı, sahil dokusu veya Boğaz’ın sakin kıyı görüntüleri.'
+  },
+  cekmekoy: {
+    importance: 'Rota anlatısının başladığı ve kapandığı gündelik yaşam noktasıdır.',
+    presentation: 'Şehir içinden başlayıp doğa, tarih ve Boğaz hattını dolaşarak tekrar başlangıca dönen döngüsel rota fikrini açıklayabilirsin.',
+    photoNote: 'Fotoğraf önerisi: başlangıç/kapanış duygusunu veren sokak, yol, ekip ya da rota başlangıcı kareleri.'
   }
 };
-const routeInfo = $('#route-info');
-function renderPlace(key) {
-  const place = places[key];
-  if (!place || !routeInfo) return;
-  routeInfo.innerHTML = `
-    <span class="number">${place.no}</span>
-    <h3>${place.title}</h3>
-    <p class="tagline">${place.tag}</p>
-    <img src="${place.img}" alt="${place.title} görseli">
-    <p>${place.text}</p>
-    <p><strong>${place.line}</strong></p>
-  `;
-  $$('.map-pin').forEach((pin) => pin.classList.toggle('active', pin.dataset.place === key));
-  $$('.route-step').forEach((step) => step.classList.toggle('active', step.dataset.place === key));
+
+function getStop(id){
+  return stops.find(stop => stop.id === id);
 }
-$$('.map-pin, .route-step').forEach((item) => {
-  item.addEventListener('click', () => renderPlace(item.dataset.place));
-});
-renderPlace('bogaz');
-
-const questions = [
-  {
-    q: 'Bu web sayfasında İstanbul’un ana çıkış noktası hangi doğal unsur üzerinden kuruluyor?',
-    options: ['Boğaz', 'Kapalıçarşı', 'Taksim Meydanı'],
-    answer: 0,
-    feedback: 'Doğru. Sayfanın merkezinde Boğaz’ın mavi hafızası var.'
-  },
-  {
-    q: 'Atatürk Arboretumu bu projede nasıl yorumlanıyor?',
-    options: ['Alışveriş merkezi', 'Canlı ağaç müzesi ve yeşil hafıza', 'Sadece bir köprü geçişi'],
-    answer: 1,
-    feedback: 'Doğru. Arboretum, yeşil sığınak ve bitkisel hafıza olarak anlatılıyor.'
-  },
-  {
-    q: 'Projenin ana akışı hangisi?',
-    options: ['Boğaz’dan Arboretum’a maviden yeşile yolculuk', 'Sadece tarihî camiler', 'Sadece sokak lezzetleri'],
-    answer: 0,
-    feedback: 'Doğru. Anlatım Boğaz’ın mavisinden Arboretum’un yeşiline ilerliyor.'
-  },
-  {
-    q: '“İnsan hafızası” bölümünün temel fikri nedir?',
-    options: ['İstanbul’un boş bir şehir olduğu', 'Farklı kültürlerin ve göçlerin şehirde birikmesi', 'Yalnızca ağaç türlerinin listelenmesi'],
-    answer: 1,
-    feedback: 'Doğru. İstanbul, farklı insan hikâyelerinin biriktiği sosyolojik bir kavşak olarak görülüyor.'
-  },
-  {
-    q: 'Belgrad Ormanı ve Atatürk Arboretumu, Boğaz’ın yanında hangi anlamı güçlendiriyor?',
-    options: ['Şehrin yeşil sığınağı ve nefes alanı', 'Sadece alışveriş kültürü', 'Endüstriyel üretim merkezi'],
-    answer: 0,
-    feedback: 'Doğru. Bu alanlar İstanbul’un korunan yeşil hafızası olarak ele alınıyor.'
-  }
-];
-let quizIndex = 0;
-let answered = false;
-const quizCounter = $('#quiz-counter');
-const quizQuestion = $('#quiz-question');
-const quizOptions = $('#quiz-options');
-const quizFeedback = $('#quiz-feedback');
-const quizNext = $('#quiz-next');
-function renderQuiz() {
-  if (!quizCounter || !quizQuestion || !quizOptions) return;
-  const item = questions[quizIndex];
-  answered = false;
-  quizCounter.textContent = `Soru ${quizIndex + 1}/${questions.length}`;
-  quizQuestion.textContent = item.q;
-  quizFeedback.textContent = '';
-  quizOptions.innerHTML = item.options.map((option, index) => `<button class="quiz-option" type="button" data-index="${index}">${option}</button>`).join('');
-  $$('.quiz-option', quizOptions).forEach((button) => {
-    button.addEventListener('click', () => {
-      if (answered) return;
-      answered = true;
-      const selected = Number(button.dataset.index);
-      $$('.quiz-option', quizOptions).forEach((opt, index) => {
-        if (index === item.answer) opt.classList.add('correct');
-        if (index === selected && selected !== item.answer) opt.classList.add('wrong');
-      });
-      quizFeedback.textContent = selected === item.answer ? item.feedback : `Yanlış. Doğru cevap: ${item.options[item.answer]}.`;
-    });
-  });
+function stopIndex(id){
+  return stops.findIndex(stop => stop.id === id);
 }
-quizNext?.addEventListener('click', () => {
-  quizIndex = (quizIndex + 1) % questions.length;
-  renderQuiz();
-});
-renderQuiz();
-
-// Bir ses açıldığında diğerlerini durdurarak karışık ve bozuk duyulmasını engeller.
-$$('audio').forEach((audio) => {
-  audio.volume = 0.45;
-  audio.addEventListener('play', () => {
-    $$('audio').forEach((other) => {
-      if (other !== audio) other.pause();
-    });
-    $$('.audio-card').forEach((card) => card.classList.remove('active-audio'));
-    audio.closest('.audio-card')?.classList.add('active-audio');
-  });
-});
-
-// Sunum modu
-const presentationModal = $('#presentation-modal');
-const presentationContent = $('#presentation-content');
-const presentationCounter = $('#presentation-counter');
-const presentationDots = $('#presentation-dots');
-const presentationPrev = $('#presentation-prev');
-const presentationNext = $('#presentation-next');
-const presentationClose = $('.presentation-close');
-const openPresentation = $('#open-presentation');
-const presentationSlides = [
-  {
-    title: 'Megakent’in İçinde Zamanın Durduğu Yerler',
-    subtitle: 'İstanbul’un Mavi ve Yeşil Hafızası',
-    text: 'Bu sunum modu, web sayfasını sınıf içinde daha rahat anlatmanız için hazırlandı. Ana akış: Boğaz → İnsan Hafızası → Yeşil Hafıza → Nefes Rotası.',
-    image: 'assets/images/bogaz-havadan.webp'
-  },
-  {
-    title: 'Mavi Hafıza',
-    subtitle: 'Boğaz: İstanbul’un mavi omurgası',
-    text: 'Boğaz yalnızca doğal bir su yolu değil; İstanbul’un kültürel ritmini kuran ana sahnedir. Vapur, köprü, kıyı yaşamı ve sahil hafızası burada toplanır.',
-    image: 'assets/images/kopru.webp'
-  },
-  {
-    title: 'İnsan Hafızası',
-    subtitle: 'Göçler, semtler, diller ve günlük hayat',
-    text: 'İstanbul’un hafızası yalnızca mekânlarda değil, insanlarda birikir. Şehir farklı toplulukları, yaşam ritimlerini ve hikâyeleri bir arada taşır.',
-    image: 'assets/images/anadolu-hisari.webp'
-  },
-  {
-    title: 'Yeşil Hafıza',
-    subtitle: 'Belgrad Ormanı ve Atatürk Arboretumu',
-    text: 'Bu alanlar megakentin içinde zamanı yavaşlatan, nefes aldıran ve doğanın hafızasını koruyan yeşil arşivlerdir.',
-    image: 'assets/images/ataturk-arboretumu.webp'
-  },
-  {
-    title: 'Nefes Rotası',
-    subtitle: 'Boğaz’dan Arboretum’a yolculuk',
-    text: 'Proje bir gezi listesi değil; İstanbul’un mavi hafızasından yeşil hafızasına uzanan düşünsel bir rota sunar.',
-    image: 'assets/images/belgrad-ormani.webp'
-  },
-  {
-    title: 'Kapanış',
-    subtitle: 'İstanbul’un iki ana rengi',
-    text: 'Boğaz’ın mavisi şehri dünyaya açar; Arboretum’un yeşili şehre nefes aldırır. İstanbul’u özel yapan şey bu çok katmanlı birlikteliktir.',
-    image: 'assets/images/bogaz-havadan.webp'
+function setActive(id){
+  hotspots.forEach(h => h.classList.toggle('active', h.dataset.stop === id));
+}
+function openModal(){
+  modal?.classList.add('open');
+  modal?.setAttribute('aria-hidden', 'false');
+}
+function closeModal(){
+  modal?.classList.remove('open');
+  modal?.setAttribute('aria-hidden', 'true');
+  setActive(null);
+}
+function tagHTML(tags){
+  return (tags || []).map(tag => `<span class="meta">${tag}</span>`).join('');
+}
+function normalizeMedia(stop){
+  if(Array.isArray(stop.media) && stop.media.length){
+    return stop.media.map(item => {
+      if(typeof item === 'string'){
+        return { type: guessType(item), src: item, caption: '' };
+      }
+      return { type: item.type || guessType(item.src || ''), src: item.src, caption: item.caption || '' };
+    }).filter(item => item.src);
   }
-];
-let presentationIndex = 0;
-function renderPresentation(index = 0) {
-  const slide = presentationSlides[index];
-  if (!slide || !presentationContent || !presentationCounter || !presentationDots) return;
-  presentationContent.innerHTML = `
-    <div class="presentation-slide">
-      <div class="presentation-text">
-        <p class="eyebrow">Sunum Modu</p>
-        <h2>${slide.title}</h2>
-        <h3>${slide.subtitle}</h3>
-        <p>${slide.text}</p>
+
+  const photos = stop.photos && stop.photos.length ? stop.photos : ['assets/images/rota-haritasi.png'];
+  return photos.map(src => ({ type: guessType(src), src, caption: '' }));
+}
+function guessType(src){
+  return /\.(mp4|webm|ogg)$/i.test(src) ? 'video' : 'image';
+}
+function renderMainMedia(item, stop){
+  if(!item || !item.src){
+    return `
+      <div class="photoEmpty">
+        <div class="photoEmptyBox">Bu durak için fotoğraf/video alanı hazır. Dosya eklediğinde burada tam haliyle görünecek.</div>
       </div>
-      <div class="presentation-image"><img src="${slide.image}" alt="${slide.title}"></div>
-    </div>
+    `;
+  }
+  if(item.type === 'video'){
+    return `<video src="${item.src}" controls playsinline preload="metadata"></video>`;
+  }
+  return `<img src="${item.src}" alt="${stop.title} görseli">`;
+}
+function renderThumb(item, stop, index, active){
+  const cls = `${active ? 'active' : ''} ${item.type === 'video' ? 'videoThumb' : ''}`.trim();
+  const thumbMedia = item.type === 'video'
+    ? `<video src="${item.src}" muted preload="metadata"></video>`
+    : `<img src="${item.src}" alt="${stop.title} küçük görsel ${index + 1}">`;
+  return `
+    <button type="button" class="${cls}" data-thumb="${index}" aria-label="${index + 1}. medya">
+      ${thumbMedia}
+    </button>
   `;
-  presentationCounter.textContent = `Slayt ${index + 1}/${presentationSlides.length}`;
-  presentationDots.innerHTML = presentationSlides.map((_, i) => `<button class="presentation-dot ${i === index ? 'active' : ''}" data-slide="${i}" aria-label="Slayt ${i + 1}"></button>`).join('');
-  $$('.presentation-dot', presentationDots).forEach((dot) => {
-    dot.addEventListener('click', () => {
-      presentationIndex = Number(dot.dataset.slide);
-      renderPresentation(presentationIndex);
+}
+function renderStop(stop, imageIndex = 0){
+  if(!stop || !content) return;
+  currentStop = stop;
+  const media = normalizeMedia(stop);
+  currentImageIndex = Math.max(0, Math.min(imageIndex, media.length - 1));
+  const detail = popupDetails[stop.id] || {};
+  const currentItem = media[currentImageIndex];
+  const currentCaption = currentItem.caption || detail.photoNote || 'Bu alana durakla ilgili fotoğraf veya video açıklaması eklenebilir.';
+
+  const thumbs = media.map((item, index) => renderThumb(item, stop, index, index === currentImageIndex)).join('');
+
+  content.innerHTML = `
+    <article class="travelCard">
+      <div class="travelHero">
+        ${renderMainMedia(currentItem, stop)}
+        <div class="heroOverlay">
+          <div class="chipRow">
+            <span class="chip">${currentImageIndex + 1}/${media.length} medya</span>
+            <span class="chip">${stop.category}</span>
+          </div>
+          <div class="galleryNav">
+            <button class="arrowBtn" type="button" data-gallery="prev" aria-label="Önceki medya" ${media.length < 2 ? 'disabled' : ''}>‹</button>
+            <button class="arrowBtn" type="button" data-gallery="next" aria-label="Sonraki medya" ${media.length < 2 ? 'disabled' : ''}>›</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="travelInfo">
+        <div class="travelTop">
+          <div>
+            <span class="kicker">Gezi Kartı</span>
+            <h1 id="modalTitle">${stop.title}</h1>
+            <p class="subtitle">${stop.subtitle}</p>
+          </div>
+          <div class="badge">${stop.category}</div>
+        </div>
+
+        <div class="routeOrder">${stop.routeOrder}</div>
+        <div class="smallMeta">${tagHTML(stop.tags)}</div>
+
+        <div class="contentGrid">
+          <div class="contentBox full">
+            <h3>Kısa Bilgi</h3>
+            <p>${stop.text}</p>
+          </div>
+          <div class="contentBox">
+            <h3>Neden Önemli?</h3>
+            <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
+          </div>
+          <div class="contentBox">
+            <h3>Sunumda Nasıl Anlatılır?</h3>
+            <p>${detail.presentation || 'Bu durak üzerinden İstanbul’un mavi, yeşil ve tarihî hafızasıyla bağlantı kurulabilir.'}</p>
+          </div>
+        </div>
+
+        <div class="noteBlock">
+          <strong>Sunum Cümlesi</strong>
+          <div>${stop.note}</div>
+        </div>
+
+        <div class="photoCaption">${currentCaption}</div>
+
+        <div>
+          <div class="thumbHeader">
+            <span class="kicker">Fotoğraf / Video Albümü</span>
+            <span class="thumbHint">Medya ekledikçe burada çoğalır</span>
+          </div>
+          <div class="thumbStrip">${thumbs}</div>
+        </div>
+
+        <div class="routeButtons">
+          <button class="routeBtn" type="button" data-route="prev">← Önceki Durak</button>
+          <button class="routeBtn primary" type="button" data-route="next">Sonraki Durak →</button>
+        </div>
+      </div>
+    </article>
+  `;
+
+  content.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(media.length < 2) return;
+      const nextIndex = btn.dataset.gallery === 'next'
+        ? (currentImageIndex + 1) % media.length
+        : (currentImageIndex - 1 + media.length) % media.length;
+      renderStop(stop, nextIndex);
+    });
+  });
+
+  content.querySelectorAll('[data-thumb]').forEach(btn => {
+    btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
+  });
+
+  content.querySelectorAll('[data-route]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = stopIndex(stop.id);
+      const nextIndex = btn.dataset.route === 'next'
+        ? (index + 1) % stops.length
+        : (index - 1 + stops.length) % stops.length;
+      openStop(stops[nextIndex].id);
     });
   });
 }
-openPresentation?.addEventListener('click', () => {
-  presentationIndex = 0;
-  renderPresentation(presentationIndex);
-  if (typeof presentationModal.showModal === 'function') presentationModal.showModal();
+function openStop(id){
+  const stop = getStop(id);
+  if(!stop) return;
+  setActive(id);
+  renderStop(stop, 0);
+  openModal();
+}
+hotspots.forEach(h => {
+  h.addEventListener('click', () => openStop(h.dataset.stop));
 });
-presentationPrev?.addEventListener('click', () => {
-  presentationIndex = (presentationIndex - 1 + presentationSlides.length) % presentationSlides.length;
-  renderPresentation(presentationIndex);
+closeBtn?.addEventListener('click', closeModal);
+modal?.addEventListener('click', event => {
+  if(event.target?.dataset?.close === 'true') closeModal();
 });
-presentationNext?.addEventListener('click', () => {
-  presentationIndex = (presentationIndex + 1) % presentationSlides.length;
-  renderPresentation(presentationIndex);
+document.addEventListener('keydown', event => {
+  if(!modal?.classList.contains('open')) return;
+  if(event.key === 'Escape') closeModal();
+  if(!currentStop) return;
+  const media = normalizeMedia(currentStop);
+  if(event.key === 'ArrowRight') renderStop(currentStop, (currentImageIndex + 1) % media.length);
+  if(event.key === 'ArrowLeft') renderStop(currentStop, (currentImageIndex - 1 + media.length) % media.length);
 });
-presentationClose?.addEventListener('click', () => presentationModal.close());
-presentationModal?.addEventListener('click', (event) => {
-  if (event.target === presentationModal) presentationModal.close();
-});
-document.addEventListener('keydown', (event) => {
-  if (!presentationModal?.open) return;
-  if (event.key === 'ArrowRight') {
-    presentationIndex = (presentationIndex + 1) % presentationSlides.length;
-    renderPresentation(presentationIndex);
+
+
+/* Profesyonel yerel müzik playerı */
+const localTracks = window.LOCAL_MUSIC_TRACKS || [];
+const routeAudio = document.querySelector('#routeAudio');
+const playerMiniButton = document.querySelector('#playerMiniButton');
+const playerPanel = document.querySelector('#playerPanel');
+const playerClose = document.querySelector('#playerClose');
+const miniCover = document.querySelector('#miniCover');
+const miniTrackName = document.querySelector('#miniTrackName');
+const miniDisc = document.querySelector('.miniDisc');
+const playerCover = document.querySelector('#playerCover');
+const trackTitle = document.querySelector('#trackTitle');
+const trackArtist = document.querySelector('#trackArtist');
+const progressRange = document.querySelector('#progressRange');
+const currentTimeLabel = document.querySelector('#currentTime');
+const durationTimeLabel = document.querySelector('#durationTime');
+const prevTrackButton = document.querySelector('#prevTrack');
+const nextTrackButton = document.querySelector('#nextTrack');
+const playPauseButton = document.querySelector('#playPause');
+const volumeRange = document.querySelector('#volumeRange');
+const loopToggle = document.querySelector('#loopToggle');
+const trackList = document.querySelector('#trackList');
+
+let activeTrackIndex = 0;
+let playlistLoop = true;
+let firstInteractionStarted = false;
+
+function formatTime(seconds){
+  if(!Number.isFinite(seconds)) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+  return `${mins}:${secs}`;
+}
+function getTrack(index){
+  return localTracks[index] || localTracks[0];
+}
+function updateTrackList(){
+  if(!trackList) return;
+  trackList.innerHTML = localTracks.map((track, index) => `
+    <button class="trackItem ${index === activeTrackIndex ? 'active' : ''}" type="button" data-track="${index}">
+      <img src="${track.cover}" alt="">
+      <span>
+        <strong>${track.title}</strong>
+        <span>${track.artist}</span>
+      </span>
+      <em>${index === activeTrackIndex ? 'Çalıyor' : 'Seç'}</em>
+    </button>
+  `).join('');
+  trackList.querySelectorAll('[data-track]').forEach((button) => {
+    button.addEventListener('click', () => setTrack(Number(button.dataset.track), true));
+  });
+}
+function setTrack(index, shouldPlay = false){
+  const track = getTrack(index);
+  if(!track || !routeAudio) return;
+  activeTrackIndex = index;
+  routeAudio.src = track.src;
+  routeAudio.volume = Number(volumeRange?.value ?? 0.45);
+  if(playerCover) playerCover.src = track.cover;
+  if(miniCover) miniCover.src = track.cover;
+  if(trackTitle) trackTitle.textContent = track.title;
+  if(trackArtist) trackArtist.textContent = track.artist;
+  if(miniTrackName) miniTrackName.textContent = track.title;
+  if(progressRange) progressRange.value = 0;
+  if(currentTimeLabel) currentTimeLabel.textContent = '0:00';
+  if(durationTimeLabel) durationTimeLabel.textContent = '0:00';
+  updateTrackList();
+  if(shouldPlay) playRouteMusic();
+}
+async function playRouteMusic(){
+  if(!routeAudio) return;
+  try{
+    await routeAudio.play();
+    if(playPauseButton) playPauseButton.textContent = 'Ⅱ';
+    miniDisc?.classList.add('is-playing');
+  }catch(error){
+    if(playPauseButton) playPauseButton.textContent = '▶';
+    miniDisc?.classList.remove('is-playing');
   }
-  if (event.key === 'ArrowLeft') {
-    presentationIndex = (presentationIndex - 1 + presentationSlides.length) % presentationSlides.length;
-    renderPresentation(presentationIndex);
-  }
-  if (event.key === 'Escape') {
-    presentationModal.close();
+}
+function pauseRouteMusic(){
+  if(!routeAudio) return;
+  routeAudio.pause();
+  if(playPauseButton) playPauseButton.textContent = '▶';
+  miniDisc?.classList.remove('is-playing');
+}
+function toggleRouteMusic(){
+  if(!routeAudio) return;
+  if(routeAudio.paused) playRouteMusic();
+  else pauseRouteMusic();
+}
+function nextTrack(shouldPlay = true){
+  if(!localTracks.length) return;
+  setTrack((activeTrackIndex + 1) % localTracks.length, shouldPlay);
+}
+function prevTrack(shouldPlay = true){
+  if(!localTracks.length) return;
+  setTrack((activeTrackIndex - 1 + localTracks.length) % localTracks.length, shouldPlay);
+}
+function openPlayer(){
+  playerPanel?.classList.add('open');
+  playerPanel?.setAttribute('aria-hidden', 'false');
+}
+function closePlayer(){
+  playerPanel?.classList.remove('open');
+  playerPanel?.setAttribute('aria-hidden', 'true');
+}
+function togglePlayer(){
+  if(playerPanel?.classList.contains('open')) closePlayer();
+  else openPlayer();
+}
+function tryStartOnFirstInteraction(){
+  if(firstInteractionStarted) return;
+  firstInteractionStarted = true;
+  if(routeAudio && routeAudio.paused) playRouteMusic();
+}
+
+playerMiniButton?.addEventListener('click', () => {
+  togglePlayer();
+  tryStartOnFirstInteraction();
+});
+playerClose?.addEventListener('click', closePlayer);
+playPauseButton?.addEventListener('click', toggleRouteMusic);
+nextTrackButton?.addEventListener('click', () => nextTrack(true));
+prevTrackButton?.addEventListener('click', () => prevTrack(true));
+volumeRange?.addEventListener('input', () => {
+  if(routeAudio) routeAudio.volume = Number(volumeRange.value);
+});
+loopToggle?.addEventListener('click', () => {
+  playlistLoop = !playlistLoop;
+  loopToggle.classList.toggle('active', playlistLoop);
+  loopToggle.textContent = playlistLoop ? 'Loop açık' : 'Loop kapalı';
+});
+progressRange?.addEventListener('input', () => {
+  if(!routeAudio || !Number.isFinite(routeAudio.duration)) return;
+  routeAudio.currentTime = (Number(progressRange.value) / 100) * routeAudio.duration;
+});
+routeAudio?.addEventListener('timeupdate', () => {
+  if(!routeAudio || !Number.isFinite(routeAudio.duration)) return;
+  if(progressRange) progressRange.value = (routeAudio.currentTime / routeAudio.duration) * 100;
+  if(currentTimeLabel) currentTimeLabel.textContent = formatTime(routeAudio.currentTime);
+  if(durationTimeLabel) durationTimeLabel.textContent = formatTime(routeAudio.duration);
+});
+routeAudio?.addEventListener('loadedmetadata', () => {
+  if(durationTimeLabel) durationTimeLabel.textContent = formatTime(routeAudio.duration);
+});
+routeAudio?.addEventListener('pause', () => miniDisc?.classList.remove('is-playing'));
+routeAudio?.addEventListener('play', () => miniDisc?.classList.add('is-playing'));
+routeAudio?.addEventListener('ended', () => {
+  if(playlistLoop || activeTrackIndex < localTracks.length - 1){
+    nextTrack(true);
+  }else{
+    pauseRouteMusic();
   }
 });
+document.addEventListener('pointerdown', tryStartOnFirstInteraction, { once:true });
+if(localTracks.length){
+  setTrack(0, false);
+}
