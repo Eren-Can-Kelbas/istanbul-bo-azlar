@@ -109,15 +109,29 @@ function guessType(src){
 function renderMainMedia(item, stop){
   if(!item || !item.src){
     return `
-      <div class="photoEmpty">
-        <div class="photoEmptyBox">Bu durak için fotoğraf/video alanı hazır. Dosya eklediğinde burada tam haliyle görünecek.</div>
+      <div class="mediaStage">
+        <div class="photoEmpty">
+          <div class="photoEmptyBox">Bu durak için fotoğraf/video alanı hazır. Dosya eklediğinde burada tam haliyle görünecek.</div>
+        </div>
       </div>
     `;
   }
+
   if(item.type === 'video'){
-    return `<video src="${item.src}" controls playsinline preload="metadata"></video>`;
+    return `
+      <div class="mediaStage">
+        <video class="mediaBackdrop" src="${item.src}" muted preload="metadata"></video>
+        <video class="mainMedia" src="${item.src}" controls playsinline preload="metadata"></video>
+      </div>
+    `;
   }
-  return `<img src="${item.src}" alt="${stop.title} görseli">`;
+
+  return `
+    <div class="mediaStage">
+      <img class="mediaBackdrop" src="${item.src}" alt="" aria-hidden="true">
+      <img class="mainMedia" src="${item.src}" alt="${stop.title} görseli">
+    </div>
+  `;
 }
 function renderThumb(item, stop, index, active){
   const cls = `${active ? 'active' : ''} ${item.type === 'video' ? 'videoThumb' : ''}`.trim();
@@ -168,14 +182,57 @@ function renderStop(stop, imageIndex = 0){
         </div>
 
         <div class="routeOrder">${stop.routeOrder}</div>
-        <div class="popupScrollNotice">Bu sağ bölüm kaydırılabilir. Fotoğraf/video alanı ve albüm aşağıda devam eder.</div>
+        <div class="popupScrollNotice">Sağ panel kaydırılabilir. Aşağıdaki butonları da kullanabilirsin.</div>
         <div class="smallMeta">${tagHTML(stop.tags)}</div>
 
-        <div class="contentGrid">
+        <div class="contentGrid contentGridIntro">
           <div class="contentBox full">
             <h3>Kısa Bilgi</h3>
             <p>${stop.text}</p>
           </div>
+        </div>
+
+        <section class="mediaSection mediaSectionPriority">
+          <div class="mediaSectionTop">
+            <div>
+              <span class="kicker">Medya Alanı</span>
+              <h3>Fotoğraf / Video Kontrolü</h3>
+            </div>
+            <span class="mediaStatus">Hazır</span>
+          </div>
+
+          <div class="photoCaption">${currentCaption}</div>
+
+          <div class="mediaChecklist">
+            ${mediaChecklistHTML(media)}
+          </div>
+
+          <div class="thumbHeader">
+            <span class="kicker">Albüm</span>
+            <span class="thumbHint">Fotoğraf/video ekledikçe burada görünür</span>
+          </div>
+          <div class="thumbStrip">${thumbs}</div>
+
+          <details class="mediaAddGuide">
+            <summary>Fotoğraf/video ekleme ipucu</summary>
+            <div class="mediaGuideGrid">
+              <div class="mediaGuideItem">
+                <strong>1. Ana görsel</strong>
+                <span>Durak genel görünümü veya en güçlü kare.</span>
+              </div>
+              <div class="mediaGuideItem">
+                <strong>2. Detay görsel</strong>
+                <span>Tabela, manzara, yol, kıyı veya tarihî detay.</span>
+              </div>
+              <div class="mediaGuideItem">
+                <strong>3. Kısa video</strong>
+                <span>10–20 saniyelik atmosfer görüntüsü.</span>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <div class="contentGrid contentGridCompact">
           <div class="contentBox">
             <h3>Neden Önemli?</h3>
             <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
@@ -191,42 +248,10 @@ function renderStop(stop, imageIndex = 0){
           <div>${stop.note}</div>
         </div>
 
-        <section class="mediaSection">
-          <div class="mediaSectionTop">
-            <div>
-              <span class="kicker">Medya Alanı</span>
-              <h3>Fotoğraf / Video Ekleme Bölümü</h3>
-            </div>
-            <span class="mediaStatus">Hazır</span>
-          </div>
-
-          <div class="photoCaption">${currentCaption}</div>
-
-          <div class="mediaGuideGrid">
-            <div class="mediaGuideItem">
-              <strong>1. Ana görsel</strong>
-              <span>Durak genel görünümü veya en güçlü kare.</span>
-            </div>
-            <div class="mediaGuideItem">
-              <strong>2. Detay görsel</strong>
-              <span>Tabela, manzara, yol, kıyı veya tarihî detay.</span>
-            </div>
-            <div class="mediaGuideItem">
-              <strong>3. Kısa video</strong>
-              <span>10–20 saniyelik atmosfer görüntüsü.</span>
-            </div>
-          </div>
-
-          <div class="mediaChecklist">
-            ${mediaChecklistHTML(media)}
-          </div>
-
-          <div class="thumbHeader">
-            <span class="kicker">Albüm</span>
-            <span class="thumbHint">Fotoğraf/video ekledikçe burada görünür</span>
-          </div>
-          <div class="thumbStrip">${thumbs}</div>
-        </section>
+        <div class="scrollControls">
+          <button class="scrollBtn" type="button" data-scroll-panel="up">↑ Üste Dön</button>
+          <button class="scrollBtn primary" type="button" data-scroll-panel="down">↓ Devamını Gör</button>
+        </div>
 
         <div class="routeButtons">
           <button class="routeBtn" type="button" data-route="prev">← Önceki Durak</button>
@@ -250,6 +275,19 @@ function renderStop(stop, imageIndex = 0){
     btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
   });
 
+  content.querySelectorAll('[data-scroll-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const infoArea = content.querySelector('.travelInfo');
+      if(!infoArea) return;
+      const direction = btn.dataset.scrollPanel;
+      if(direction === 'up'){
+        infoArea.scrollTo({ top: 0, behavior: 'smooth' });
+      }else{
+        infoArea.scrollBy({ top: Math.max(220, infoArea.clientHeight * 0.72), behavior: 'smooth' });
+      }
+    });
+  });
+
   content.querySelectorAll('[data-route]').forEach(btn => {
     btn.addEventListener('click', () => {
       const index = stopIndex(stop.id);
@@ -260,8 +298,7 @@ function renderStop(stop, imageIndex = 0){
     });
   });
 
-  const infoArea = content.querySelector('.travelInfo');
-  if(infoArea) infoArea.scrollTop = 0;
+  resetPopupScrollAreas();
 }
 function openStop(id){
   const stop = getStop(id);
@@ -502,3 +539,290 @@ function closeAuditPanel(){
 }
 auditToggle?.addEventListener('click', openAuditPanel);
 auditClose?.addEventListener('click', closeAuditPanel);
+
+
+/* v19 - Popup scroll alanlarını resetleme */
+function resetPopupScrollAreas(){
+  const infoArea = content?.querySelector('.travelInfo');
+  const mediaArea = content?.querySelector('.travelHero');
+  if(infoArea) infoArea.scrollTop = 0;
+  if(mediaArea) mediaArea.scrollTop = 0;
+}
+
+
+/* v23 - Sade popup + gerçek kaydırılabilir panel
+   Eski renderStop fonksiyonunu bilinçli olarak override eder. */
+function renderStop(stop, imageIndex = 0){
+  if(!stop || !content) return;
+
+  currentStop = stop;
+  const media = normalizeMedia(stop);
+  currentImageIndex = Math.max(0, Math.min(imageIndex, media.length - 1));
+  const detail = popupDetails[stop.id] || {};
+  const currentItem = media[currentImageIndex];
+  const currentCaption = currentItem.caption || detail.photoNote || 'Bu alana durakla ilgili fotoğraf veya video açıklaması eklenebilir.';
+
+  const thumbs = media.map((item, index) => renderThumb(item, stop, index, index === currentImageIndex)).join('');
+
+  content.innerHTML = `
+    <article class="travelCard travelCardSimple">
+      <div class="travelHero">
+        ${renderMainMedia(currentItem, stop)}
+        <div class="heroOverlay">
+          <div class="chipRow">
+            <span class="chip">${currentImageIndex + 1}/${media.length}</span>
+          </div>
+          <div class="galleryNav">
+            <button class="arrowBtn" type="button" data-gallery="prev" aria-label="Önceki medya" ${media.length < 2 ? 'disabled' : ''}>‹</button>
+            <button class="arrowBtn" type="button" data-gallery="next" aria-label="Sonraki medya" ${media.length < 2 ? 'disabled' : ''}>›</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="travelInfo travelInfoSimple" aria-label="${stop.title} popup içeriği">
+        <div class="popupTopSticky">
+          <div class="travelTop simpleTop">
+            <div>
+              <span class="kicker">Gezi Kartı</span>
+              <h1 id="modalTitle">${stop.title}</h1>
+              <p class="subtitle">${stop.subtitle}</p>
+            </div>
+            <div class="badge">${stop.category}</div>
+          </div>
+
+          <div class="routeOrder">${stop.routeOrder}</div>
+          <div class="smallMeta">${tagHTML(stop.tags)}</div>
+        </div>
+
+        <section class="simpleBlock">
+          <h3>Kısa Bilgi</h3>
+          <p>${stop.text}</p>
+        </section>
+
+        <section class="simpleMediaBlock">
+          <div class="simpleMediaHeader">
+            <div>
+              <span class="kicker">Medya</span>
+              <h3>Fotoğraf / Video</h3>
+            </div>
+            <span class="mediaCount">${media.length} medya</span>
+          </div>
+
+          <p class="simpleCaption">${currentCaption}</p>
+
+          <div class="thumbStrip simpleThumbs">${thumbs}</div>
+
+          <div class="simpleMediaHelp">
+            Fotoğraf/video eklemek için ilgili dosyayı klasörüne koyup <strong>index.html</strong> içindeki ilgili durağın <strong>photos</strong> veya <strong>media</strong> listesine ekle.
+          </div>
+        </section>
+
+        <section class="simpleBlock noteSimple">
+          <h3>Sunum Cümlesi</h3>
+          <p>${stop.note}</p>
+        </section>
+
+        <details class="simpleDetails">
+          <summary>Detaylı anlatım notları</summary>
+          <div class="simpleDetailGrid">
+            <div>
+              <h4>Neden önemli?</h4>
+              <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
+            </div>
+            <div>
+              <h4>Sunumda nasıl anlatılır?</h4>
+              <p>${detail.presentation || 'Bu durak üzerinden İstanbul’un mavi, yeşil ve tarihî hafızasıyla bağlantı kurulabilir.'}</p>
+            </div>
+          </div>
+        </details>
+
+        <div class="scrollControls simpleScrollControls">
+          <button class="scrollBtn" type="button" data-scroll-panel="up">↑ Üste</button>
+          <button class="scrollBtn primary" type="button" data-scroll-panel="down">↓ Aşağı</button>
+        </div>
+
+        <div class="routeButtons simpleRouteButtons">
+          <button class="routeBtn" type="button" data-route="prev">← Önceki</button>
+          <button class="routeBtn primary" type="button" data-route="next">Sonraki →</button>
+        </div>
+      </aside>
+    </article>
+  `;
+
+  content.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(media.length < 2) return;
+      const nextIndex = btn.dataset.gallery === 'next'
+        ? (currentImageIndex + 1) % media.length
+        : (currentImageIndex - 1 + media.length) % media.length;
+      renderStop(stop, nextIndex);
+    });
+  });
+
+  content.querySelectorAll('[data-thumb]').forEach(btn => {
+    btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
+  });
+
+  content.querySelectorAll('[data-scroll-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const infoArea = content.querySelector('.travelInfoSimple');
+      if(!infoArea) return;
+      if(btn.dataset.scrollPanel === 'up'){
+        infoArea.scrollTo({ top: 0, behavior: 'smooth' });
+      }else{
+        infoArea.scrollBy({ top: Math.max(220, infoArea.clientHeight * 0.72), behavior: 'smooth' });
+      }
+    });
+  });
+
+  content.querySelectorAll('[data-route]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = stopIndex(stop.id);
+      const nextIndex = btn.dataset.route === 'next'
+        ? (index + 1) % stops.length
+        : (index - 1 + stops.length) % stops.length;
+      openStop(stops[nextIndex].id);
+    });
+  });
+
+  const infoArea = content.querySelector('.travelInfoSimple');
+  const card = content.querySelector('.travelCardSimple');
+
+  if(infoArea){
+    infoArea.scrollTop = 0;
+  }
+
+  // Mouse/finger sol fotoğraf tarafındayken de sağ panel kaydırılabilsin.
+  if(card && infoArea){
+    card.addEventListener('wheel', (event) => {
+      if(event.target.closest('.travelInfoSimple')) return;
+      infoArea.scrollTop += event.deltaY;
+      event.preventDefault();
+    }, { passive: false });
+  }
+}
+
+
+/* v24 - Stabil popup: tüm popup tek kaydırılabilir alan
+   Sağ panel yerine modalın kendisi scroll eder. Hotspotlara dokunmaz. */
+function renderStop(stop, imageIndex = 0){
+  if(!stop || !content) return;
+
+  currentStop = stop;
+  const media = normalizeMedia(stop);
+  currentImageIndex = Math.max(0, Math.min(imageIndex, media.length - 1));
+  const detail = popupDetails[stop.id] || {};
+  const currentItem = media[currentImageIndex];
+  const currentCaption = currentItem.caption || detail.photoNote || 'Bu alana durakla ilgili fotoğraf veya video açıklaması eklenebilir.';
+
+  const thumbs = media.map((item, index) => renderThumb(item, stop, index, index === currentImageIndex)).join('');
+
+  content.innerHTML = `
+    <article class="popupStableCard">
+      <section class="popupMediaPane">
+        ${renderMainMedia(currentItem, stop)}
+        <div class="heroOverlay">
+          <div class="chipRow">
+            <span class="chip">${currentImageIndex + 1}/${media.length}</span>
+          </div>
+          <div class="galleryNav">
+            <button class="arrowBtn" type="button" data-gallery="prev" aria-label="Önceki medya" ${media.length < 2 ? 'disabled' : ''}>‹</button>
+            <button class="arrowBtn" type="button" data-gallery="next" aria-label="Sonraki medya" ${media.length < 2 ? 'disabled' : ''}>›</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="popupContentPane" aria-label="${stop.title} popup içeriği">
+        <header class="stableHeader">
+          <span class="kicker">Gezi Kartı</span>
+          <h1 id="modalTitle">${stop.title}</h1>
+          <p class="subtitle">${stop.subtitle}</p>
+          <div class="badge stableBadge">${stop.category}</div>
+        </header>
+
+        <div class="stableMetaRow">
+          <span class="routeOrder">${stop.routeOrder}</span>
+          ${tagHTML(stop.tags)}
+        </div>
+
+        <section class="stableBlock">
+          <h3>Kısa Bilgi</h3>
+          <p>${stop.text}</p>
+        </section>
+
+        <section class="stableBlock stableMediaBlock">
+          <div class="stableMediaTop">
+            <div>
+              <span class="kicker">Medya</span>
+              <h3>Fotoğraf / Video</h3>
+            </div>
+            <span class="mediaCount">${media.length} medya</span>
+          </div>
+          <p class="stableCaption">${currentCaption}</p>
+          <div class="thumbStrip stableThumbs">${thumbs}</div>
+        </section>
+
+        <section class="stableBlock noteSimple">
+          <h3>Sunum Cümlesi</h3>
+          <p>${stop.note}</p>
+        </section>
+
+        <details class="stableDetails">
+          <summary>Detaylı anlatım notları</summary>
+          <div>
+            <h4>Neden önemli?</h4>
+            <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
+            <h4>Sunumda nasıl anlatılır?</h4>
+            <p>${detail.presentation || 'Bu durak üzerinden İstanbul’un mavi, yeşil ve tarihî hafızasıyla bağlantı kurulabilir.'}</p>
+          </div>
+        </details>
+
+        <div class="stableBottomControls">
+          <button class="scrollBtn" type="button" data-scroll-panel="up">↑ Üste</button>
+          <button class="scrollBtn primary" type="button" data-scroll-panel="down">↓ Aşağı</button>
+          <button class="routeBtn" type="button" data-route="prev">← Önceki</button>
+          <button class="routeBtn primary" type="button" data-route="next">Sonraki →</button>
+        </div>
+      </section>
+    </article>
+  `;
+
+  content.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(media.length < 2) return;
+      const nextIndex = btn.dataset.gallery === 'next'
+        ? (currentImageIndex + 1) % media.length
+        : (currentImageIndex - 1 + media.length) % media.length;
+      renderStop(stop, nextIndex);
+    });
+  });
+
+  content.querySelectorAll('[data-thumb]').forEach(btn => {
+    btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
+  });
+
+  content.querySelectorAll('[data-scroll-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = document.querySelector('.modalPanel');
+      if(!panel) return;
+      if(btn.dataset.scrollPanel === 'up'){
+        panel.scrollTo({ top: 0, behavior: 'smooth' });
+      }else{
+        panel.scrollBy({ top: Math.max(260, panel.clientHeight * 0.75), behavior: 'smooth' });
+      }
+    });
+  });
+
+  content.querySelectorAll('[data-route]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = stopIndex(stop.id);
+      const nextIndex = btn.dataset.route === 'next'
+        ? (index + 1) % stops.length
+        : (index - 1 + stops.length) % stops.length;
+      openStop(stops[nextIndex].id);
+    });
+  });
+
+  const panel = document.querySelector('.modalPanel');
+  if(panel) panel.scrollTop = 0;
+}

@@ -1087,6 +1087,2571 @@ body{
   }
 }
 
+
+/* v18 - Gerçek telefon yatay popup düzeltmesi
+   Önceki kuralları özellikle override eder. Hotspotlara dokunmaz. */
+@media (orientation: landscape) and (max-height: 560px){
+  .infoModal{
+    padding:6px !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+    overflow:hidden !important;
+  }
+
+  .travelCard{
+    display:grid !important;
+    grid-template-columns:42% 58% !important;
+    grid-template-rows:100% !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+  }
+
+  .travelHero{
+    grid-column:1 !important;
+    grid-row:1 !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-height:none !important;
+    flex:none !important;
+    overflow:hidden !important;
+  }
+
+  .travelHero img,
+  .travelHero video{
+    width:100% !important;
+    height:100% !important;
+    object-fit:contain !important;
+    object-position:center center !important;
+  }
+
+  .travelInfo{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    height:100% !important;
+    max-height:100% !important;
+    min-height:0 !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    padding:12px 14px 46px !important;
+    gap:7px !important;
+    scrollbar-gutter:stable !important;
+  }
+
+  .travelInfo::-webkit-scrollbar{
+    width:10px !important;
+  }
+
+  .travelTop{
+    display:block !important;
+  }
+
+  .badge{
+    display:inline-flex !important;
+    margin-top:7px !important;
+    padding:6px 9px !important;
+    font-size:.78rem !important;
+  }
+
+  .kicker{
+    font-size:.62rem !important;
+    margin-bottom:4px !important;
+  }
+
+  .travelInfo h1{
+    font-size:clamp(1.18rem, 3.2vw, 1.85rem) !important;
+    line-height:.96 !important;
+  }
+
+  .subtitle{
+    margin-top:5px !important;
+    font-size:.82rem !important;
+    line-height:1.2 !important;
+  }
+
+  .routeOrder,
+  .popupScrollNotice{
+    padding:6px 9px !important;
+    font-size:.74rem !important;
+    line-height:1.25 !important;
+    border-radius:13px !important;
+  }
+
+  .smallMeta{
+    gap:5px !important;
+  }
+
+  .smallMeta .meta{
+    padding:5px 7px !important;
+    font-size:.72rem !important;
+  }
+
+  .contentGrid{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:6px !important;
+  }
+
+  .contentBox{
+    padding:8px !important;
+    border-radius:13px !important;
+  }
+
+  .contentBox.full{
+    grid-column:1 / -1 !important;
+  }
+
+  .contentBox h3{
+    font-size:.78rem !important;
+    margin-bottom:4px !important;
+  }
+
+  .contentBox p{
+    font-size:.76rem !important;
+    line-height:1.35 !important;
+  }
+
+  .noteBlock{
+    padding:9px !important;
+    border-radius:13px !important;
+  }
+
+  .noteBlock strong{
+    font-size:.78rem !important;
+    margin-bottom:4px !important;
+  }
+
+  .noteBlock div{
+    font-size:.76rem !important;
+    line-height:1.35 !important;
+  }
+
+  .mediaSection{
+    padding:9px !important;
+    border-radius:14px !important;
+  }
+
+  .mediaSectionTop{
+    margin-bottom:6px !important;
+  }
+
+  .mediaSectionTop h3{
+    font-size:.82rem !important;
+  }
+
+  .mediaStatus{
+    padding:5px 7px !important;
+    font-size:.68rem !important;
+  }
+
+  .photoCaption{
+    padding:8px 9px !important;
+    font-size:.74rem !important;
+    line-height:1.32 !important;
+  }
+
+  .mediaGuideGrid{
+    grid-template-columns:repeat(3, 1fr) !important;
+    gap:5px !important;
+    margin:6px 0 8px !important;
+  }
+
+  .mediaGuideItem{
+    padding:6px !important;
+    border-radius:10px !important;
+  }
+
+  .mediaGuideItem strong{
+    font-size:.68rem !important;
+    margin:0 !important;
+  }
+
+  .mediaGuideItem span{
+    display:none !important;
+  }
+
+  .mediaChecklist{
+    grid-template-columns:repeat(3, 1fr) !important;
+    gap:5px !important;
+  }
+
+  .mediaCheck{
+    padding:6px !important;
+    font-size:.68rem !important;
+    border-radius:10px !important;
+  }
+
+  .thumbHeader{
+    margin:5px 0 !important;
+  }
+
+  .thumbHint{
+    display:none !important;
+  }
+
+  .thumbStrip{
+    max-height:52px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+    padding-bottom:3px !important;
+  }
+
+  .thumbStrip button{
+    flex:0 0 auto !important;
+    width:48px !important;
+    height:38px !important;
+    border-radius:9px !important;
+  }
+
+  .routeButtons{
+    gap:6px !important;
+    margin-top:3px !important;
+  }
+
+  .routeBtn{
+    padding:7px 9px !important;
+    font-size:.74rem !important;
+  }
+
+  .closeBtn{
+    right:10px !important;
+    top:10px !important;
+    width:38px !important;
+    height:38px !important;
+    font-size:24px !important;
+  }
+}
+
+/* iPhone Pro Max gibi geniş ama kısa ekranlarda medya alanı görünür kalsın. */
+@media (orientation: landscape) and (min-width: 760px) and (max-height: 480px){
+  .travelCard{
+    grid-template-columns:38% 62% !important;
+  }
+
+  .travelInfo{
+    padding-right:18px !important;
+  }
+
+  .travelHero img,
+  .travelHero video{
+    object-fit:cover !important;
+  }
+}
+
+
+/* v19 - Popup ekrana sığdırma + net scrollbar düzeltmesi
+   En sonda olduğu için önceki mobil kuralları override eder. */
+.infoModal.open{ overflow:hidden !important; }
+.modalPanel{ overflow:hidden !important; }
+.travelCard{ overflow:hidden !important; }
+.travelHero{ overflow:hidden !important; }
+.travelHero img,
+.travelHero video{
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+.travelInfo{
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:auto !important;
+  scrollbar-gutter:stable both-edges !important;
+}
+.travelInfo::-webkit-scrollbar{ width:12px !important; }
+.travelInfo::-webkit-scrollbar-track{ background:rgba(19,32,52,.08) !important; border-radius:999px !important; }
+.travelInfo::-webkit-scrollbar-thumb{ background:rgba(31,107,58,.58) !important; border-radius:999px !important; border:3px solid rgba(255,250,240,1) !important; }
+
+@media (orientation:landscape) and (max-height:560px){
+  .infoModal{ padding:6px !important; }
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+  }
+  .travelCard{
+    display:grid !important;
+    grid-template-columns:40% 60% !important;
+    grid-template-rows:100% !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+  }
+  .travelHero{
+    grid-column:1 !important;
+    grid-row:1 !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-height:none !important;
+    flex:none !important;
+    display:grid !important;
+    place-items:center !important;
+    background:#e8dcc1 !important;
+  }
+  .travelHero img,
+  .travelHero video{
+    width:100% !important;
+    height:100% !important;
+    object-fit:contain !important;
+    object-position:center center !important;
+    background:#e8dcc1 !important;
+  }
+  .heroOverlay{ inset:auto 8px 8px 8px !important; }
+  .chip{ padding:5px 8px !important; font-size:.68rem !important; }
+  .arrowBtn{ width:32px !important; height:32px !important; font-size:20px !important; }
+  .travelInfo{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    width:100% !important;
+    height:100% !important;
+    max-height:100% !important;
+    min-height:0 !important;
+    overflow-y:scroll !important;
+    overflow-x:hidden !important;
+    padding:10px 14px 38px 14px !important;
+    gap:6px !important;
+    background:linear-gradient(180deg, rgba(255,250,240,1) 0%, rgba(255,255,255,1) 100%) !important;
+  }
+  .travelInfo::-webkit-scrollbar{ width:10px !important; }
+  .travelTop{ display:block !important; }
+  .badge{ display:inline-flex !important; max-width:calc(100% - 52px) !important; margin-top:5px !important; padding:5px 8px !important; font-size:.68rem !important; white-space:normal !important; }
+  .kicker{ font-size:.58rem !important; margin-bottom:3px !important; }
+  .travelInfo h1{ font-size:clamp(1.08rem, 3.2vw, 1.62rem) !important; line-height:.96 !important; letter-spacing:-.03em !important; padding-right:42px !important; }
+  .subtitle{ margin-top:4px !important; font-size:.74rem !important; line-height:1.18 !important; }
+  .routeOrder,
+  .popupScrollNotice{ padding:5px 8px !important; font-size:.66rem !important; line-height:1.18 !important; border-radius:12px !important; }
+  .popupScrollNotice{ position:sticky !important; top:0 !important; z-index:2 !important; box-shadow:0 8px 18px rgba(35,23,10,.08) !important; }
+  .smallMeta{ gap:4px !important; }
+  .smallMeta .meta{ padding:4px 6px !important; font-size:.64rem !important; }
+  .contentGrid{ display:grid !important; grid-template-columns:1fr 1fr !important; gap:5px !important; }
+  .contentBox{ padding:7px !important; border-radius:11px !important; }
+  .contentBox.full{ grid-column:1 / -1 !important; }
+  .contentBox h3{ font-size:.70rem !important; margin:0 0 3px !important; }
+  .contentBox p{ font-size:.66rem !important; line-height:1.28 !important; }
+  .noteBlock{ padding:7px !important; border-radius:11px !important; }
+  .noteBlock strong{ font-size:.70rem !important; margin-bottom:3px !important; }
+  .noteBlock div{ font-size:.66rem !important; line-height:1.28 !important; }
+  .mediaSection{ padding:7px !important; border-radius:12px !important; }
+  .mediaSectionTop{ margin-bottom:5px !important; }
+  .mediaSectionTop h3{ font-size:.72rem !important; }
+  .mediaStatus{ padding:4px 6px !important; font-size:.60rem !important; }
+  .photoCaption{ padding:6px 7px !important; font-size:.64rem !important; line-height:1.25 !important; }
+  .mediaGuideGrid{ grid-template-columns:repeat(3, 1fr) !important; gap:4px !important; margin:5px 0 6px !important; }
+  .mediaGuideItem{ padding:5px !important; border-radius:8px !important; }
+  .mediaGuideItem strong{ font-size:.58rem !important; margin:0 !important; }
+  .mediaGuideItem span{ display:none !important; }
+  .mediaChecklist{ grid-template-columns:repeat(3, 1fr) !important; gap:4px !important; margin-top:5px !important; }
+  .mediaCheck{ padding:5px !important; font-size:.58rem !important; line-height:1.16 !important; border-radius:8px !important; }
+  .thumbHeader{ margin:4px 0 !important; }
+  .thumbHint{ display:none !important; }
+  .thumbStrip{ max-height:44px !important; overflow-x:auto !important; overflow-y:hidden !important; flex-wrap:nowrap !important; padding-bottom:2px !important; }
+  .thumbStrip button{ flex:0 0 auto !important; width:44px !important; height:34px !important; border-radius:8px !important; }
+  .routeButtons{ gap:5px !important; margin-top:2px !important; }
+  .routeBtn{ padding:6px 8px !important; font-size:.66rem !important; }
+  .closeBtn{ right:8px !important; top:8px !important; width:36px !important; height:36px !important; font-size:23px !important; }
+}
+
+@media (orientation:landscape) and (min-width:760px) and (max-height:480px){
+  .travelHero img,
+  .travelHero video{ object-fit:contain !important; }
+}
+
+@media (orientation:portrait) and (max-width:760px){
+  .modalPanel{ width:calc(100vw - 14px) !important; height:calc(100svh - 14px) !important; max-height:calc(100svh - 14px) !important; }
+  .travelCard{ display:flex !important; flex-direction:column !important; height:100% !important; overflow:hidden !important; }
+  .travelHero{ flex:0 0 36% !important; height:auto !important; min-height:180px !important; }
+  .travelInfo{ flex:1 1 auto !important; min-height:0 !important; overflow-y:scroll !important; padding-bottom:44px !important; }
+}
+
+
+/* v20 - Fotoğraf orantılama + popup web/mobil final düzeltme
+   Hotspotlara dokunmaz. En sonda override edilir. */
+.infoModal{
+  overflow:hidden !important;
+}
+
+.modalPanel{
+  width:min(1180px, calc(100vw - 28px)) !important;
+  height:min(86svh, 760px) !important;
+  max-height:min(86svh, 760px) !important;
+  overflow:hidden !important;
+}
+
+.travelCard{
+  display:grid !important;
+  grid-template-columns:47% 53% !important;
+  grid-template-rows:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+
+/* Sol fotoğraf alanı artık görseli zorla büyütmez; gerçek oranıyla merkezler. */
+.travelHero{
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+  padding:16px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.25), transparent 34%),
+    #e8dcc1 !important;
+}
+
+.travelHero img,
+.travelHero video{
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  display:block !important;
+  border-radius:22px !important;
+  background:#e8dcc1 !important;
+  box-shadow:0 16px 36px rgba(35,23,10,.10) !important;
+}
+
+/* Sağ panel her zaman bağımsız kayar. */
+.travelInfo{
+  height:100% !important;
+  max-height:100% !important;
+  min-height:0 !important;
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-gutter:stable both-edges !important;
+  padding:22px 24px 54px !important;
+  gap:10px !important;
+}
+
+.travelInfo::-webkit-scrollbar{
+  width:12px !important;
+}
+.travelInfo::-webkit-scrollbar-track{
+  background:rgba(19,32,52,.08) !important;
+  border-radius:999px !important;
+}
+.travelInfo::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.58) !important;
+  border-radius:999px !important;
+  border:3px solid rgba(255,250,240,1) !important;
+}
+
+.popupScrollNotice{
+  position:sticky !important;
+  top:0 !important;
+  z-index:3 !important;
+  box-shadow:0 8px 18px rgba(35,23,10,.08) !important;
+}
+
+/* Medya alanı artık üstte ve daha kompakt. */
+.mediaSectionPriority{
+  border:1px solid rgba(31,107,58,.16) !important;
+  background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,250,240,.92)) !important;
+}
+
+.mediaAddGuide{
+  margin-top:8px !important;
+}
+.mediaAddGuide summary{
+  cursor:pointer !important;
+  font-weight:900 !important;
+  color:var(--green-dark) !important;
+  font-size:.86rem !important;
+}
+.mediaAddGuide .mediaGuideGrid{
+  margin-top:8px !important;
+}
+
+.contentGridIntro{
+  grid-template-columns:1fr !important;
+}
+.contentGridCompact{
+  grid-template-columns:1fr 1fr !important;
+}
+
+/* Webde düşük yükseklikte de sığsın. */
+@media (max-height:760px){
+  .modalPanel{
+    height:calc(100svh - 22px) !important;
+    max-height:calc(100svh - 22px) !important;
+  }
+  .travelInfo{
+    padding:16px 18px 50px !important;
+    gap:8px !important;
+  }
+  .travelInfo h1{
+    font-size:clamp(1.55rem, 3vw, 2.35rem) !important;
+  }
+  .subtitle{
+    font-size:.92rem !important;
+  }
+  .contentBox,
+  .noteBlock,
+  .mediaSection{
+    padding:10px 12px !important;
+  }
+}
+
+/* Telefon yatay / DevTools iPhone 15 Pro Max: iki kolon, sol görsel orantılı, sağ yazı kaydırılır. */
+@media (orientation:landscape) and (max-height:560px){
+  .infoModal{
+    padding:6px !important;
+  }
+
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+  }
+
+  .travelCard{
+    display:grid !important;
+    grid-template-columns:38% 62% !important;
+    grid-template-rows:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+  }
+
+  .travelHero{
+    grid-column:1 !important;
+    grid-row:1 !important;
+    height:100% !important;
+    min-height:0 !important;
+    padding:8px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  .travelHero img,
+  .travelHero video{
+    width:auto !important;
+    height:auto !important;
+    max-width:100% !important;
+    max-height:100% !important;
+    object-fit:contain !important;
+    border-radius:14px !important;
+  }
+
+  .travelInfo{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    height:100% !important;
+    max-height:100% !important;
+    min-height:0 !important;
+    overflow-y:scroll !important;
+    padding:10px 14px 42px !important;
+    gap:6px !important;
+  }
+
+  .travelTop{
+    display:block !important;
+  }
+
+  .travelInfo h1{
+    font-size:clamp(1.08rem, 3vw, 1.58rem) !important;
+    line-height:.96 !important;
+    padding-right:42px !important;
+  }
+
+  .badge{
+    display:inline-flex !important;
+    max-width:calc(100% - 50px) !important;
+    margin-top:5px !important;
+    padding:5px 8px !important;
+    font-size:.66rem !important;
+    white-space:normal !important;
+  }
+
+  .kicker{
+    font-size:.58rem !important;
+    margin-bottom:3px !important;
+  }
+
+  .subtitle{
+    margin-top:4px !important;
+    font-size:.72rem !important;
+    line-height:1.15 !important;
+  }
+
+  .routeOrder,
+  .popupScrollNotice{
+    padding:5px 8px !important;
+    font-size:.64rem !important;
+    line-height:1.18 !important;
+    border-radius:12px !important;
+  }
+
+  .smallMeta{
+    gap:4px !important;
+  }
+
+  .smallMeta .meta{
+    padding:4px 6px !important;
+    font-size:.62rem !important;
+  }
+
+  .contentGridIntro,
+  .contentGridCompact{
+    grid-template-columns:1fr !important;
+    gap:5px !important;
+  }
+
+  .contentBox{
+    padding:7px !important;
+    border-radius:11px !important;
+  }
+
+  .contentBox h3{
+    font-size:.68rem !important;
+    margin:0 0 3px !important;
+  }
+
+  .contentBox p{
+    font-size:.64rem !important;
+    line-height:1.25 !important;
+  }
+
+  .mediaSection{
+    padding:7px !important;
+    border-radius:12px !important;
+  }
+
+  .mediaSectionTop{
+    margin-bottom:5px !important;
+  }
+
+  .mediaSectionTop h3{
+    font-size:.70rem !important;
+  }
+
+  .mediaStatus{
+    padding:4px 6px !important;
+    font-size:.58rem !important;
+  }
+
+  .photoCaption{
+    padding:6px 7px !important;
+    font-size:.62rem !important;
+    line-height:1.22 !important;
+  }
+
+  .mediaChecklist{
+    grid-template-columns:repeat(3, 1fr) !important;
+    gap:4px !important;
+    margin-top:5px !important;
+  }
+
+  .mediaCheck{
+    padding:5px !important;
+    font-size:.56rem !important;
+    line-height:1.14 !important;
+    border-radius:8px !important;
+  }
+
+  .mediaAddGuide{
+    display:none !important;
+  }
+
+  .thumbHeader{
+    margin:4px 0 !important;
+  }
+
+  .thumbHint{
+    display:none !important;
+  }
+
+  .thumbStrip{
+    max-height:42px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+    padding-bottom:2px !important;
+  }
+
+  .thumbStrip button{
+    flex:0 0 auto !important;
+    width:44px !important;
+    height:34px !important;
+    border-radius:8px !important;
+  }
+
+  .noteBlock{
+    padding:7px !important;
+    border-radius:11px !important;
+  }
+
+  .noteBlock strong{
+    font-size:.68rem !important;
+    margin-bottom:3px !important;
+  }
+
+  .noteBlock div{
+    font-size:.64rem !important;
+    line-height:1.25 !important;
+  }
+
+  .routeButtons{
+    gap:5px !important;
+  }
+
+  .routeBtn{
+    padding:6px 8px !important;
+    font-size:.64rem !important;
+  }
+
+  .closeBtn{
+    right:8px !important;
+    top:8px !important;
+    width:36px !important;
+    height:36px !important;
+    font-size:23px !important;
+  }
+}
+
+/* Dikey telefonda tek kolon ama görsel kontrollü yükseklikte. */
+@media (orientation:portrait) and (max-width:760px){
+  .modalPanel{
+    width:calc(100vw - 14px) !important;
+    height:calc(100svh - 14px) !important;
+    max-height:calc(100svh - 14px) !important;
+  }
+
+  .travelCard{
+    display:flex !important;
+    flex-direction:column !important;
+    height:100% !important;
+    overflow:hidden !important;
+  }
+
+  .travelHero{
+    flex:0 0 34% !important;
+    min-height:170px !important;
+    padding:10px !important;
+  }
+
+  .travelInfo{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    overflow-y:scroll !important;
+    padding-bottom:48px !important;
+  }
+}
+
+
+/* v21 - Fotoğrafları gerçek merkezleme + popup sığdırma finali
+   Not: Harita hotspotlarına dokunmaz. */
+.modalPanel{
+  width:min(1160px, calc(100vw - 28px)) !important;
+  height:min(84svh, 720px) !important;
+  max-height:min(84svh, 720px) !important;
+  overflow:hidden !important;
+}
+
+.travelCard{
+  display:grid !important;
+  grid-template-columns:46% 54% !important;
+  grid-template-rows:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+}
+
+/* Sol alan artık görseli direkt alta itmez. Sahne içinde tam ortalar. */
+.travelHero{
+  position:relative !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  background:#e8dcc1 !important;
+}
+
+.mediaStage{
+  position:absolute !important;
+  inset:0 !important;
+  display:grid !important;
+  place-items:center !important;
+  padding:clamp(12px, 2vw, 28px) !important;
+  overflow:hidden !important;
+}
+
+.mediaBackdrop{
+  position:absolute !important;
+  inset:-18px !important;
+  width:calc(100% + 36px) !important;
+  height:calc(100% + 36px) !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  filter:blur(20px) brightness(.82) saturate(1.08) !important;
+  transform:scale(1.06) !important;
+  opacity:.42 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+.mainMedia{
+  position:relative !important;
+  z-index:1 !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  border-radius:22px !important;
+  box-shadow:0 18px 42px rgba(35,23,10,.18) !important;
+  background:#e8dcc1 !important;
+}
+
+/* Önceki genel img/video kurallarının main medyayı bozmasını engelle. */
+.travelHero > img,
+.travelHero > video{
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+
+.heroOverlay{
+  z-index:3 !important;
+}
+
+.travelInfo{
+  height:100% !important;
+  max-height:100% !important;
+  min-height:0 !important;
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-gutter:stable both-edges !important;
+  padding:18px 22px 46px !important;
+  gap:8px !important;
+}
+
+.travelInfo::-webkit-scrollbar{
+  width:13px !important;
+}
+.travelInfo::-webkit-scrollbar-track{
+  background:rgba(19,32,52,.08) !important;
+  border-radius:999px !important;
+}
+.travelInfo::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.62) !important;
+  border-radius:999px !important;
+  border:3px solid rgba(255,250,240,1) !important;
+}
+
+.popupScrollNotice{
+  padding:7px 10px !important;
+  font-size:.78rem !important;
+  width:max-content !important;
+  max-width:100% !important;
+}
+
+.travelInfo h1{
+  font-size:clamp(1.85rem, 3.2vw, 2.75rem) !important;
+}
+
+.contentBox,
+.noteBlock,
+.mediaSection{
+  padding:10px 12px !important;
+}
+
+.contentBox p,
+.noteBlock div,
+.photoCaption{
+  line-height:1.42 !important;
+}
+
+.mediaSectionPriority{
+  margin-top:2px !important;
+}
+
+.mediaChecklist{
+  gap:7px !important;
+}
+
+.thumbStrip{
+  max-height:88px !important;
+  overflow-y:auto !important;
+}
+
+/* Webde kısa yükseklik: fotoğraf + yazılar aynı ekranda dengede kalsın. */
+@media (max-height:760px){
+  .modalPanel{
+    width:min(1120px, calc(100vw - 24px)) !important;
+    height:calc(100svh - 24px) !important;
+    max-height:calc(100svh - 24px) !important;
+  }
+
+  .travelCard{
+    grid-template-columns:43% 57% !important;
+  }
+
+  .travelInfo{
+    padding:14px 18px 42px !important;
+    gap:7px !important;
+  }
+
+  .travelInfo h1{
+    font-size:clamp(1.45rem, 2.9vw, 2.18rem) !important;
+  }
+
+  .subtitle{
+    font-size:.88rem !important;
+  }
+
+  .routeOrder,
+  .popupScrollNotice{
+    font-size:.74rem !important;
+  }
+
+  .smallMeta .meta{
+    font-size:.76rem !important;
+    padding:5px 8px !important;
+  }
+
+  .contentBox h3{
+    font-size:.82rem !important;
+  }
+
+  .contentBox p,
+  .noteBlock div{
+    font-size:.82rem !important;
+  }
+
+  .mediaStage{
+    padding:14px !important;
+  }
+
+  .mainMedia{
+    border-radius:18px !important;
+  }
+}
+
+/* Telefon yatay / DevTools iPhone ölçüleri */
+@media (orientation:landscape) and (max-height:560px){
+  .infoModal{
+    padding:6px !important;
+  }
+
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+  }
+
+  .travelCard{
+    grid-template-columns:36% 64% !important;
+    height:100% !important;
+  }
+
+  .mediaStage{
+    padding:8px !important;
+  }
+
+  .mainMedia{
+    max-width:100% !important;
+    max-height:100% !important;
+    border-radius:13px !important;
+  }
+
+  .mediaBackdrop{
+    filter:blur(16px) brightness(.82) saturate(1.05) !important;
+    opacity:.38 !important;
+  }
+
+  .travelInfo{
+    height:100% !important;
+    max-height:100% !important;
+    overflow-y:scroll !important;
+    padding:9px 14px 36px !important;
+    gap:5px !important;
+  }
+
+  .travelTop{
+    display:block !important;
+  }
+
+  .travelInfo h1{
+    font-size:clamp(1.05rem, 2.8vw, 1.48rem) !important;
+    line-height:.96 !important;
+    padding-right:42px !important;
+  }
+
+  .badge{
+    display:inline-flex !important;
+    max-width:calc(100% - 50px) !important;
+    margin-top:4px !important;
+    padding:4px 7px !important;
+    font-size:.62rem !important;
+    white-space:normal !important;
+  }
+
+  .kicker{
+    font-size:.55rem !important;
+    margin-bottom:2px !important;
+  }
+
+  .subtitle{
+    margin-top:3px !important;
+    font-size:.68rem !important;
+    line-height:1.14 !important;
+  }
+
+  .routeOrder,
+  .popupScrollNotice{
+    padding:4px 7px !important;
+    font-size:.60rem !important;
+    line-height:1.15 !important;
+    border-radius:10px !important;
+  }
+
+  .smallMeta{
+    gap:3px !important;
+  }
+
+  .smallMeta .meta{
+    padding:3px 5px !important;
+    font-size:.58rem !important;
+  }
+
+  .contentGridIntro,
+  .contentGridCompact{
+    grid-template-columns:1fr !important;
+    gap:4px !important;
+  }
+
+  .contentBox,
+  .noteBlock,
+  .mediaSection{
+    padding:6px !important;
+    border-radius:10px !important;
+  }
+
+  .contentBox h3,
+  .noteBlock strong,
+  .mediaSectionTop h3{
+    font-size:.63rem !important;
+    margin:0 0 2px !important;
+  }
+
+  .contentBox p,
+  .noteBlock div,
+  .photoCaption{
+    font-size:.59rem !important;
+    line-height:1.22 !important;
+  }
+
+  .mediaSectionTop{
+    margin-bottom:4px !important;
+  }
+
+  .mediaStatus{
+    padding:3px 5px !important;
+    font-size:.54rem !important;
+  }
+
+  .photoCaption{
+    padding:5px 6px !important;
+  }
+
+  .mediaChecklist{
+    grid-template-columns:repeat(3, 1fr) !important;
+    gap:3px !important;
+    margin-top:4px !important;
+  }
+
+  .mediaCheck{
+    padding:4px !important;
+    font-size:.52rem !important;
+    line-height:1.12 !important;
+    border-radius:7px !important;
+  }
+
+  .mediaAddGuide{
+    display:none !important;
+  }
+
+  .thumbHeader{
+    margin:3px 0 !important;
+  }
+
+  .thumbHint{
+    display:none !important;
+  }
+
+  .thumbStrip{
+    max-height:38px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+  }
+
+  .thumbStrip button{
+    flex:0 0 auto !important;
+    width:40px !important;
+    height:30px !important;
+    border-radius:7px !important;
+  }
+
+  .routeButtons{
+    gap:4px !important;
+  }
+
+  .routeBtn{
+    padding:5px 7px !important;
+    font-size:.58rem !important;
+  }
+
+  .closeBtn{
+    right:7px !important;
+    top:7px !important;
+    width:34px !important;
+    height:34px !important;
+    font-size:22px !important;
+  }
+}
+
+/* Dikey mobilde tek kolon ama görsel fazla yer kaplamaz. */
+@media (orientation:portrait) and (max-width:760px){
+  .modalPanel{
+    width:calc(100vw - 14px) !important;
+    height:calc(100svh - 14px) !important;
+    max-height:calc(100svh - 14px) !important;
+  }
+
+  .travelCard{
+    display:flex !important;
+    flex-direction:column !important;
+    height:100% !important;
+    overflow:hidden !important;
+  }
+
+  .travelHero{
+    flex:0 0 32% !important;
+    min-height:168px !important;
+  }
+
+  .mediaStage{
+    padding:10px !important;
+  }
+
+  .travelInfo{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    overflow-y:scroll !important;
+    padding:14px 16px 44px !important;
+  }
+}
+
+
+/* v22 - Gerçek scrollbar + fotoğraf hizalama final düzeltmesi */
+.modalPanel{
+  width:min(1180px, calc(100vw - 28px)) !important;
+  height:min(86svh, 760px) !important;
+  max-height:min(86svh, 760px) !important;
+  overflow:hidden !important;
+}
+
+.travelCard{
+  display:grid !important;
+  grid-template-columns:46% 54% !important;
+  grid-template-rows:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+
+/* Sol medya: fotoğraf artık aşağıya düşmez, üst-merkez konumlanır. */
+.travelHero{
+  position:relative !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+  background:#e8dcc1 !important;
+}
+
+.mediaStage{
+  position:absolute !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:center !important;
+  padding:clamp(14px, 2.2vw, 30px) !important;
+  overflow:hidden !important;
+}
+
+.mediaBackdrop{
+  position:absolute !important;
+  inset:-18px !important;
+  width:calc(100% + 36px) !important;
+  height:calc(100% + 36px) !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  filter:blur(18px) brightness(.86) saturate(1.04) !important;
+  transform:scale(1.06) !important;
+  opacity:.32 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+.mainMedia{
+  position:relative !important;
+  z-index:1 !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  border-radius:22px !important;
+  box-shadow:0 18px 42px rgba(35,23,10,.18) !important;
+  background:#e8dcc1 !important;
+}
+
+/* Sağ panel: kaydırma kesin aktif, scrollbar görünür. */
+.travelInfo{
+  height:100% !important;
+  max-height:100% !important;
+  min-height:0 !important;
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:thin !important;
+  scrollbar-color:rgba(31,107,58,.75) rgba(19,32,52,.10) !important;
+  scrollbar-gutter:stable both-edges !important;
+  padding:18px 22px 92px !important;
+  gap:8px !important;
+  scroll-behavior:smooth !important;
+}
+
+.travelInfo::-webkit-scrollbar{
+  width:15px !important;
+}
+.travelInfo::-webkit-scrollbar-track{
+  background:rgba(19,32,52,.10) !important;
+  border-radius:999px !important;
+}
+.travelInfo::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.78) !important;
+  border-radius:999px !important;
+  border:4px solid rgba(255,250,240,1) !important;
+}
+.travelInfo::-webkit-scrollbar-thumb:hover{
+  background:rgba(31,107,58,.95) !important;
+}
+
+.scrollControls{
+  position:sticky !important;
+  bottom:6px !important;
+  z-index:5 !important;
+  display:flex !important;
+  gap:8px !important;
+  justify-content:flex-end !important;
+  padding:8px 0 0 !important;
+  margin-top:4px !important;
+  background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,250,240,.96) 38%) !important;
+}
+
+.scrollBtn{
+  border:0 !important;
+  border-radius:999px !important;
+  padding:9px 13px !important;
+  background:rgba(19,32,52,.09) !important;
+  color:var(--ink) !important;
+  font-weight:900 !important;
+  cursor:pointer !important;
+  box-shadow:0 8px 16px rgba(35,23,10,.08) !important;
+}
+
+.scrollBtn.primary{
+  background:var(--green) !important;
+  color:#fff !important;
+}
+
+.popupScrollNotice{
+  position:sticky !important;
+  top:0 !important;
+  z-index:4 !important;
+  width:max-content !important;
+  max-width:100% !important;
+  padding:7px 10px !important;
+  border-radius:999px !important;
+  box-shadow:0 8px 18px rgba(35,23,10,.08) !important;
+}
+
+/* Medya kutusu ekranda daha üstte ve kompakt kalır. */
+.mediaSection{
+  padding:10px 12px !important;
+}
+.mediaChecklist{
+  gap:7px !important;
+}
+.thumbStrip{
+  max-height:88px !important;
+  overflow-y:auto !important;
+  padding-right:4px !important;
+}
+
+/* Webde kısa ekran */
+@media (max-height:760px){
+  .modalPanel{
+    height:calc(100svh - 24px) !important;
+    max-height:calc(100svh - 24px) !important;
+  }
+
+  .travelCard{
+    grid-template-columns:42% 58% !important;
+  }
+
+  .mediaStage{
+    padding:14px !important;
+  }
+
+  .travelInfo{
+    padding:14px 18px 86px !important;
+    gap:7px !important;
+  }
+
+  .travelInfo h1{
+    font-size:clamp(1.45rem, 2.8vw, 2.15rem) !important;
+  }
+
+  .contentBox,
+  .noteBlock,
+  .mediaSection{
+    padding:9px 11px !important;
+  }
+}
+
+/* Telefon yatay ve DevTools iPhone ölçüleri */
+@media (orientation:landscape) and (max-height:560px){
+  .infoModal{
+    padding:6px !important;
+  }
+
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+  }
+
+  .travelCard{
+    grid-template-columns:36% 64% !important;
+    height:100% !important;
+  }
+
+  .mediaStage{
+    align-items:flex-start !important;
+    padding:8px !important;
+  }
+
+  .mainMedia{
+    max-width:100% !important;
+    max-height:100% !important;
+    border-radius:13px !important;
+  }
+
+  .mediaBackdrop{
+    filter:blur(16px) brightness(.86) saturate(1.04) !important;
+    opacity:.28 !important;
+  }
+
+  .travelInfo{
+    height:100% !important;
+    max-height:100% !important;
+    overflow-y:scroll !important;
+    padding:9px 14px 72px !important;
+    gap:5px !important;
+  }
+
+  .travelInfo::-webkit-scrollbar{
+    width:12px !important;
+  }
+
+  .travelTop{
+    display:block !important;
+  }
+
+  .travelInfo h1{
+    font-size:clamp(1.05rem, 2.7vw, 1.44rem) !important;
+    line-height:.96 !important;
+    padding-right:42px !important;
+  }
+
+  .badge{
+    display:inline-flex !important;
+    max-width:calc(100% - 50px) !important;
+    margin-top:4px !important;
+    padding:4px 7px !important;
+    font-size:.60rem !important;
+    white-space:normal !important;
+  }
+
+  .kicker{
+    font-size:.54rem !important;
+    margin-bottom:2px !important;
+  }
+
+  .subtitle{
+    margin-top:3px !important;
+    font-size:.66rem !important;
+    line-height:1.12 !important;
+  }
+
+  .routeOrder,
+  .popupScrollNotice{
+    padding:4px 7px !important;
+    font-size:.58rem !important;
+    line-height:1.14 !important;
+    border-radius:10px !important;
+  }
+
+  .smallMeta{
+    gap:3px !important;
+  }
+
+  .smallMeta .meta{
+    padding:3px 5px !important;
+    font-size:.56rem !important;
+  }
+
+  .contentGridIntro,
+  .contentGridCompact{
+    grid-template-columns:1fr !important;
+    gap:4px !important;
+  }
+
+  .contentBox,
+  .noteBlock,
+  .mediaSection{
+    padding:6px !important;
+    border-radius:10px !important;
+  }
+
+  .contentBox h3,
+  .noteBlock strong,
+  .mediaSectionTop h3{
+    font-size:.61rem !important;
+    margin:0 0 2px !important;
+  }
+
+  .contentBox p,
+  .noteBlock div,
+  .photoCaption{
+    font-size:.57rem !important;
+    line-height:1.18 !important;
+  }
+
+  .mediaSectionTop{
+    margin-bottom:4px !important;
+  }
+
+  .mediaStatus{
+    padding:3px 5px !important;
+    font-size:.52rem !important;
+  }
+
+  .photoCaption{
+    padding:5px 6px !important;
+  }
+
+  .mediaChecklist{
+    grid-template-columns:repeat(3, 1fr) !important;
+    gap:3px !important;
+    margin-top:4px !important;
+  }
+
+  .mediaCheck{
+    padding:4px !important;
+    font-size:.50rem !important;
+    line-height:1.10 !important;
+    border-radius:7px !important;
+  }
+
+  .mediaAddGuide{
+    display:none !important;
+  }
+
+  .thumbHeader{
+    margin:3px 0 !important;
+  }
+
+  .thumbHint{
+    display:none !important;
+  }
+
+  .thumbStrip{
+    max-height:38px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+  }
+
+  .thumbStrip button{
+    flex:0 0 auto !important;
+    width:40px !important;
+    height:30px !important;
+    border-radius:7px !important;
+  }
+
+  .scrollControls{
+    gap:5px !important;
+    bottom:3px !important;
+  }
+
+  .scrollBtn{
+    padding:6px 8px !important;
+    font-size:.58rem !important;
+  }
+
+  .routeButtons{
+    gap:4px !important;
+  }
+
+  .routeBtn{
+    padding:5px 7px !important;
+    font-size:.56rem !important;
+  }
+
+  .closeBtn{
+    right:7px !important;
+    top:7px !important;
+    width:34px !important;
+    height:34px !important;
+    font-size:22px !important;
+  }
+}
+
+/* Dikey mobil */
+@media (orientation:portrait) and (max-width:760px){
+  .modalPanel{
+    width:calc(100vw - 14px) !important;
+    height:calc(100svh - 14px) !important;
+    max-height:calc(100svh - 14px) !important;
+  }
+
+  .travelCard{
+    display:flex !important;
+    flex-direction:column !important;
+    height:100% !important;
+    overflow:hidden !important;
+  }
+
+  .travelHero{
+    flex:0 0 31% !important;
+    min-height:160px !important;
+  }
+
+  .mediaStage{
+    align-items:flex-start !important;
+    padding:10px !important;
+  }
+
+  .travelInfo{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    overflow-y:scroll !important;
+    padding:14px 16px 74px !important;
+  }
+}
+
+
+/* v23 - Sade, kaydırılabilir ve mobil uyumlu popup final düzeni */
+.modalPanel{
+  width:min(1120px, calc(100vw - 28px)) !important;
+  height:min(84svh, 720px) !important;
+  max-height:min(84svh, 720px) !important;
+  overflow:hidden !important;
+  border-radius:28px !important;
+}
+
+.travelCardSimple{
+  display:grid !important;
+  grid-template-columns:46% 54% !important;
+  grid-template-rows:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+
+.travelCardSimple .travelHero{
+  position:relative !important;
+  height:100% !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+  background:#e8dcc1 !important;
+}
+
+.travelCardSimple .mediaStage{
+  position:absolute !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  overflow:hidden !important;
+}
+
+.travelCardSimple .mediaBackdrop{
+  position:absolute !important;
+  inset:-18px !important;
+  width:calc(100% + 36px) !important;
+  height:calc(100% + 36px) !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  filter:blur(18px) brightness(.84) saturate(1.04) !important;
+  opacity:.28 !important;
+  transform:scale(1.05) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+.travelCardSimple .mainMedia{
+  position:relative !important;
+  z-index:1 !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  border-radius:22px !important;
+  box-shadow:0 18px 42px rgba(35,23,10,.18) !important;
+  background:#e8dcc1 !important;
+}
+
+.travelInfoSimple{
+  height:100% !important;
+  min-height:0 !important;
+  max-height:100% !important;
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:thin !important;
+  scrollbar-color:rgba(31,107,58,.85) rgba(19,32,52,.10) !important;
+  scrollbar-gutter:stable both-edges !important;
+  padding:18px 22px 92px !important;
+  gap:10px !important;
+  background:linear-gradient(180deg, rgba(255,250,240,1), rgba(255,255,255,1)) !important;
+  scroll-behavior:smooth !important;
+}
+
+.travelInfoSimple::-webkit-scrollbar{
+  width:16px !important;
+}
+.travelInfoSimple::-webkit-scrollbar-track{
+  background:rgba(19,32,52,.10) !important;
+  border-radius:999px !important;
+}
+.travelInfoSimple::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.85) !important;
+  border-radius:999px !important;
+  border:4px solid rgba(255,250,240,1) !important;
+}
+
+.popupTopSticky{
+  position:sticky !important;
+  top:0 !important;
+  z-index:6 !important;
+  padding-bottom:8px !important;
+  background:linear-gradient(180deg, rgba(255,250,240,1) 0%, rgba(255,250,240,.95) 75%, rgba(255,250,240,0) 100%) !important;
+}
+
+.simpleTop{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+}
+
+.travelInfoSimple h1{
+  font-size:clamp(1.8rem, 3.1vw, 2.65rem) !important;
+  line-height:.96 !important;
+  margin:0 !important;
+  padding-right:40px !important;
+}
+
+.travelInfoSimple .subtitle{
+  font-size:.96rem !important;
+  margin:7px 0 0 !important;
+}
+
+.travelInfoSimple .badge{
+  font-size:.82rem !important;
+  padding:8px 11px !important;
+  max-width:190px !important;
+  white-space:normal !important;
+}
+
+.travelInfoSimple .routeOrder{
+  margin-top:8px !important;
+  padding:8px 11px !important;
+  font-size:.86rem !important;
+}
+
+.simpleBlock,
+.simpleMediaBlock,
+.simpleDetails{
+  border-radius:18px !important;
+  background:rgba(255,255,255,.82) !important;
+  border:1px solid rgba(19,32,52,.08) !important;
+  padding:13px 14px !important;
+}
+
+.simpleBlock h3,
+.simpleMediaBlock h3{
+  margin:0 0 7px !important;
+  color:var(--green-dark) !important;
+  font-size:.98rem !important;
+}
+
+.simpleBlock p{
+  margin:0 !important;
+  color:var(--muted) !important;
+  line-height:1.52 !important;
+  font-size:.95rem !important;
+}
+
+.noteSimple{
+  border-left:4px solid var(--green) !important;
+  background:rgba(31,107,58,.08) !important;
+}
+
+.simpleMediaHeader{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:8px !important;
+}
+
+.mediaCount{
+  flex:0 0 auto !important;
+  border-radius:999px !important;
+  padding:7px 9px !important;
+  background:rgba(31,107,58,.12) !important;
+  color:var(--green-dark) !important;
+  font-weight:900 !important;
+  font-size:.78rem !important;
+}
+
+.simpleCaption{
+  margin:0 0 10px !important;
+  padding:10px 12px !important;
+  border-radius:14px !important;
+  background:rgba(209,95,40,.08) !important;
+  border:1px solid rgba(209,95,40,.12) !important;
+  color:#5a402d !important;
+  font-weight:750 !important;
+  line-height:1.42 !important;
+  font-size:.9rem !important;
+}
+
+.simpleThumbs{
+  max-height:120px !important;
+  overflow-y:auto !important;
+  padding-right:4px !important;
+}
+
+.simpleThumbs button{
+  width:70px !important;
+  height:54px !important;
+}
+
+.simpleMediaHelp{
+  margin-top:10px !important;
+  color:var(--muted) !important;
+  font-size:.84rem !important;
+  line-height:1.42 !important;
+}
+
+.simpleDetails{
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+.simpleDetails summary{
+  cursor:pointer !important;
+  padding:12px 14px !important;
+  color:var(--green-dark) !important;
+  font-weight:900 !important;
+}
+
+.simpleDetailGrid{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+  padding:0 14px 14px !important;
+}
+
+.simpleDetailGrid h4{
+  margin:0 0 5px !important;
+  color:var(--green-dark) !important;
+  font-size:.88rem !important;
+}
+
+.simpleDetailGrid p{
+  margin:0 !important;
+  color:var(--muted) !important;
+  line-height:1.42 !important;
+  font-size:.87rem !important;
+}
+
+.simpleScrollControls{
+  position:sticky !important;
+  bottom:46px !important;
+  z-index:7 !important;
+  display:flex !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+  padding:18px 0 4px !important;
+  margin-top:2px !important;
+  background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,250,240,.98) 45%) !important;
+}
+
+.simpleRouteButtons{
+  position:sticky !important;
+  bottom:0 !important;
+  z-index:8 !important;
+  padding:6px 0 0 !important;
+  background:rgba(255,250,240,.98) !important;
+}
+
+/* Kısa ekranlarda her şey biraz küçülür ama kaydırma korunur. */
+@media (max-height:760px){
+  .modalPanel{
+    height:calc(100svh - 24px) !important;
+    max-height:calc(100svh - 24px) !important;
+  }
+
+  .travelCardSimple{
+    grid-template-columns:42% 58% !important;
+  }
+
+  .travelCardSimple .mediaStage{
+    padding:14px !important;
+  }
+
+  .travelInfoSimple{
+    padding:14px 18px 82px !important;
+    gap:8px !important;
+  }
+
+  .travelInfoSimple h1{
+    font-size:clamp(1.42rem, 2.8vw, 2.1rem) !important;
+  }
+
+  .simpleBlock,
+  .simpleMediaBlock,
+  .simpleDetails{
+    padding:10px 12px !important;
+    border-radius:15px !important;
+  }
+
+  .simpleBlock p,
+  .simpleCaption,
+  .simpleMediaHelp{
+    font-size:.82rem !important;
+  }
+}
+
+/* Mobil yatay */
+@media (orientation:landscape) and (max-height:560px){
+  .infoModal{
+    padding:6px !important;
+  }
+
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+  }
+
+  .travelCardSimple{
+    grid-template-columns:34% 66% !important;
+    height:100% !important;
+  }
+
+  .travelCardSimple .mediaStage{
+    padding:8px !important;
+  }
+
+  .travelCardSimple .mainMedia{
+    border-radius:13px !important;
+  }
+
+  .travelInfoSimple{
+    height:100% !important;
+    overflow-y:scroll !important;
+    padding:8px 14px 68px !important;
+    gap:5px !important;
+  }
+
+  .simpleTop{
+    display:block !important;
+  }
+
+  .travelInfoSimple h1{
+    font-size:clamp(1.05rem, 2.6vw, 1.42rem) !important;
+    padding-right:40px !important;
+  }
+
+  .travelInfoSimple .subtitle{
+    font-size:.66rem !important;
+    margin-top:3px !important;
+  }
+
+  .travelInfoSimple .badge{
+    display:inline-flex !important;
+    margin-top:4px !important;
+    padding:4px 7px !important;
+    max-width:calc(100% - 48px) !important;
+    font-size:.58rem !important;
+  }
+
+  .travelInfoSimple .routeOrder,
+  .smallMeta .meta{
+    font-size:.56rem !important;
+    padding:4px 6px !important;
+  }
+
+  .smallMeta{
+    gap:3px !important;
+  }
+
+  .simpleBlock,
+  .simpleMediaBlock,
+  .simpleDetails{
+    padding:6px !important;
+    border-radius:10px !important;
+  }
+
+  .simpleBlock h3,
+  .simpleMediaBlock h3{
+    font-size:.62rem !important;
+    margin-bottom:3px !important;
+  }
+
+  .simpleBlock p,
+  .simpleCaption,
+  .simpleMediaHelp{
+    font-size:.56rem !important;
+    line-height:1.18 !important;
+  }
+
+  .simpleCaption{
+    padding:5px 6px !important;
+    margin-bottom:5px !important;
+  }
+
+  .simpleMediaHelp,
+  .simpleDetails{
+    display:none !important;
+  }
+
+  .mediaCount{
+    font-size:.52rem !important;
+    padding:3px 5px !important;
+  }
+
+  .simpleThumbs{
+    max-height:38px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+  }
+
+  .simpleThumbs button{
+    flex:0 0 auto !important;
+    width:40px !important;
+    height:30px !important;
+    border-radius:7px !important;
+  }
+
+  .simpleScrollControls{
+    bottom:36px !important;
+    gap:5px !important;
+    padding-top:10px !important;
+  }
+
+  .scrollBtn,
+  .routeBtn{
+    padding:5px 7px !important;
+    font-size:.56rem !important;
+  }
+
+  .simpleRouteButtons{
+    gap:4px !important;
+  }
+
+  .closeBtn{
+    right:7px !important;
+    top:7px !important;
+    width:34px !important;
+    height:34px !important;
+    font-size:22px !important;
+  }
+}
+
+/* Mobil dikey */
+@media (orientation:portrait) and (max-width:760px){
+  .modalPanel{
+    width:calc(100vw - 14px) !important;
+    height:calc(100svh - 14px) !important;
+    max-height:calc(100svh - 14px) !important;
+  }
+
+  .travelCardSimple{
+    display:flex !important;
+    flex-direction:column !important;
+  }
+
+  .travelCardSimple .travelHero{
+    flex:0 0 30% !important;
+    min-height:155px !important;
+  }
+
+  .travelCardSimple .mediaStage{
+    padding:10px !important;
+  }
+
+  .travelInfoSimple{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    overflow-y:scroll !important;
+    padding:14px 16px 72px !important;
+  }
+
+  .simpleTop{
+    display:block !important;
+  }
+
+  .travelInfoSimple .badge{
+    margin-top:6px !important;
+  }
+
+  .simpleDetailGrid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* v24 - Stabil popup final: tek kaydırılabilir modal */
+.modalPanel{
+  width:min(1120px, calc(100vw - 28px)) !important;
+  height:min(86svh, 760px) !important;
+  max-height:min(86svh, 760px) !important;
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:thin !important;
+  scrollbar-color:rgba(31,107,58,.85) rgba(19,32,52,.12) !important;
+  border-radius:28px !important;
+  background:rgba(255,250,240,.98) !important;
+}
+
+.modalPanel::-webkit-scrollbar{
+  width:16px !important;
+}
+.modalPanel::-webkit-scrollbar-track{
+  background:rgba(19,32,52,.12) !important;
+  border-radius:999px !important;
+}
+.modalPanel::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.85) !important;
+  border-radius:999px !important;
+  border:4px solid rgba(255,250,240,1) !important;
+}
+
+#dialogContent{
+  min-height:100% !important;
+}
+
+.popupStableCard{
+  display:grid !important;
+  grid-template-columns:44% 56% !important;
+  align-items:stretch !important;
+  min-height:100% !important;
+  overflow:visible !important;
+}
+
+.popupMediaPane{
+  position:sticky !important;
+  top:0 !important;
+  align-self:start !important;
+  height:min(86svh, 760px) !important;
+  min-height:520px !important;
+  overflow:hidden !important;
+  background:#e8dcc1 !important;
+}
+
+.popupMediaPane .mediaStage{
+  position:absolute !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:18px !important;
+  overflow:hidden !important;
+}
+
+.popupMediaPane .mediaBackdrop{
+  position:absolute !important;
+  inset:-18px !important;
+  width:calc(100% + 36px) !important;
+  height:calc(100% + 36px) !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  filter:blur(18px) brightness(.84) saturate(1.04) !important;
+  opacity:.30 !important;
+  transform:scale(1.05) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+.popupMediaPane .mainMedia{
+  position:relative !important;
+  z-index:1 !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  border-radius:22px !important;
+  box-shadow:0 18px 42px rgba(35,23,10,.18) !important;
+  background:#e8dcc1 !important;
+}
+
+.popupContentPane{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  padding:24px 30px 90px !important;
+  overflow:visible !important;
+  min-height:100% !important;
+  background:linear-gradient(180deg, rgba(255,250,240,1), rgba(255,255,255,1)) !important;
+}
+
+.stableHeader{
+  position:relative !important;
+  padding-right:64px !important;
+}
+
+.stableHeader h1{
+  margin:0 !important;
+  font-size:clamp(1.9rem, 3.2vw, 2.75rem) !important;
+  line-height:.96 !important;
+  letter-spacing:-.04em !important;
+  color:var(--ink) !important;
+}
+
+.stableHeader .subtitle{
+  margin:8px 0 0 !important;
+  font-size:1rem !important;
+  color:var(--accent) !important;
+  font-weight:850 !important;
+}
+
+.stableBadge{
+  position:absolute !important;
+  right:0 !important;
+  top:0 !important;
+  max-width:190px !important;
+  white-space:normal !important;
+}
+
+.stableMetaRow{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  flex-wrap:wrap !important;
+}
+
+.stableMetaRow .routeOrder,
+.stableMetaRow .meta{
+  padding:8px 11px !important;
+  border-radius:999px !important;
+  font-size:.88rem !important;
+}
+
+.stableBlock,
+.stableDetails{
+  border-radius:18px !important;
+  background:rgba(255,255,255,.82) !important;
+  border:1px solid rgba(19,32,52,.08) !important;
+  padding:14px 16px !important;
+}
+
+.stableBlock h3,
+.stableMediaTop h3{
+  margin:0 0 7px !important;
+  color:var(--green-dark) !important;
+  font-size:1rem !important;
+}
+
+.stableBlock p{
+  margin:0 !important;
+  color:var(--muted) !important;
+  line-height:1.52 !important;
+  font-size:.96rem !important;
+}
+
+.stableMediaBlock{
+  border-color:rgba(31,107,58,.16) !important;
+}
+
+.stableMediaTop{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  margin-bottom:8px !important;
+}
+
+.mediaCount{
+  flex:0 0 auto !important;
+  border-radius:999px !important;
+  padding:7px 9px !important;
+  background:rgba(31,107,58,.12) !important;
+  color:var(--green-dark) !important;
+  font-weight:900 !important;
+  font-size:.78rem !important;
+}
+
+.stableCaption{
+  margin:0 0 10px !important;
+  padding:10px 12px !important;
+  border-radius:14px !important;
+  background:rgba(209,95,40,.08) !important;
+  border:1px solid rgba(209,95,40,.12) !important;
+  color:#5a402d !important;
+  font-weight:750 !important;
+  line-height:1.42 !important;
+  font-size:.9rem !important;
+}
+
+.stableThumbs{
+  max-height:126px !important;
+  overflow-y:auto !important;
+  padding-right:4px !important;
+}
+
+.stableThumbs button{
+  width:72px !important;
+  height:54px !important;
+}
+
+.noteSimple{
+  border-left:4px solid var(--green) !important;
+  background:rgba(31,107,58,.08) !important;
+}
+
+.stableDetails{
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+.stableDetails summary{
+  cursor:pointer !important;
+  padding:12px 16px !important;
+  color:var(--green-dark) !important;
+  font-weight:900 !important;
+}
+
+.stableDetails div{
+  padding:0 16px 16px !important;
+}
+
+.stableDetails h4{
+  margin:10px 0 5px !important;
+  color:var(--green-dark) !important;
+  font-size:.92rem !important;
+}
+
+.stableDetails p{
+  margin:0 !important;
+  color:var(--muted) !important;
+  line-height:1.45 !important;
+  font-size:.9rem !important;
+}
+
+.stableBottomControls{
+  position:sticky !important;
+  bottom:0 !important;
+  z-index:20 !important;
+  display:flex !important;
+  gap:8px !important;
+  flex-wrap:wrap !important;
+  justify-content:flex-end !important;
+  margin-top:auto !important;
+  padding:14px 0 0 !important;
+  background:linear-gradient(180deg, rgba(255,250,240,0), rgba(255,250,240,.98) 34%) !important;
+}
+
+.scrollBtn,
+.routeBtn{
+  border:0 !important;
+  border-radius:999px !important;
+  padding:10px 13px !important;
+  background:rgba(19,32,52,.09) !important;
+  color:var(--ink) !important;
+  font-weight:900 !important;
+  cursor:pointer !important;
+}
+
+.scrollBtn.primary,
+.routeBtn.primary{
+  background:var(--green) !important;
+  color:#fff !important;
+}
+
+.closeBtn{
+  position:fixed !important;
+  z-index:1000 !important;
+}
+
+/* Kısa ekran / web */
+@media (max-height:760px){
+  .modalPanel{
+    height:calc(100svh - 24px) !important;
+    max-height:calc(100svh - 24px) !important;
+  }
+
+  .popupStableCard{
+    grid-template-columns:40% 60% !important;
+  }
+
+  .popupMediaPane{
+    height:calc(100svh - 24px) !important;
+    min-height:0 !important;
+  }
+
+  .popupMediaPane .mediaStage{
+    padding:14px !important;
+  }
+
+  .popupContentPane{
+    padding:18px 24px 86px !important;
+    gap:9px !important;
+  }
+
+  .stableHeader h1{
+    font-size:clamp(1.45rem, 2.8vw, 2.15rem) !important;
+  }
+
+  .stableBlock,
+  .stableDetails{
+    padding:11px 13px !important;
+  }
+
+  .stableBlock p,
+  .stableCaption,
+  .stableDetails p{
+    font-size:.84rem !important;
+  }
+}
+
+/* Mobil yatay */
+@media (orientation:landscape) and (max-height:560px){
+  .infoModal{
+    padding:6px !important;
+  }
+
+  .modalPanel{
+    width:calc(100vw - 12px) !important;
+    height:calc(100svh - 12px) !important;
+    max-height:calc(100svh - 12px) !important;
+    border-radius:18px !important;
+  }
+
+  .popupStableCard{
+    grid-template-columns:34% 66% !important;
+  }
+
+  .popupMediaPane{
+    height:calc(100svh - 12px) !important;
+  }
+
+  .popupMediaPane .mediaStage{
+    padding:8px !important;
+  }
+
+  .popupMediaPane .mainMedia{
+    border-radius:13px !important;
+  }
+
+  .popupContentPane{
+    padding:10px 16px 72px !important;
+    gap:6px !important;
+  }
+
+  .stableHeader h1{
+    font-size:clamp(1.05rem, 2.6vw, 1.42rem) !important;
+    padding-right:40px !important;
+  }
+
+  .stableHeader .subtitle{
+    margin-top:3px !important;
+    font-size:.66rem !important;
+  }
+
+  .stableBadge{
+    max-width:calc(100% - 48px) !important;
+    padding:4px 7px !important;
+    font-size:.58rem !important;
+  }
+
+  .kicker{
+    font-size:.54rem !important;
+    margin-bottom:2px !important;
+  }
+
+  .stableMetaRow{
+    gap:3px !important;
+  }
+
+  .stableMetaRow .routeOrder,
+  .stableMetaRow .meta{
+    padding:4px 6px !important;
+    font-size:.56rem !important;
+  }
+
+  .stableBlock,
+  .stableDetails{
+    padding:6px !important;
+    border-radius:10px !important;
+  }
+
+  .stableBlock h3,
+  .stableMediaTop h3{
+    font-size:.62rem !important;
+    margin-bottom:3px !important;
+  }
+
+  .stableBlock p,
+  .stableCaption,
+  .stableDetails p{
+    font-size:.56rem !important;
+    line-height:1.18 !important;
+  }
+
+  .stableCaption{
+    padding:5px 6px !important;
+    margin-bottom:5px !important;
+  }
+
+  .stableDetails{
+    display:none !important;
+  }
+
+  .mediaCount{
+    font-size:.52rem !important;
+    padding:3px 5px !important;
+  }
+
+  .stableThumbs{
+    max-height:38px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+  }
+
+  .stableThumbs button{
+    flex:0 0 auto !important;
+    width:40px !important;
+    height:30px !important;
+    border-radius:7px !important;
+  }
+
+  .stableBottomControls{
+    gap:5px !important;
+    padding-top:8px !important;
+  }
+
+  .scrollBtn,
+  .routeBtn{
+    padding:5px 7px !important;
+    font-size:.56rem !important;
+  }
+
+  .closeBtn{
+    right:7px !important;
+    top:7px !important;
+    width:34px !important;
+    height:34px !important;
+    font-size:22px !important;
+  }
+}
+
+/* Mobil dikey */
+@media (orientation:portrait) and (max-width:760px){
+  .modalPanel{
+    width:calc(100vw - 14px) !important;
+    height:calc(100svh - 14px) !important;
+    max-height:calc(100svh - 14px) !important;
+  }
+
+  .popupStableCard{
+    display:block !important;
+  }
+
+  .popupMediaPane{
+    position:relative !important;
+    height:32svh !important;
+    min-height:165px !important;
+  }
+
+  .popupContentPane{
+    padding:14px 16px 76px !important;
+  }
+
+  .stableHeader{
+    padding-right:44px !important;
+  }
+
+  .stableHeader h1{
+    font-size:clamp(1.45rem, 8vw, 2.15rem) !important;
+  }
+
+  .stableBadge{
+    position:static !important;
+    display:inline-flex !important;
+    margin-top:6px !important;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -1319,15 +3884,29 @@ function guessType(src){
 function renderMainMedia(item, stop){
   if(!item || !item.src){
     return `
-      <div class="photoEmpty">
-        <div class="photoEmptyBox">Bu durak için fotoğraf/video alanı hazır. Dosya eklediğinde burada tam haliyle görünecek.</div>
+      <div class="mediaStage">
+        <div class="photoEmpty">
+          <div class="photoEmptyBox">Bu durak için fotoğraf/video alanı hazır. Dosya eklediğinde burada tam haliyle görünecek.</div>
+        </div>
       </div>
     `;
   }
+
   if(item.type === 'video'){
-    return `<video src="${item.src}" controls playsinline preload="metadata"></video>`;
+    return `
+      <div class="mediaStage">
+        <video class="mediaBackdrop" src="${item.src}" muted preload="metadata"></video>
+        <video class="mainMedia" src="${item.src}" controls playsinline preload="metadata"></video>
+      </div>
+    `;
   }
-  return `<img src="${item.src}" alt="${stop.title} görseli">`;
+
+  return `
+    <div class="mediaStage">
+      <img class="mediaBackdrop" src="${item.src}" alt="" aria-hidden="true">
+      <img class="mainMedia" src="${item.src}" alt="${stop.title} görseli">
+    </div>
+  `;
 }
 function renderThumb(item, stop, index, active){
   const cls = `${active ? 'active' : ''} ${item.type === 'video' ? 'videoThumb' : ''}`.trim();
@@ -1378,14 +3957,57 @@ function renderStop(stop, imageIndex = 0){
         </div>
 
         <div class="routeOrder">${stop.routeOrder}</div>
-        <div class="popupScrollNotice">Bu sağ bölüm kaydırılabilir. Fotoğraf/video alanı ve albüm aşağıda devam eder.</div>
+        <div class="popupScrollNotice">Sağ panel kaydırılabilir. Aşağıdaki butonları da kullanabilirsin.</div>
         <div class="smallMeta">${tagHTML(stop.tags)}</div>
 
-        <div class="contentGrid">
+        <div class="contentGrid contentGridIntro">
           <div class="contentBox full">
             <h3>Kısa Bilgi</h3>
             <p>${stop.text}</p>
           </div>
+        </div>
+
+        <section class="mediaSection mediaSectionPriority">
+          <div class="mediaSectionTop">
+            <div>
+              <span class="kicker">Medya Alanı</span>
+              <h3>Fotoğraf / Video Kontrolü</h3>
+            </div>
+            <span class="mediaStatus">Hazır</span>
+          </div>
+
+          <div class="photoCaption">${currentCaption}</div>
+
+          <div class="mediaChecklist">
+            ${mediaChecklistHTML(media)}
+          </div>
+
+          <div class="thumbHeader">
+            <span class="kicker">Albüm</span>
+            <span class="thumbHint">Fotoğraf/video ekledikçe burada görünür</span>
+          </div>
+          <div class="thumbStrip">${thumbs}</div>
+
+          <details class="mediaAddGuide">
+            <summary>Fotoğraf/video ekleme ipucu</summary>
+            <div class="mediaGuideGrid">
+              <div class="mediaGuideItem">
+                <strong>1. Ana görsel</strong>
+                <span>Durak genel görünümü veya en güçlü kare.</span>
+              </div>
+              <div class="mediaGuideItem">
+                <strong>2. Detay görsel</strong>
+                <span>Tabela, manzara, yol, kıyı veya tarihî detay.</span>
+              </div>
+              <div class="mediaGuideItem">
+                <strong>3. Kısa video</strong>
+                <span>10–20 saniyelik atmosfer görüntüsü.</span>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <div class="contentGrid contentGridCompact">
           <div class="contentBox">
             <h3>Neden Önemli?</h3>
             <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
@@ -1401,42 +4023,10 @@ function renderStop(stop, imageIndex = 0){
           <div>${stop.note}</div>
         </div>
 
-        <section class="mediaSection">
-          <div class="mediaSectionTop">
-            <div>
-              <span class="kicker">Medya Alanı</span>
-              <h3>Fotoğraf / Video Ekleme Bölümü</h3>
-            </div>
-            <span class="mediaStatus">Hazır</span>
-          </div>
-
-          <div class="photoCaption">${currentCaption}</div>
-
-          <div class="mediaGuideGrid">
-            <div class="mediaGuideItem">
-              <strong>1. Ana görsel</strong>
-              <span>Durak genel görünümü veya en güçlü kare.</span>
-            </div>
-            <div class="mediaGuideItem">
-              <strong>2. Detay görsel</strong>
-              <span>Tabela, manzara, yol, kıyı veya tarihî detay.</span>
-            </div>
-            <div class="mediaGuideItem">
-              <strong>3. Kısa video</strong>
-              <span>10–20 saniyelik atmosfer görüntüsü.</span>
-            </div>
-          </div>
-
-          <div class="mediaChecklist">
-            ${mediaChecklistHTML(media)}
-          </div>
-
-          <div class="thumbHeader">
-            <span class="kicker">Albüm</span>
-            <span class="thumbHint">Fotoğraf/video ekledikçe burada görünür</span>
-          </div>
-          <div class="thumbStrip">${thumbs}</div>
-        </section>
+        <div class="scrollControls">
+          <button class="scrollBtn" type="button" data-scroll-panel="up">↑ Üste Dön</button>
+          <button class="scrollBtn primary" type="button" data-scroll-panel="down">↓ Devamını Gör</button>
+        </div>
 
         <div class="routeButtons">
           <button class="routeBtn" type="button" data-route="prev">← Önceki Durak</button>
@@ -1460,6 +4050,19 @@ function renderStop(stop, imageIndex = 0){
     btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
   });
 
+  content.querySelectorAll('[data-scroll-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const infoArea = content.querySelector('.travelInfo');
+      if(!infoArea) return;
+      const direction = btn.dataset.scrollPanel;
+      if(direction === 'up'){
+        infoArea.scrollTo({ top: 0, behavior: 'smooth' });
+      }else{
+        infoArea.scrollBy({ top: Math.max(220, infoArea.clientHeight * 0.72), behavior: 'smooth' });
+      }
+    });
+  });
+
   content.querySelectorAll('[data-route]').forEach(btn => {
     btn.addEventListener('click', () => {
       const index = stopIndex(stop.id);
@@ -1470,8 +4073,7 @@ function renderStop(stop, imageIndex = 0){
     });
   });
 
-  const infoArea = content.querySelector('.travelInfo');
-  if(infoArea) infoArea.scrollTop = 0;
+  resetPopupScrollAreas();
 }
 function openStop(id){
   const stop = getStop(id);
@@ -1712,6 +4314,293 @@ function closeAuditPanel(){
 }
 auditToggle?.addEventListener('click', openAuditPanel);
 auditClose?.addEventListener('click', closeAuditPanel);
+
+
+/* v19 - Popup scroll alanlarını resetleme */
+function resetPopupScrollAreas(){
+  const infoArea = content?.querySelector('.travelInfo');
+  const mediaArea = content?.querySelector('.travelHero');
+  if(infoArea) infoArea.scrollTop = 0;
+  if(mediaArea) mediaArea.scrollTop = 0;
+}
+
+
+/* v23 - Sade popup + gerçek kaydırılabilir panel
+   Eski renderStop fonksiyonunu bilinçli olarak override eder. */
+function renderStop(stop, imageIndex = 0){
+  if(!stop || !content) return;
+
+  currentStop = stop;
+  const media = normalizeMedia(stop);
+  currentImageIndex = Math.max(0, Math.min(imageIndex, media.length - 1));
+  const detail = popupDetails[stop.id] || {};
+  const currentItem = media[currentImageIndex];
+  const currentCaption = currentItem.caption || detail.photoNote || 'Bu alana durakla ilgili fotoğraf veya video açıklaması eklenebilir.';
+
+  const thumbs = media.map((item, index) => renderThumb(item, stop, index, index === currentImageIndex)).join('');
+
+  content.innerHTML = `
+    <article class="travelCard travelCardSimple">
+      <div class="travelHero">
+        ${renderMainMedia(currentItem, stop)}
+        <div class="heroOverlay">
+          <div class="chipRow">
+            <span class="chip">${currentImageIndex + 1}/${media.length}</span>
+          </div>
+          <div class="galleryNav">
+            <button class="arrowBtn" type="button" data-gallery="prev" aria-label="Önceki medya" ${media.length < 2 ? 'disabled' : ''}>‹</button>
+            <button class="arrowBtn" type="button" data-gallery="next" aria-label="Sonraki medya" ${media.length < 2 ? 'disabled' : ''}>›</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="travelInfo travelInfoSimple" aria-label="${stop.title} popup içeriği">
+        <div class="popupTopSticky">
+          <div class="travelTop simpleTop">
+            <div>
+              <span class="kicker">Gezi Kartı</span>
+              <h1 id="modalTitle">${stop.title}</h1>
+              <p class="subtitle">${stop.subtitle}</p>
+            </div>
+            <div class="badge">${stop.category}</div>
+          </div>
+
+          <div class="routeOrder">${stop.routeOrder}</div>
+          <div class="smallMeta">${tagHTML(stop.tags)}</div>
+        </div>
+
+        <section class="simpleBlock">
+          <h3>Kısa Bilgi</h3>
+          <p>${stop.text}</p>
+        </section>
+
+        <section class="simpleMediaBlock">
+          <div class="simpleMediaHeader">
+            <div>
+              <span class="kicker">Medya</span>
+              <h3>Fotoğraf / Video</h3>
+            </div>
+            <span class="mediaCount">${media.length} medya</span>
+          </div>
+
+          <p class="simpleCaption">${currentCaption}</p>
+
+          <div class="thumbStrip simpleThumbs">${thumbs}</div>
+
+          <div class="simpleMediaHelp">
+            Fotoğraf/video eklemek için ilgili dosyayı klasörüne koyup <strong>index.html</strong> içindeki ilgili durağın <strong>photos</strong> veya <strong>media</strong> listesine ekle.
+          </div>
+        </section>
+
+        <section class="simpleBlock noteSimple">
+          <h3>Sunum Cümlesi</h3>
+          <p>${stop.note}</p>
+        </section>
+
+        <details class="simpleDetails">
+          <summary>Detaylı anlatım notları</summary>
+          <div class="simpleDetailGrid">
+            <div>
+              <h4>Neden önemli?</h4>
+              <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
+            </div>
+            <div>
+              <h4>Sunumda nasıl anlatılır?</h4>
+              <p>${detail.presentation || 'Bu durak üzerinden İstanbul’un mavi, yeşil ve tarihî hafızasıyla bağlantı kurulabilir.'}</p>
+            </div>
+          </div>
+        </details>
+
+        <div class="scrollControls simpleScrollControls">
+          <button class="scrollBtn" type="button" data-scroll-panel="up">↑ Üste</button>
+          <button class="scrollBtn primary" type="button" data-scroll-panel="down">↓ Aşağı</button>
+        </div>
+
+        <div class="routeButtons simpleRouteButtons">
+          <button class="routeBtn" type="button" data-route="prev">← Önceki</button>
+          <button class="routeBtn primary" type="button" data-route="next">Sonraki →</button>
+        </div>
+      </aside>
+    </article>
+  `;
+
+  content.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(media.length < 2) return;
+      const nextIndex = btn.dataset.gallery === 'next'
+        ? (currentImageIndex + 1) % media.length
+        : (currentImageIndex - 1 + media.length) % media.length;
+      renderStop(stop, nextIndex);
+    });
+  });
+
+  content.querySelectorAll('[data-thumb]').forEach(btn => {
+    btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
+  });
+
+  content.querySelectorAll('[data-scroll-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const infoArea = content.querySelector('.travelInfoSimple');
+      if(!infoArea) return;
+      if(btn.dataset.scrollPanel === 'up'){
+        infoArea.scrollTo({ top: 0, behavior: 'smooth' });
+      }else{
+        infoArea.scrollBy({ top: Math.max(220, infoArea.clientHeight * 0.72), behavior: 'smooth' });
+      }
+    });
+  });
+
+  content.querySelectorAll('[data-route]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = stopIndex(stop.id);
+      const nextIndex = btn.dataset.route === 'next'
+        ? (index + 1) % stops.length
+        : (index - 1 + stops.length) % stops.length;
+      openStop(stops[nextIndex].id);
+    });
+  });
+
+  const infoArea = content.querySelector('.travelInfoSimple');
+  const card = content.querySelector('.travelCardSimple');
+
+  if(infoArea){
+    infoArea.scrollTop = 0;
+  }
+
+  // Mouse/finger sol fotoğraf tarafındayken de sağ panel kaydırılabilsin.
+  if(card && infoArea){
+    card.addEventListener('wheel', (event) => {
+      if(event.target.closest('.travelInfoSimple')) return;
+      infoArea.scrollTop += event.deltaY;
+      event.preventDefault();
+    }, { passive: false });
+  }
+}
+
+
+/* v24 - Stabil popup: tüm popup tek kaydırılabilir alan
+   Sağ panel yerine modalın kendisi scroll eder. Hotspotlara dokunmaz. */
+function renderStop(stop, imageIndex = 0){
+  if(!stop || !content) return;
+
+  currentStop = stop;
+  const media = normalizeMedia(stop);
+  currentImageIndex = Math.max(0, Math.min(imageIndex, media.length - 1));
+  const detail = popupDetails[stop.id] || {};
+  const currentItem = media[currentImageIndex];
+  const currentCaption = currentItem.caption || detail.photoNote || 'Bu alana durakla ilgili fotoğraf veya video açıklaması eklenebilir.';
+
+  const thumbs = media.map((item, index) => renderThumb(item, stop, index, index === currentImageIndex)).join('');
+
+  content.innerHTML = `
+    <article class="popupStableCard">
+      <section class="popupMediaPane">
+        ${renderMainMedia(currentItem, stop)}
+        <div class="heroOverlay">
+          <div class="chipRow">
+            <span class="chip">${currentImageIndex + 1}/${media.length}</span>
+          </div>
+          <div class="galleryNav">
+            <button class="arrowBtn" type="button" data-gallery="prev" aria-label="Önceki medya" ${media.length < 2 ? 'disabled' : ''}>‹</button>
+            <button class="arrowBtn" type="button" data-gallery="next" aria-label="Sonraki medya" ${media.length < 2 ? 'disabled' : ''}>›</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="popupContentPane" aria-label="${stop.title} popup içeriği">
+        <header class="stableHeader">
+          <span class="kicker">Gezi Kartı</span>
+          <h1 id="modalTitle">${stop.title}</h1>
+          <p class="subtitle">${stop.subtitle}</p>
+          <div class="badge stableBadge">${stop.category}</div>
+        </header>
+
+        <div class="stableMetaRow">
+          <span class="routeOrder">${stop.routeOrder}</span>
+          ${tagHTML(stop.tags)}
+        </div>
+
+        <section class="stableBlock">
+          <h3>Kısa Bilgi</h3>
+          <p>${stop.text}</p>
+        </section>
+
+        <section class="stableBlock stableMediaBlock">
+          <div class="stableMediaTop">
+            <div>
+              <span class="kicker">Medya</span>
+              <h3>Fotoğraf / Video</h3>
+            </div>
+            <span class="mediaCount">${media.length} medya</span>
+          </div>
+          <p class="stableCaption">${currentCaption}</p>
+          <div class="thumbStrip stableThumbs">${thumbs}</div>
+        </section>
+
+        <section class="stableBlock noteSimple">
+          <h3>Sunum Cümlesi</h3>
+          <p>${stop.note}</p>
+        </section>
+
+        <details class="stableDetails">
+          <summary>Detaylı anlatım notları</summary>
+          <div>
+            <h4>Neden önemli?</h4>
+            <p>${detail.importance || 'Bu durak rota anlatısının önemli parçalarından biridir.'}</p>
+            <h4>Sunumda nasıl anlatılır?</h4>
+            <p>${detail.presentation || 'Bu durak üzerinden İstanbul’un mavi, yeşil ve tarihî hafızasıyla bağlantı kurulabilir.'}</p>
+          </div>
+        </details>
+
+        <div class="stableBottomControls">
+          <button class="scrollBtn" type="button" data-scroll-panel="up">↑ Üste</button>
+          <button class="scrollBtn primary" type="button" data-scroll-panel="down">↓ Aşağı</button>
+          <button class="routeBtn" type="button" data-route="prev">← Önceki</button>
+          <button class="routeBtn primary" type="button" data-route="next">Sonraki →</button>
+        </div>
+      </section>
+    </article>
+  `;
+
+  content.querySelectorAll('[data-gallery]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(media.length < 2) return;
+      const nextIndex = btn.dataset.gallery === 'next'
+        ? (currentImageIndex + 1) % media.length
+        : (currentImageIndex - 1 + media.length) % media.length;
+      renderStop(stop, nextIndex);
+    });
+  });
+
+  content.querySelectorAll('[data-thumb]').forEach(btn => {
+    btn.addEventListener('click', () => renderStop(stop, Number(btn.dataset.thumb)));
+  });
+
+  content.querySelectorAll('[data-scroll-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = document.querySelector('.modalPanel');
+      if(!panel) return;
+      if(btn.dataset.scrollPanel === 'up'){
+        panel.scrollTo({ top: 0, behavior: 'smooth' });
+      }else{
+        panel.scrollBy({ top: Math.max(260, panel.clientHeight * 0.75), behavior: 'smooth' });
+      }
+    });
+  });
+
+  content.querySelectorAll('[data-route]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = stopIndex(stop.id);
+      const nextIndex = btn.dataset.route === 'next'
+        ? (index + 1) % stops.length
+        : (index - 1 + stops.length) % stops.length;
+      openStop(stops[nextIndex].id);
+    });
+  });
+
+  const panel = document.querySelector('.modalPanel');
+  if(panel) panel.scrollTop = 0;
+}
 
   </script>
 </body>
