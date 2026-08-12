@@ -66,6 +66,30 @@ function closeModal(){
 function tagHTML(tags){
   return (tags || []).map(tag => `<span class="meta">${tag}</span>`).join('');
 }
+
+function countMediaTypes(media){
+  return media.reduce((acc, item) => {
+    if(item.type === 'video') acc.video += 1;
+    else acc.image += 1;
+    return acc;
+  }, { image: 0, video: 0 });
+}
+function mediaChecklistHTML(media){
+  const counts = countMediaTypes(media || []);
+  const total = (media || []).length;
+  return `
+    <div class="mediaCheck ${total >= 3 ? '' : 'warn'}">Toplam medya: ${total}<br>${total >= 3 ? 'Yeterli' : '3+ önerilir'}</div>
+    <div class="mediaCheck ${counts.image >= 2 ? '' : 'warn'}">Fotoğraf: ${counts.image}<br>${counts.image >= 2 ? 'İyi' : '2+ önerilir'}</div>
+    <div class="mediaCheck ${counts.video >= 1 ? '' : 'warn'}">Video: ${counts.video}<br>${counts.video >= 1 ? 'Tamam' : '1 video ekle'}</div>
+  `;
+}
+function auditStopStatus(stop){
+  const media = normalizeMedia(stop);
+  const counts = countMediaTypes(media);
+  const missingText = !stop.text || !stop.note || !stop.subtitle;
+  const needsMoreMedia = media.length < 3 || counts.image < 2 || counts.video < 1;
+  return { media, counts, missingText, needsMoreMedia, good: !missingText && !needsMoreMedia };
+}
 function normalizeMedia(stop){
   if(Array.isArray(stop.media) && stop.media.length){
     return stop.media.map(item => {
@@ -144,6 +168,7 @@ function renderStop(stop, imageIndex = 0){
         </div>
 
         <div class="routeOrder">${stop.routeOrder}</div>
+        <div class="popupScrollNotice">Bu sağ bölüm kaydırılabilir. Fotoğraf/video alanı ve albüm aşağıda devam eder.</div>
         <div class="smallMeta">${tagHTML(stop.tags)}</div>
 
         <div class="contentGrid">
@@ -166,15 +191,42 @@ function renderStop(stop, imageIndex = 0){
           <div>${stop.note}</div>
         </div>
 
-        <div class="photoCaption">${currentCaption}</div>
+        <section class="mediaSection">
+          <div class="mediaSectionTop">
+            <div>
+              <span class="kicker">Medya Alanı</span>
+              <h3>Fotoğraf / Video Ekleme Bölümü</h3>
+            </div>
+            <span class="mediaStatus">Hazır</span>
+          </div>
 
-        <div>
+          <div class="photoCaption">${currentCaption}</div>
+
+          <div class="mediaGuideGrid">
+            <div class="mediaGuideItem">
+              <strong>1. Ana görsel</strong>
+              <span>Durak genel görünümü veya en güçlü kare.</span>
+            </div>
+            <div class="mediaGuideItem">
+              <strong>2. Detay görsel</strong>
+              <span>Tabela, manzara, yol, kıyı veya tarihî detay.</span>
+            </div>
+            <div class="mediaGuideItem">
+              <strong>3. Kısa video</strong>
+              <span>10–20 saniyelik atmosfer görüntüsü.</span>
+            </div>
+          </div>
+
+          <div class="mediaChecklist">
+            ${mediaChecklistHTML(media)}
+          </div>
+
           <div class="thumbHeader">
-            <span class="kicker">Fotoğraf / Video Albümü</span>
-            <span class="thumbHint">Medya ekledikçe burada çoğalır</span>
+            <span class="kicker">Albüm</span>
+            <span class="thumbHint">Fotoğraf/video ekledikçe burada görünür</span>
           </div>
           <div class="thumbStrip">${thumbs}</div>
-        </div>
+        </section>
 
         <div class="routeButtons">
           <button class="routeBtn" type="button" data-route="prev">← Önceki Durak</button>
@@ -207,6 +259,9 @@ function renderStop(stop, imageIndex = 0){
       openStop(stops[nextIndex].id);
     });
   });
+
+  const infoArea = content.querySelector('.travelInfo');
+  if(infoArea) infoArea.scrollTop = 0;
 }
 function openStop(id){
   const stop = getStop(id);
@@ -224,7 +279,10 @@ modal?.addEventListener('click', event => {
 });
 document.addEventListener('keydown', event => {
   if(!modal?.classList.contains('open')) return;
-  if(event.key === 'Escape') closeModal();
+  if(event.key === 'Escape'){
+    closeModal();
+    closeAuditPanel();
+  }
   if(!currentStop) return;
   const media = normalizeMedia(currentStop);
   if(event.key === 'ArrowRight') renderStop(currentStop, (currentImageIndex + 1) % media.length);
@@ -390,3 +448,57 @@ document.addEventListener('pointerdown', tryStartOnFirstInteraction, { once:true
 if(localTracks.length){
   setTrack(0, false);
 }
+
+
+/* v16 - Popup içerik kontrol paneli */
+const auditToggle = document.querySelector('#auditToggle');
+const auditPanel = document.querySelector('#auditPanel');
+const auditClose = document.querySelector('#auditClose');
+const auditSummary = document.querySelector('#auditSummary');
+const auditContent = document.querySelector('#auditContent');
+function renderAuditPanel(){
+  if(!auditSummary || !auditContent) return;
+  const statuses = stops.map(stop => ({ stop, ...auditStopStatus(stop) }));
+  const totalImages = statuses.reduce((sum, item) => sum + item.counts.image, 0);
+  const totalVideos = statuses.reduce((sum, item) => sum + item.counts.video, 0);
+  auditSummary.innerHTML = `
+    <div class="auditMetric"><strong>${stops.length}</strong><span>Durak</span></div>
+    <div class="auditMetric"><strong>${totalImages}</strong><span>Fotoğraf</span></div>
+    <div class="auditMetric"><strong>${totalVideos}</strong><span>Video</span></div>
+  `;
+  auditContent.innerHTML = statuses.map(({ stop, media, counts, good, missingText, needsMoreMedia }) => `
+    <article class="auditItem">
+      <div class="auditItemTop">
+        <strong>${stop.title}</strong>
+        <span class="auditStatus ${good ? 'good' : 'warn'}">${good ? 'Hazır' : 'Kontrol Et'}</span>
+      </div>
+      <div class="auditDetails">
+        <span class="auditChip">${stop.category || 'Kategori yok'}</span>
+        <span class="auditChip">${media.length} medya</span>
+        <span class="auditChip">${counts.image} foto</span>
+        <span class="auditChip">${counts.video} video</span>
+        ${missingText ? '<span class="auditChip">Metin eksik</span>' : ''}
+        ${needsMoreMedia ? '<span class="auditChip">Medya artır</span>' : ''}
+      </div>
+      <button class="auditOpenBtn" type="button" data-open-stop="${stop.id}">Popup Aç</button>
+    </article>
+  `).join('');
+  auditContent.querySelectorAll('[data-open-stop]').forEach(button => {
+    button.addEventListener('click', () => {
+      openStop(button.dataset.openStop);
+      auditPanel?.classList.remove('open');
+      auditPanel?.setAttribute('aria-hidden', 'true');
+    });
+  });
+}
+function openAuditPanel(){
+  renderAuditPanel();
+  auditPanel?.classList.add('open');
+  auditPanel?.setAttribute('aria-hidden', 'false');
+}
+function closeAuditPanel(){
+  auditPanel?.classList.remove('open');
+  auditPanel?.setAttribute('aria-hidden', 'true');
+}
+auditToggle?.addEventListener('click', openAuditPanel);
+auditClose?.addEventListener('click', closeAuditPanel);

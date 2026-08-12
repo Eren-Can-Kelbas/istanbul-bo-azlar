@@ -693,6 +693,400 @@ button{font:inherit}
   .playerPanel{ right:-2px; bottom:68px; width:calc(100vw - 20px); }
 }
 
+
+/* v15 - Popup medya ekleme alanı */
+.mediaSection{
+  padding:14px;
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,250,240,.84));
+  border:1px solid rgba(31,107,58,.12);
+  box-shadow:0 10px 24px rgba(35,23,10,.06);
+}
+.mediaSectionTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.mediaSectionTop h3{
+  margin:0;
+  color:var(--ink);
+  font-size:1.02rem;
+  line-height:1.15;
+}
+.mediaStatus{
+  flex:0 0 auto;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(31,107,58,.12);
+  color:var(--green-dark);
+  font-weight:900;
+  font-size:.82rem;
+}
+.mediaGuideGrid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:8px;
+  margin:10px 0 12px;
+}
+.mediaGuideItem{
+  padding:10px;
+  border-radius:15px;
+  background:rgba(19,32,52,.045);
+  border:1px solid rgba(19,32,52,.06);
+}
+.mediaGuideItem strong{
+  display:block;
+  color:var(--green-dark);
+  font-size:.88rem;
+  margin-bottom:4px;
+}
+.mediaGuideItem span{
+  display:block;
+  color:var(--muted);
+  font-size:.82rem;
+  line-height:1.35;
+}
+.mediaSection .photoCaption{
+  margin:0;
+}
+.mediaSection .thumbHeader{
+  margin-top:8px;
+}
+
+@media (max-width:940px){
+  .mediaGuideGrid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* v16 - Mobil QR / yatay telefon güvenli düzen */
+html,
+body{
+  height:100%;
+  min-height:100svh;
+}
+.stage{
+  height:100svh;
+}
+.mapWrap{
+  width:min(100vw, calc(100svh * 2048 / 1117));
+  height:min(100svh, calc(100vw * 1117 / 2048));
+  max-height:100svh;
+}
+
+.mobileRotateHint{
+  position:absolute;
+  left:50%;
+  bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+  transform:translateX(-50%);
+  z-index:14;
+  display:none;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(19,32,52,.86);
+  color:#fff;
+  font-weight:850;
+  font-size:.9rem;
+  box-shadow:0 14px 34px rgba(0,0,0,.18);
+  backdrop-filter:blur(10px);
+  pointer-events:none;
+}
+
+.auditToggle{
+  position:absolute;
+  left:max(14px, 1.6vw);
+  bottom:max(14px, 1.6vw);
+  z-index:13;
+  border:1px solid rgba(31,107,58,.22);
+  border-radius:999px;
+  padding:11px 14px;
+  background:rgba(255,250,240,.94);
+  color:var(--green-dark);
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 14px 30px rgba(35,23,10,.16);
+  backdrop-filter:blur(10px);
+}
+.auditPanel{
+  position:absolute;
+  left:max(14px, 1.6vw);
+  bottom:68px;
+  z-index:15;
+  width:min(440px, calc(100vw - 28px));
+  max-height:min(74vh, 620px);
+  display:none;
+  overflow:auto;
+  border-radius:26px;
+  padding:16px;
+  background:rgba(255,250,240,.96);
+  border:1px solid rgba(31,107,58,.16);
+  box-shadow:0 26px 70px rgba(35,23,10,.24);
+  backdrop-filter:blur(14px);
+}
+.auditPanel.open{ display:block; }
+.auditHeader{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.auditKicker{ display:block; color:var(--green); font-size:.72rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin-bottom:4px; }
+.auditHeader h2{ margin:0; font-size:1.35rem; line-height:1; }
+.auditClose{ width:34px; height:34px; border:0; border-radius:50%; background:rgba(19,32,52,.9); color:#fff; font-size:22px; line-height:1; cursor:pointer; }
+.auditSummary{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px; }
+.auditMetric{ padding:10px; border-radius:16px; background:rgba(19,32,52,.06); text-align:center; }
+.auditMetric strong{ display:block; color:var(--green-dark); font-size:1.1rem; }
+.auditMetric span{ display:block; color:var(--muted); font-size:.78rem; margin-top:2px; }
+.auditContent{ display:flex; flex-direction:column; gap:9px; }
+.auditItem{ border-radius:18px; padding:11px; background:rgba(255,255,255,.72); border:1px solid rgba(19,32,52,.08); }
+.auditItemTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+.auditItem strong{ display:block; color:var(--ink); }
+.auditStatus{ border-radius:999px; padding:5px 8px; font-size:.74rem; font-weight:900; white-space:nowrap; }
+.auditStatus.good{ background:rgba(31,107,58,.12); color:var(--green-dark); }
+.auditStatus.warn{ background:rgba(209,95,40,.13); color:#7d3a18; }
+.auditDetails{ margin:8px 0 0; display:flex; flex-wrap:wrap; gap:6px; }
+.auditChip{ border-radius:999px; padding:5px 8px; background:rgba(19,32,52,.06); color:var(--muted); font-size:.78rem; font-weight:800; }
+.auditOpenBtn{ margin-top:9px; width:100%; border:0; border-radius:999px; padding:9px 10px; background:var(--green); color:#fff; font-weight:900; cursor:pointer; }
+.auditNote{ margin:12px 2px 0; color:var(--muted); font-size:.84rem; line-height:1.45; }
+
+.mediaChecklist{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:8px;
+}
+.mediaCheck{
+  border-radius:14px;
+  padding:9px;
+  background:rgba(31,107,58,.075);
+  color:var(--green-dark);
+  font-weight:850;
+  font-size:.82rem;
+  line-height:1.25;
+}
+.mediaCheck.warn{ background:rgba(209,95,40,.10); color:#7d3a18; }
+
+@media (max-width:940px) and (orientation:landscape), (max-height:560px) and (orientation:landscape){
+  .modalPanel{ width:calc(100vw - 12px); height:calc(100svh - 12px); max-height:calc(100svh - 12px); border-radius:20px; }
+  .travelCard{ grid-template-columns:minmax(0,.92fr) minmax(360px,1.08fr); height:100%; min-height:0; overflow:hidden; }
+  .travelHero{ height:100%; min-height:0; }
+  .travelInfo{ padding:14px 16px; gap:8px; overflow-y:auto; }
+  .travelInfo h1{ font-size:clamp(1.35rem, 3.8vw, 2.1rem); }
+  .subtitle, .routeOrder, .contentBox p, .noteBlock div{ font-size:.86rem; line-height:1.42; }
+  .contentGrid{ grid-template-columns:1fr; gap:8px; }
+  .contentBox, .noteBlock, .mediaSection{ padding:10px; border-radius:15px; }
+  .mediaGuideGrid{ grid-template-columns:1fr 1fr 1fr; gap:6px; }
+  .mediaGuideItem{ padding:8px; }
+  .mediaGuideItem span{ display:none; }
+  .thumbStrip button{ width:54px; height:42px; }
+  .routeBtn{ padding:8px 10px; font-size:.86rem; }
+  .localMusicPlayer{ right:10px; bottom:calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .playerMiniButton{ min-width:58px; width:58px; padding:7px; }
+  .miniText{ display:none; }
+  .playerPanel{ right:0; bottom:68px; max-height:calc(100svh - 88px); overflow:auto; }
+  .auditToggle{ display:none; }
+}
+@media (max-width:760px) and (orientation:portrait){
+  .mobileRotateHint{ display:block; }
+  .auditToggle{ display:none; }
+}
+@media (max-width:760px){
+  .auditPanel{ display:none !important; }
+}
+
+
+/* v17 - Popup scrollbar ve kullanım düzeltmesi */
+.modalPanel{
+  height:min(90svh, 800px);
+  max-height:min(90svh, 800px);
+  overflow:hidden;
+}
+.travelCard{
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+.travelHero{
+  height:100%;
+  min-height:0;
+  display:grid;
+  place-items:center;
+}
+.travelHero img,
+.travelHero video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center center;
+}
+
+/* Sağ içerik alanı artık her zaman kendi içinde kaydırılabilir ve scrollbar görünür. */
+.travelInfo{
+  height:100%;
+  max-height:100%;
+  min-height:0;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  scrollbar-gutter:stable both-edges;
+  padding-bottom:56px;
+}
+.travelInfo::-webkit-scrollbar{
+  width:12px;
+}
+.travelInfo::-webkit-scrollbar-track{
+  background:rgba(19,32,52,.065);
+  border-radius:999px;
+}
+.travelInfo::-webkit-scrollbar-thumb{
+  background:rgba(31,107,58,.48);
+  border-radius:999px;
+  border:3px solid rgba(255,250,240,1);
+}
+.travelInfo::-webkit-scrollbar-thumb:hover{
+  background:rgba(31,107,58,.68);
+}
+.popupScrollNotice{
+  align-self:flex-start;
+  padding:9px 12px;
+  border-radius:999px;
+  background:rgba(31,107,58,.09);
+  color:var(--green-dark);
+  font-size:.86rem;
+  font-weight:850;
+}
+
+/* Popup sağ bölümde en kritik alanlar daha kompakt hale getirildi. */
+.contentGrid{
+  gap:8px;
+}
+.contentBox{
+  padding:12px 13px;
+}
+.contentBox p,
+.noteBlock div,
+.photoCaption{
+  line-height:1.48;
+}
+.noteBlock,
+.mediaSection{
+  padding:12px;
+}
+.mediaGuideGrid{
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:7px;
+}
+.mediaGuideItem{
+  padding:8px;
+}
+.mediaGuideItem span{
+  font-size:.78rem;
+}
+.thumbStrip{
+  max-height:126px;
+  overflow-y:auto;
+  padding-right:4px;
+}
+
+/* Geniş ekranda popup çok büyük görünmesin; içerik daha kontrollü kalsın. */
+@media (min-width:1100px){
+  .modalPanel{
+    width:min(1120px, calc(100vw - 36px));
+  }
+  .travelCard{
+    grid-template-columns:minmax(0,.96fr) minmax(410px,1.04fr);
+  }
+}
+
+/* Yatay telefonda/pencere alçakken popup kullanılabilir kalsın. */
+@media (max-height:720px){
+  .modalPanel{
+    height:calc(100svh - 16px);
+    max-height:calc(100svh - 16px);
+    border-radius:22px;
+  }
+  .travelInfo{
+    padding:16px 18px 44px;
+    gap:9px;
+  }
+  .travelInfo h1{
+    font-size:clamp(1.5rem, 3.4vw, 2.2rem);
+  }
+  .subtitle{
+    font-size:.92rem;
+  }
+  .routeOrder,
+  .popupScrollNotice,
+  .smallMeta .meta{
+    font-size:.82rem;
+  }
+  .contentGrid{
+    grid-template-columns:1fr;
+  }
+  .mediaGuideGrid{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+  .mediaGuideItem span{
+    display:none;
+  }
+  .thumbStrip button{
+    width:58px;
+    height:44px;
+  }
+}
+
+@media (max-width:940px){
+  .modalPanel{
+    height:92svh;
+    max-height:92svh;
+    overflow:hidden;
+  }
+  .travelCard{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    overflow:hidden;
+  }
+  .travelHero{
+    flex:0 0 42%;
+    min-height:220px;
+    height:auto;
+  }
+  .travelInfo{
+    flex:1 1 auto;
+    height:auto;
+    max-height:none;
+    min-height:0;
+    overflow-y:scroll;
+    padding-bottom:58px;
+  }
+}
+
+/* Dikey mobilde popup tamamen tek kolon ve rahat kaydırılabilir. */
+@media (max-width:620px){
+  .modalPanel{
+    height:94svh;
+    max-height:94svh;
+    border-radius:22px;
+  }
+  .travelHero{
+    flex-basis:34%;
+    min-height:190px;
+  }
+  .travelInfo{
+    padding:18px 18px 54px;
+  }
+  .travelTop{
+    gap:8px;
+  }
+  .popupScrollNotice{
+    border-radius:16px;
+  }
+  .mediaGuideGrid{
+    grid-template-columns:1fr;
+  }
+  .mediaGuideItem span{
+    display:block;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -773,6 +1167,29 @@ button{font:inherit}
         </aside>
       </section>
 
+
+      <div class="mobileRotateHint" aria-hidden="true">
+        Daha iyi deneyim için telefonu yatay çevir.
+      </div>
+
+      <button id="auditToggle" class="auditToggle" type="button" aria-label="Popup içerik kontrol panelini aç">
+        İçerik Kontrol
+      </button>
+
+      <aside id="auditPanel" class="auditPanel" aria-hidden="true">
+        <div class="auditHeader">
+          <div>
+            <span class="auditKicker">Kontrol Paneli</span>
+            <h2>Popup İçerikleri</h2>
+          </div>
+          <button id="auditClose" class="auditClose" type="button" aria-label="Kontrol panelini kapat">×</button>
+        </div>
+        <div id="auditSummary" class="auditSummary"></div>
+        <div id="auditContent" class="auditContent"></div>
+        <p class="auditNote">
+          Bu panel sadece kontrol içindir. Medya ekledikten sonra sayfayı yenileyip buradan popup sayılarını kontrol edebilirsin.
+        </p>
+      </aside>
     </section>
 
     <div id="infoModal" class="infoModal" aria-hidden="true">
@@ -859,6 +1276,30 @@ function closeModal(){
 function tagHTML(tags){
   return (tags || []).map(tag => `<span class="meta">${tag}</span>`).join('');
 }
+
+function countMediaTypes(media){
+  return media.reduce((acc, item) => {
+    if(item.type === 'video') acc.video += 1;
+    else acc.image += 1;
+    return acc;
+  }, { image: 0, video: 0 });
+}
+function mediaChecklistHTML(media){
+  const counts = countMediaTypes(media || []);
+  const total = (media || []).length;
+  return `
+    <div class="mediaCheck ${total >= 3 ? '' : 'warn'}">Toplam medya: ${total}<br>${total >= 3 ? 'Yeterli' : '3+ önerilir'}</div>
+    <div class="mediaCheck ${counts.image >= 2 ? '' : 'warn'}">Fotoğraf: ${counts.image}<br>${counts.image >= 2 ? 'İyi' : '2+ önerilir'}</div>
+    <div class="mediaCheck ${counts.video >= 1 ? '' : 'warn'}">Video: ${counts.video}<br>${counts.video >= 1 ? 'Tamam' : '1 video ekle'}</div>
+  `;
+}
+function auditStopStatus(stop){
+  const media = normalizeMedia(stop);
+  const counts = countMediaTypes(media);
+  const missingText = !stop.text || !stop.note || !stop.subtitle;
+  const needsMoreMedia = media.length < 3 || counts.image < 2 || counts.video < 1;
+  return { media, counts, missingText, needsMoreMedia, good: !missingText && !needsMoreMedia };
+}
 function normalizeMedia(stop){
   if(Array.isArray(stop.media) && stop.media.length){
     return stop.media.map(item => {
@@ -937,6 +1378,7 @@ function renderStop(stop, imageIndex = 0){
         </div>
 
         <div class="routeOrder">${stop.routeOrder}</div>
+        <div class="popupScrollNotice">Bu sağ bölüm kaydırılabilir. Fotoğraf/video alanı ve albüm aşağıda devam eder.</div>
         <div class="smallMeta">${tagHTML(stop.tags)}</div>
 
         <div class="contentGrid">
@@ -959,15 +1401,42 @@ function renderStop(stop, imageIndex = 0){
           <div>${stop.note}</div>
         </div>
 
-        <div class="photoCaption">${currentCaption}</div>
+        <section class="mediaSection">
+          <div class="mediaSectionTop">
+            <div>
+              <span class="kicker">Medya Alanı</span>
+              <h3>Fotoğraf / Video Ekleme Bölümü</h3>
+            </div>
+            <span class="mediaStatus">Hazır</span>
+          </div>
 
-        <div>
+          <div class="photoCaption">${currentCaption}</div>
+
+          <div class="mediaGuideGrid">
+            <div class="mediaGuideItem">
+              <strong>1. Ana görsel</strong>
+              <span>Durak genel görünümü veya en güçlü kare.</span>
+            </div>
+            <div class="mediaGuideItem">
+              <strong>2. Detay görsel</strong>
+              <span>Tabela, manzara, yol, kıyı veya tarihî detay.</span>
+            </div>
+            <div class="mediaGuideItem">
+              <strong>3. Kısa video</strong>
+              <span>10–20 saniyelik atmosfer görüntüsü.</span>
+            </div>
+          </div>
+
+          <div class="mediaChecklist">
+            ${mediaChecklistHTML(media)}
+          </div>
+
           <div class="thumbHeader">
-            <span class="kicker">Fotoğraf / Video Albümü</span>
-            <span class="thumbHint">Medya ekledikçe burada çoğalır</span>
+            <span class="kicker">Albüm</span>
+            <span class="thumbHint">Fotoğraf/video ekledikçe burada görünür</span>
           </div>
           <div class="thumbStrip">${thumbs}</div>
-        </div>
+        </section>
 
         <div class="routeButtons">
           <button class="routeBtn" type="button" data-route="prev">← Önceki Durak</button>
@@ -1000,6 +1469,9 @@ function renderStop(stop, imageIndex = 0){
       openStop(stops[nextIndex].id);
     });
   });
+
+  const infoArea = content.querySelector('.travelInfo');
+  if(infoArea) infoArea.scrollTop = 0;
 }
 function openStop(id){
   const stop = getStop(id);
@@ -1017,7 +1489,10 @@ modal?.addEventListener('click', event => {
 });
 document.addEventListener('keydown', event => {
   if(!modal?.classList.contains('open')) return;
-  if(event.key === 'Escape') closeModal();
+  if(event.key === 'Escape'){
+    closeModal();
+    closeAuditPanel();
+  }
   if(!currentStop) return;
   const media = normalizeMedia(currentStop);
   if(event.key === 'ArrowRight') renderStop(currentStop, (currentImageIndex + 1) % media.length);
@@ -1183,6 +1658,60 @@ document.addEventListener('pointerdown', tryStartOnFirstInteraction, { once:true
 if(localTracks.length){
   setTrack(0, false);
 }
+
+
+/* v16 - Popup içerik kontrol paneli */
+const auditToggle = document.querySelector('#auditToggle');
+const auditPanel = document.querySelector('#auditPanel');
+const auditClose = document.querySelector('#auditClose');
+const auditSummary = document.querySelector('#auditSummary');
+const auditContent = document.querySelector('#auditContent');
+function renderAuditPanel(){
+  if(!auditSummary || !auditContent) return;
+  const statuses = stops.map(stop => ({ stop, ...auditStopStatus(stop) }));
+  const totalImages = statuses.reduce((sum, item) => sum + item.counts.image, 0);
+  const totalVideos = statuses.reduce((sum, item) => sum + item.counts.video, 0);
+  auditSummary.innerHTML = `
+    <div class="auditMetric"><strong>${stops.length}</strong><span>Durak</span></div>
+    <div class="auditMetric"><strong>${totalImages}</strong><span>Fotoğraf</span></div>
+    <div class="auditMetric"><strong>${totalVideos}</strong><span>Video</span></div>
+  `;
+  auditContent.innerHTML = statuses.map(({ stop, media, counts, good, missingText, needsMoreMedia }) => `
+    <article class="auditItem">
+      <div class="auditItemTop">
+        <strong>${stop.title}</strong>
+        <span class="auditStatus ${good ? 'good' : 'warn'}">${good ? 'Hazır' : 'Kontrol Et'}</span>
+      </div>
+      <div class="auditDetails">
+        <span class="auditChip">${stop.category || 'Kategori yok'}</span>
+        <span class="auditChip">${media.length} medya</span>
+        <span class="auditChip">${counts.image} foto</span>
+        <span class="auditChip">${counts.video} video</span>
+        ${missingText ? '<span class="auditChip">Metin eksik</span>' : ''}
+        ${needsMoreMedia ? '<span class="auditChip">Medya artır</span>' : ''}
+      </div>
+      <button class="auditOpenBtn" type="button" data-open-stop="${stop.id}">Popup Aç</button>
+    </article>
+  `).join('');
+  auditContent.querySelectorAll('[data-open-stop]').forEach(button => {
+    button.addEventListener('click', () => {
+      openStop(button.dataset.openStop);
+      auditPanel?.classList.remove('open');
+      auditPanel?.setAttribute('aria-hidden', 'true');
+    });
+  });
+}
+function openAuditPanel(){
+  renderAuditPanel();
+  auditPanel?.classList.add('open');
+  auditPanel?.setAttribute('aria-hidden', 'false');
+}
+function closeAuditPanel(){
+  auditPanel?.classList.remove('open');
+  auditPanel?.setAttribute('aria-hidden', 'true');
+}
+auditToggle?.addEventListener('click', openAuditPanel);
+auditClose?.addEventListener('click', closeAuditPanel);
 
   </script>
 </body>
